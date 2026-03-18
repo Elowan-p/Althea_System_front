@@ -1,0 +1,39 @@
+{
+  "header": {
+    "search": "Suchen...",
+    "cart": "Warenkorb",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "settings": "Einstellungen",
+    "orders": "Bestellungen",
+    "logout": "Abmelden"
+  },
+  "home": {
+    "welcome": "Willkommen bei Althea Systems",
+    "presentation": "Ihr Partner für hochwertige Medizintechnik.",
+    "categories": "Kategorien",
+    "top_products": "Top Produkte"
+  },
+  "product": {
+    "add_to_cart": "In den Warenkorb",
+    "out_of_stock": "Nicht lieferbar",
+    "similar_products": "Ähnliche Produkte"
+  },
+  "cart": {
+    "title": "Ihr Warenkorb",
+    "checkout": "Zur Kasse gehen",
+    "total": "Gesamt"
+  },
+  "checkout": {
+    "auth_guest": "Authentifizierung / Gast",
+    "address": "Adressinformationen",
+    "payment": "Zahlungsmethode",
+    "confirmation": "Bestellbestätigung"
+  },
+  "common": {
+    "next": "Weiter",
+    "prev": "Zurück",
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten."
+  }
+}
