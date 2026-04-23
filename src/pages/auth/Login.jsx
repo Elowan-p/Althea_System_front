@@ -8,10 +8,10 @@ import {
   Building, 
   Eye, 
   EyeOff,
-  AlertCircle
+  AlertCircle,
+  LoaderCircle
 } from 'lucide-react';
 import { login } from '../../services/api';
-import Loader from '../../components/common/Loader';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -42,8 +42,8 @@ const Login = () => {
             if (res.data.token) {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
-                navigate('/account/orders'); // Redirect to professional workspace
-                window.location.reload(); // Force header update
+                window.dispatchEvent(new Event('authchange'));
+                navigate('/account/orders', { replace: true });
             }
         } catch (err) {
             console.error("Login Error:", err);
@@ -52,8 +52,6 @@ const Login = () => {
             setLoading(false);
         }
     };
-
-    if (loading) return <Loader />;
 
     return (
         <div className="auth-page">
@@ -109,6 +107,7 @@ const Login = () => {
                                         name="username"
                                         placeholder="name@institution.com" 
                                         required
+                                        disabled={loading}
                                         value={formData.username}
                                         onChange={handleChange}
                                     />
@@ -127,12 +126,14 @@ const Login = () => {
                                         name="password"
                                         placeholder="••••••••" 
                                         required
+                                        disabled={loading}
                                         value={formData.password}
                                         onChange={handleChange}
                                     />
                                     <button 
                                         type="button" 
                                         className="eye-toggle"
+                                        disabled={loading}
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
                                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -145,6 +146,7 @@ const Login = () => {
                                     <input 
                                         type="checkbox" 
                                         name="rememberMe"
+                                        disabled={loading}
                                         checked={formData.rememberMe}
                                         onChange={handleChange}
                                     />
@@ -152,9 +154,18 @@ const Login = () => {
                                 </label>
                             </div>
 
-                            <button type="submit" className="btn-auth-submit">
-                                <span>Sign In to Workspace</span>
-                                <ArrowRight size={20} />
+                            <button type="submit" className="btn-auth-submit" disabled={loading}>
+                                {loading ? (
+                                    <>
+                                        <LoaderCircle size={20} className="spin-icon" />
+                                        <span>Connexion en cours...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Sign In to Workspace</span>
+                                        <ArrowRight size={20} />
+                                    </>
+                                )}
                             </button>
                         </form>
 
@@ -245,6 +256,7 @@ const Login = () => {
                 .input-icon-wrap input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 92, 151, 0.08); outline: none; }
                 
                 .eye-toggle { position: absolute; right: 1rem; color: #94a3b8; }
+                .eye-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
 
                 .form-options { margin-bottom: 2rem; }
                 .check-label { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: #475569; }
@@ -252,6 +264,8 @@ const Login = () => {
 
                 .btn-auth-submit { width: 100%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1.1rem; border-radius: 14px; font-weight: 800; font-size: 1rem; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
                 .btn-auth-submit:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0, 92, 151, 0.25); }
+                .btn-auth-submit:disabled { opacity: 0.85; cursor: wait; transform: none; box-shadow: none; }
+                .spin-icon { animation: spin 0.8s linear infinite; }
                 
                 .auth-footer { text-align: center; margin-top: 3.5rem; }
                 .auth-footer p { font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem; font-style: italic; }
@@ -260,6 +274,7 @@ const Login = () => {
 
                 .auth-security-footer { margin-top: 5rem; display: flex; gap: 2rem; color: #cbd5e1; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
                 .sec-item { display: flex; align-items: center; gap: 6px; }
+                @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
                 @media (max-width: 1024px) {
                     .auth-container { grid-template-columns: 1fr; }

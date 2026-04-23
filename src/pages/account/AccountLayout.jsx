@@ -12,7 +12,9 @@ const AccountLayout = () => {
     
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/login');
+        localStorage.removeItem('user');
+        window.dispatchEvent(new Event('authchange'));
+        navigate('/', { replace: true });
     };
 
     return (

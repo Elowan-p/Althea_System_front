@@ -20,6 +20,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [categories, setCategories] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
 
   const categoryIconMap = {
     'Surgical Systems': <Activity size={16} />,
@@ -33,7 +34,6 @@ const Header = () => {
   };
 
   const cartCount = 3; 
-  const isAuthenticated = !!localStorage.getItem('token');
 
   useEffect(() => {
     const fetchCats = async () => {
@@ -47,8 +47,17 @@ const Header = () => {
     fetchCats();
     
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const syncAuthState = () => setIsAuthenticated(!!localStorage.getItem('token'));
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('storage', syncAuthState);
+    window.addEventListener('authchange', syncAuthState);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('storage', syncAuthState);
+      window.removeEventListener('authchange', syncAuthState);
+    };
   }, []);
 
   const handleSearch = (e) => {
@@ -56,6 +65,14 @@ const Header = () => {
     if (searchValue.trim()) {
       navigate(`/search?q=${searchValue}`);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.dispatchEvent(new Event('authchange'));
+    setIsMenuOpen(false);
+    navigate('/', { replace: true });
   };
 
   return (
@@ -152,7 +169,7 @@ const Header = () => {
                                     <div className="profile-header">Workspace</div>
                                     <NavLink to="/account/settings">My Profile</NavLink>
                                     <NavLink to="/account/orders">Quick Orders</NavLink>
-                                    <button className="btn-logout" onClick={() => { localStorage.removeItem('token'); window.location.reload(); }}>Sign Out</button>
+                                    <button className="btn-logout" onClick={handleLogout}>Sign Out</button>
                                 </div>
                             </div>
                         </div>

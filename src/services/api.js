@@ -65,9 +65,15 @@ const seedCategoryCache = (category) => {
   }
 };
 
-const seedProductsCache = (products) => {
+const seedProductsIntoEntityCache = (products) => {
   if (Array.isArray(products)) {
     products.forEach(seedProductCache);
+  }
+};
+
+const seedFullProductsCache = (products) => {
+  if (Array.isArray(products)) {
+    seedProductsIntoEntityCache(products);
     setCachedData('products', products);
   }
 };
@@ -120,7 +126,7 @@ export const getHomeData = () => cachedGet(
   {
     onSuccess: (data) => {
       seedCategoriesCache(data?.categories);
-      seedProductsCache(data?.topProducts);
+      seedProductsIntoEntityCache(data?.topProducts);
     },
   }
 );
@@ -132,7 +138,7 @@ export const getCategories = () => cachedGet(
   {
     onSuccess: (data) => {
       seedCategoriesCache(data);
-      data?.forEach((category) => seedProductsCache(category?.products));
+      data?.forEach((category) => seedProductsIntoEntityCache(category?.products));
     },
   }
 );
@@ -143,7 +149,7 @@ export const getCategory = (id) => cachedGet(
   {
     onSuccess: (data) => {
       seedCategoryCache(data);
-      seedProductsCache(data?.products);
+      seedProductsIntoEntityCache(data?.products);
     },
   }
 );
@@ -152,7 +158,7 @@ export const getCategoryProducts = (categoryId, params) => cachedGet(
   `category-products:${categoryId}`,
   () => api.get(`/categories/${categoryId}/products`, { params }),
   {
-    onSuccess: (data) => seedProductsCache(data),
+    onSuccess: (data) => seedProductsIntoEntityCache(data),
   }
 );
 
@@ -161,7 +167,7 @@ export const getProducts = () => cachedGet(
   'products',
   () => api.get('/products'),
   {
-    onSuccess: (data) => seedProductsCache(data),
+    onSuccess: (data) => seedFullProductsCache(data),
   }
 );
 
@@ -177,7 +183,7 @@ export const getSimilarProducts = (id) => cachedGet(
   `product-similar:${id}`,
   () => api.get(`/products/${id}/similar`),
   {
-    onSuccess: (data) => seedProductsCache(data),
+    onSuccess: (data) => seedProductsIntoEntityCache(data),
   }
 );
 

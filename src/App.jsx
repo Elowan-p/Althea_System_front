@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './components/common/Layout';
 import Loader from './components/common/Loader';
+import AccountLayout from './pages/account/AccountLayout';
+import Orders from './pages/account/Orders';
+import Settings from './pages/account/Settings';
 import './i18n'; // Initialize i18n
 import './index.css'; // Global CSS
 
@@ -18,9 +21,6 @@ const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
 const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
-const AccountLayout = lazy(() => import('./pages/account/AccountLayout'));
-const Orders = lazy(() => import('./pages/account/Orders'));
-const Settings = lazy(() => import('./pages/account/Settings'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // Component for protected routes
