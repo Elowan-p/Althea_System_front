@@ -37,7 +37,7 @@ const Product = () => {
             } catch (err) {
                 console.error("Error fetching product data:", err);
             } finally {
-                setTimeout(() => setLoading(false), 800);
+                setLoading(false);
             }
         };
         fetchProduct();

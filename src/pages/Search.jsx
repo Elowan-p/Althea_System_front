@@ -33,7 +33,7 @@ const Search = () => {
         } catch (err) {
             console.error("Search Error:", err);
         } finally {
-            setTimeout(() => setLoading(false), 600);
+            setLoading(false);
         }
     };
 
@@ -46,7 +46,7 @@ const Search = () => {
             console.error("Catalogue Load Error:", err);
             setResults([]);
         } finally {
-            setTimeout(() => setLoading(false), 600);
+            setLoading(false);
         }
     };
 
@@ -60,9 +60,11 @@ const Search = () => {
             <section className="search-hero">
                 <div className="container">
                     <nav className="cat-breadcrumbs">
-                        <NavLink to="/">Catalogue</NavLink>
+                        <NavLink to="/">Accueil</NavLink>
                         <ChevronRight size={12} />
-                        <span className="active">Infrastructure Search</span>
+                        <NavLink to="/catalogue">Catalogue</NavLink>
+                        <ChevronRight size={12} />
+                        <span className="active">Recherche d'équipement</span>
                     </nav>
 
                     <div className="search-bar-wrap">
@@ -83,7 +85,7 @@ const Search = () => {
 
             <div className="container search-results-area">
                 {loading ? (
-                    <div style={{ padding: '5rem 0' }}><Loader /></div>
+                    <div style={{ padding: '8rem 0' }}><Loader /></div>
                 ) : (
                     <>
                         <div className="results-header">
@@ -149,9 +151,9 @@ const Search = () => {
             </div>
 
             <style>{`
-                .search-hero { padding: 5rem 0; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+                .search-hero { padding: 5rem 0; background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); border-bottom: 1px solid #e2e8f0; }
                 .search-bar-wrap { max-width: 800px; margin: 0 auto; text-align: center; }
-                .search-bar-wrap h1 { font-size: 3rem; font-weight: 900; color: #012a4a; margin-bottom: 2.5rem; }
+                .search-bar-wrap h1 { font-size: 3rem; font-weight: 900; color: #012a4a; margin-bottom: 2.5rem; letter-spacing: -0.04em; }
                 
                 .main-search-form { 
                     display: flex; 
@@ -163,13 +165,13 @@ const Search = () => {
                     border: 1px solid #e2e8f0;
                 }
                 .search-icon { margin: 0 1.5rem; color: #94a3b8; }
-                .main-search-form input { flex: 1; border: none; font-size: 1.1rem; font-weight: 600; padding: 1rem 0; }
+                .main-search-form input { flex: 1; border: none; font-size: 1.1rem; font-weight: 600; padding: 1rem 0; background: transparent; }
                 .main-search-form input:focus { outline: none; }
                 
                 .btn-search { background: var(--primary); color: white; padding: 1rem 2rem; border-radius: 15px; font-weight: 800; margin-left: 0.5rem; }
                 
                 .results-header { margin: 4rem 0 3rem; }
-                .results-header h2 { font-size: 2rem; font-weight: 850; color: #012a4a; }
+                .results-header h2 { font-size: 2rem; font-weight: 850; color: #012a4a; letter-spacing: -0.02em; }
                 .results-header h2 span { color: var(--primary); }
                 .results-header p { color: #64748b; font-weight: 700; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; }
                 
