@@ -19,6 +19,11 @@ api.interceptors.request.use((config) => {
 }, (error) => Promise.reject(error));
 
 const responseFromData = (data) => ({ data });
+const normalizeSearchValue = (value) => String(value ?? '')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase()
+  .trim();
 
 const cacheStore = new Map();
 
@@ -175,7 +180,29 @@ export const getSimilarProducts = (id) => cachedGet(
     onSuccess: (data) => seedProductsCache(data),
   }
 );
-export const searchProducts = (query) => api.get('/products/search', { params: { q: query } });
+
+export const searchProducts = async (query) => {
+  const normalizedQuery = normalizeSearchValue(query);
+
+  if (normalizedQuery.length < 2) {
+    return responseFromData([]);
+  }
+
+  const productsResponse = await getProducts();
+  const filteredProducts = (productsResponse.data || []).filter((product) => {
+    const searchableContent = normalizeSearchValue([
+      product?.title,
+      product?.description,
+      product?.medicalDomain,
+      product?.powerSupplyType,
+      product?.category?.title,
+    ].join(' '));
+
+    return searchableContent.includes(normalizedQuery);
+  });
+
+  return responseFromData(filteredProducts);
+};
 
 // Auth Service
 export const register = (data) => api.post('/auth/register', data);
