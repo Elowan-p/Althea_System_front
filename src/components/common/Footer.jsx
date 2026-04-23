@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, MessageCircle, ArrowUp, Zap, ShieldCheck, HeartPulse } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageCircle, ArrowUp, Zap, ShieldCheck, HeartPulse } from 'lucide-react';
 
 const Footer = () => {
 
@@ -69,9 +69,12 @@ const Footer = () => {
                 Pioneering medical excellence through high-end hardware and smarter infrastructure solutions since 2012. Trusted by 2,500+ clinics worldwide.
               </p>
               <div className="social-links">
-                <a href="#"><Facebook size={20} /></a>
-                <a href="#"><Twitter size={20} /></a>
-                <a href="#"><Linkedin size={20} /></a>
+                <a href="https://mleroy.fr" target="_blank" rel="noopener noreferrer">
+                  Facebook
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                  Twitter
+                </a>
               </div>
             </div>
 
