@@ -104,15 +104,12 @@ const Header = () => {
 
             {/* Center: Main Nav */}
             <nav className="desktop-only center-nav">
-                <div className="nav-item">
-                    <NavLink to="/catalogue">Catalogue</NavLink>
-                    <div className="nav-accent"></div>
-                </div>
-                
                 <div className="nav-item has-dropdown">
-                    <span className="drop-trigger">Categories <ChevronDown size={14} /></span>
+                    <NavLink to="/catalogue" className="drop-trigger catalogue-trigger">
+                        Catalogue <ChevronDown size={14} />
+                    </NavLink>
                     <div className="nav-accent"></div>
-                    
+
                     <div className="mega-dropdown">
                         <div className="mega-grid">
                             <div className="mega-col">
@@ -123,7 +120,7 @@ const Header = () => {
                                     </NavLink>
                                     {categories.length > 0 ? categories.map(cat => (
                                         <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`}>
-                                            {categoryIconMap[cat.title] || <Activity size={16} />} 
+                                            {categoryIconMap[cat.title] || <Activity size={16} />}
                                             {cat.title}
                                         </NavLink>
                                     )) : (
@@ -132,19 +129,19 @@ const Header = () => {
                                 </div>
                             </div>
                             <div className="mega-col highlight-col">
-                                <h6>Quick Access</h6>
+                                <h6>Accès rapide</h6>
                                 <div className="mega-links">
                                     <NavLink to="/search?q=scanner">Scanners</NavLink>
-                                    <NavLink to="/search?q=robotic">Robotics</NavLink>
-                                    <NavLink to="/search?q=ward">Ward Management</NavLink>
+                                    <NavLink to="/search?q=robotic">Robotique</NavLink>
+                                    <NavLink to="/search?q=ward">Gestion de salle</NavLink>
                                 </div>
                             </div>
                             <div className="mega-col">
                                 <h6>Services</h6>
                                 <div className="mega-links">
                                     <NavLink to="/contact"><Wrench size={16} /> Maintenance</NavLink>
-                                    <NavLink to="/contact"><Award size={16} /> Compliance</NavLink>
-                                    <NavLink to="/contact"><Building size={16} /> Logistics</NavLink>
+                                    <NavLink to="/contact"><Award size={16} /> Conformité</NavLink>
+                                    <NavLink to="/contact"><Building size={16} /> Logistique</NavLink>
                                 </div>
                             </div>
                         </div>
@@ -219,13 +216,13 @@ const Header = () => {
                         <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
                     </div>
                     <div className="side-section">
-                        <label>Shop by Division</label>
+                        <label>Filtrer par catégorie</label>
                         {categories.length > 0 ? categories.map((cat) => (
-                            <NavLink key={cat.id} to={`/category/${cat.id}`} onClick={() => setIsMenuOpen(false)}>
+                            <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`} onClick={() => setIsMenuOpen(false)}>
                                 {cat.title}
                             </NavLink>
                         )) : (
-                            <span className="empty-mobile-nav">No linked categories</span>
+                            <span className="empty-mobile-nav">Aucune catégorie disponible</span>
                         )}
                     </div>
                 </div>
@@ -278,6 +275,7 @@ const Header = () => {
         .nav-item:hover a, .nav-item:hover .drop-trigger { color: var(--primary); }
         .nav-accent { position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary); transition: width 0.3s ease; }
         .nav-item:hover .nav-accent { width: 100%; }
+        .catalogue-trigger { display: flex; align-items: center; gap: 4px; }
 
         /* Mega Dropdown */
         .mega-dropdown {
