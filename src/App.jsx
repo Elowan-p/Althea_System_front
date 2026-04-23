@@ -2,6 +2,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './components/common/Layout';
 import Loader from './components/common/Loader';
+import AdminLayout from './pages/admin/AdminLayout';
+import ProductTablePage from './pages/admin/ProductTablePage';
+import ProductDetailPage from './pages/admin/ProductDetailPage';
+import ProductCreatePage from './pages/admin/ProductCreatePage';
+import DataPage from './pages/admin/DataPage';
 import './i18n'; // Initialize i18n
 import './index.css'; // Global CSS
 
@@ -61,6 +66,13 @@ function App() {
 
           <Route path="/cart" element={<Cart />} />
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<ProductTablePage />} />
+            <Route path="products/new" element={<ProductCreatePage />} />
+            <Route path="products/:id" element={<ProductDetailPage />} />
+            <Route path="data" element={<DataPage />} />
+          </Route>
 
           {/* Redirect all unknown to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

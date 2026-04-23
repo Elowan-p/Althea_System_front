@@ -38,7 +38,10 @@ const Login = () => {
         setError('');
 
         try {
-            const res = await login(formData);
+            const res = await login({
+                username: formData.username,
+                password: formData.password,
+            });
             if (res.data.token) {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
