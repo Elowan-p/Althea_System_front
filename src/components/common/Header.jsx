@@ -39,8 +39,7 @@ const Header = () => {
     const fetchCats = async () => {
       try {
         const res = await getCategories();
-        const linkedCategories = (res.data || []).filter((cat) => (cat.products?.length || 0) > 0);
-        setCategories(linkedCategories);
+        setCategories(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Header Categories Error:", err);
       }

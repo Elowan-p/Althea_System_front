@@ -19,7 +19,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: '',
         rememberMe: false
     });
@@ -106,10 +106,10 @@ const Login = () => {
                                     <Mail size={18} />
                                     <input 
                                         type="email" 
-                                        name="email"
+                                        name="username"
                                         placeholder="name@institution.com" 
                                         required
-                                        value={formData.email}
+                                        value={formData.username}
                                         onChange={handleChange}
                                     />
                                 </div>

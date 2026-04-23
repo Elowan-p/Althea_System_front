@@ -2,7 +2,7 @@ import { useParams, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Filter, Grid, List as ListIcon, Star, ChevronRight, SlidersHorizontal } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getCategory, getCategoryProducts } from '../services/api';
+import { getCategory } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Category = () => {
@@ -17,12 +17,9 @@ const Category = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [catRes, prodRes] = await Promise.all([
-            getCategory(id),
-            getCategoryProducts(id)
-        ]);
+        const catRes = await getCategory(id);
         setCategory(catRes.data);
-        setProducts(prodRes.data);
+        setProducts(catRes.data?.products || []);
       } catch (err) {
         console.error("Error fetching category data:", err);
       } finally {

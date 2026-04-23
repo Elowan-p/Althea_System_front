@@ -109,7 +109,7 @@ const Home = () => {
                                 <h1 className="hero-title">{slide.title}</h1>
                                 <p className="hero-desc">{slide.desc}</p>
                                 <div className="hero-actions">
-                                    <NavLink to="/search" className="btn-primary-lg">
+                                    <NavLink to="/catalogue" className="btn-primary-lg">
                                         {slide.cta} <ArrowRight size={20} />
                                     </NavLink>
                                     <NavLink to="/contact" className="btn-outline-white">Support Center</NavLink>
@@ -157,7 +157,7 @@ const Home = () => {
                 <div className="container">
                     <div className="section-header">
                         <h3>Institutional Divisions</h3>
-                        <NavLink to="/search" className="text-cta">See All Categories <ArrowRight size={16} /></NavLink>
+                        <NavLink to="/catalogue" className="text-cta">See All Categories <ArrowRight size={16} /></NavLink>
                     </div>
                     {categories.length > 0 ? (
                         <div className="categories-grid-premium">
@@ -181,7 +181,7 @@ const Home = () => {
                     ) : (
                         <div className="empty-state">
                             <p>No connected categories are available yet.</p>
-                            <NavLink to="/search" className="btn-primary">Browse Products</NavLink>
+                            <NavLink to="/catalogue" className="btn-primary">Browse Products</NavLink>
                         </div>
                     )}
                 </div>
