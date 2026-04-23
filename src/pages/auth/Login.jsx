@@ -19,7 +19,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: '',
         rememberMe: false
     });
@@ -38,7 +38,10 @@ const Login = () => {
         setError('');
 
         try {
-            const res = await login(formData);
+            const res = await login({
+                username: formData.username,
+                password: formData.password,
+            });
             if (res.data.token) {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -106,10 +109,10 @@ const Login = () => {
                                     <Mail size={18} />
                                     <input 
                                         type="email" 
-                                        name="email"
+                                        name="username"
                                         placeholder="name@institution.com" 
                                         required
-                                        value={formData.email}
+                                        value={formData.username}
                                         onChange={handleChange}
                                     />
                                 </div>
