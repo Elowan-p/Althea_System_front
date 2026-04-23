@@ -9,32 +9,51 @@ import {
   Search, 
   Globe, 
   ChevronDown,
-  Stethoscope,
   Activity,
   Zap,
   Building,
   Wrench,
-  Award
+  Award,
+  Layers,
+  Dna,
+  Warehouse
 } from 'lucide-react';
+import { getCategories } from '../../services/api';
 
 const Header = () => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [categories, setCategories] = useState([]);
+
+  const categoryIconMap = {
+    'Surgical Systems': <Activity size={16} />,
+    'Diagnostic Imaging': <Layers size={16} />,
+    'Lab Automation': <Dna size={16} />,
+    'Infrastructure': <Warehouse size={16} />,
+    'Surgical Equipment': <Activity size={16} />,
+    'Diagnostics': <Layers size={16} />,
+    'Laboratory Tools': <Dna size={16} />,
+    'Ward Furniture': <Warehouse size={16} />,
+  };
 
   const cartCount = 3; 
   const isAuthenticated = !!localStorage.getItem('token');
 
-  const toggleLanguage = () => {
-    const languages = ['en', 'de', 'fr'];
-    const currentIndex = languages.indexOf(i18n.language);
-    const nextIndex = (currentIndex + 1) % languages.length;
-    i18n.changeLanguage(languages[nextIndex]);
-  };
-
   useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const res = await getCategories();
+        const linkedCategories = (res.data || []).filter((cat) => (cat.products?.length || 0) > 0);
+        setCategories(linkedCategories);
+      } catch (err) {
+        console.error("Header Categories Error:", err);
+      }
+    };
+    fetchCats();
+    
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -53,13 +72,15 @@ const Header = () => {
       <div className="top-utility desktop-only">
         <div className="container utils-flex">
            <div className="utility-left">
-              <span>Premium Medical Infrastructure Solutions</span>
+              <span>Althea Systems • Precision Medical Infrastructure</span>
            </div>
            <div className="utility-right">
-              <NavLink to="/contact">Support</NavLink>
-              <NavLink to="/contact">FAQ</NavLink>
-              <button className="lang-trigger" onClick={toggleLanguage}>
-                <Globe size={13} /> {i18n.language.toUpperCase()}
+              <NavLink to="/contact">Technical Support</NavLink>
+              <button className="lang-trigger" onClick={() => {
+                const next = i18n.language === 'en' ? 'fr' : 'en';
+                i18n.changeLanguage(next);
+              }}>
+                <Globe size={13} /> {i18n.language?.toUpperCase()}
               </button>
            </div>
         </div>
@@ -84,40 +105,46 @@ const Header = () => {
             {/* Center: Main Nav */}
             <nav className="desktop-only center-nav">
                 <div className="nav-item">
-                    <NavLink to="/">{t('home.welcome')}</NavLink>
+                    <NavLink to="/catalogue">Catalogue</NavLink>
                     <div className="nav-accent"></div>
                 </div>
                 
                 <div className="nav-item has-dropdown">
-                    <span className="drop-trigger">Shop <ChevronDown size={14} /></span>
+                    <span className="drop-trigger">Categories <ChevronDown size={14} /></span>
                     <div className="nav-accent"></div>
                     
                     <div className="mega-dropdown">
                         <div className="mega-grid">
                             <div className="mega-col">
-                                <h6>Divisions</h6>
+                                <h6>Catalogue</h6>
                                 <div className="mega-links">
-                                    <NavLink to="/category/4"><Stethoscope size={16} /> Surgical Systems</NavLink>
-                                    <NavLink to="/category/5"><Activity size={16} /> Diagnostic Imaging</NavLink>
-                                    <NavLink to="/category/6"><Zap size={16} /> Lab Automation</NavLink>
-                                    <NavLink to="/category/7"><Building size={16} /> Ward Furniture</NavLink>
+                                    <NavLink to="/catalogue">
+                                        <Activity size={16} /> Tous les produits
+                                    </NavLink>
+                                    {categories.length > 0 ? categories.map(cat => (
+                                        <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`}>
+                                            {categoryIconMap[cat.title] || <Activity size={16} />} 
+                                            {cat.title}
+                                        </NavLink>
+                                    )) : (
+                                        <span className="empty-nav-state">Aucune catégorie</span>
+                                    )}
                                 </div>
                             </div>
                             <div className="mega-col highlight-col">
-                                <h6>Clinics</h6>
+                                <h6>Quick Access</h6>
                                 <div className="mega-links">
-                                    <NavLink to="/search?q=cardiology">Cardiovascular</NavLink>
-                                    <NavLink to="/search?q=neurology">Neuroscience</NavLink>
-                                    <NavLink to="/search?q=oncology">Oncology</NavLink>
-                                    <NavLink to="/search?q=emergency">Acute Care</NavLink>
+                                    <NavLink to="/search?q=scanner">Scanners</NavLink>
+                                    <NavLink to="/search?q=robotic">Robotics</NavLink>
+                                    <NavLink to="/search?q=ward">Ward Management</NavLink>
                                 </div>
                             </div>
                             <div className="mega-col">
-                                <h6>Excellence</h6>
+                                <h6>Services</h6>
                                 <div className="mega-links">
-                                    <NavLink to="/contact"><Wrench size={16} /> Tech Services</NavLink>
-                                    <NavLink to="/contact"><Award size={16} /> Quality Assurance</NavLink>
-                                    <NavLink to="/contact"><Building size={16} /> Global Logistics</NavLink>
+                                    <NavLink to="/contact"><Wrench size={16} /> Maintenance</NavLink>
+                                    <NavLink to="/contact"><Award size={16} /> Compliance</NavLink>
+                                    <NavLink to="/contact"><Building size={16} /> Logistics</NavLink>
                                 </div>
                             </div>
                         </div>
@@ -136,34 +163,31 @@ const Header = () => {
                     <Search size={18} />
                     <input 
                         type="text" 
-                        placeholder="Search assets..." 
+                        placeholder="Rechercher un produit..." 
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                     />
                 </form>
 
                 <div className="actions-cluster">
-                    <div className="account-hub">
-                        <button className="icon-action-btn"><User size={24} /></button>
-                        <div className="profile-dropdown-container">
-                            <div className="mini-profile-card">
-                                {isAuthenticated ? (
-                                    <>
-                                        <div className="profile-header">Workspace</div>
-                                        <NavLink to="/account/settings">My Profile</NavLink>
-                                        <NavLink to="/account/orders">Quick Orders</NavLink>
-                                        <button className="btn-logout" onClick={() => { localStorage.removeItem('token'); window.location.reload(); }}>Sign Out</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="profile-header">Institutional Login</div>
-                                        <NavLink to="/login" className="btn-primary-sm">Sign In</NavLink>
-                                        <NavLink to="/register" className="text-link-sm">Request Access</NavLink>
-                                    </>
-                                )}
+                    {!isAuthenticated ? (
+                        <div className="auth-nav-links desktop-only">
+                            <NavLink to="/login" className="nav-login-link">Sign In</NavLink>
+                            <NavLink to="/register" className="btn-primary-sm">Register</NavLink>
+                        </div>
+                    ) : (
+                        <div className="account-hub">
+                            <button className="icon-action-btn"><User size={24} /></button>
+                            <div className="profile-dropdown-container">
+                                <div className="mini-profile-card">
+                                    <div className="profile-header">Workspace</div>
+                                    <NavLink to="/account/settings">My Profile</NavLink>
+                                    <NavLink to="/account/orders">Quick Orders</NavLink>
+                                    <button className="btn-logout" onClick={() => { localStorage.removeItem('token'); window.location.reload(); }}>Sign Out</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     <NavLink to="/cart" className="cart-btn-wrap">
                         <div className="cart-icon-box">
@@ -189,16 +213,20 @@ const Header = () => {
                 </header>
                 <div className="side-content">
                     <div className="side-section">
-                        <label>Main Navigation</label>
-                        <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
+                        <label>Navigation principale</label>
+                        <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Accueil</NavLink>
+                        <NavLink to="/catalogue" onClick={() => setIsMenuOpen(false)}>Catalogue de produits</NavLink>
                         <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
                     </div>
                     <div className="side-section">
                         <label>Shop by Division</label>
-                        <NavLink to="/category/4" onClick={() => setIsMenuOpen(false)}>Surgical</NavLink>
-                        <NavLink to="/category/5" onClick={() => setIsMenuOpen(false)}>Diagnostics</NavLink>
-                        <NavLink to="/category/6" onClick={() => setIsMenuOpen(false)}>Lab Tools</NavLink>
-                        <NavLink to="/category/7" onClick={() => setIsMenuOpen(false)}>Furniture</NavLink>
+                        {categories.length > 0 ? categories.map((cat) => (
+                            <NavLink key={cat.id} to={`/category/${cat.id}`} onClick={() => setIsMenuOpen(false)}>
+                                {cat.title}
+                            </NavLink>
+                        )) : (
+                            <span className="empty-mobile-nav">No linked categories</span>
+                        )}
                     </div>
                 </div>
             </div>
@@ -272,6 +300,7 @@ const Header = () => {
         .mega-col h6 { font-size: 0.7rem; font-weight: 950; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
         .mega-links a { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 0.9rem; font-weight: 700; color: #334155; }
         .mega-links a:hover { background: #f8fafc; color: var(--primary); }
+        .empty-nav-state { display: block; padding: 0.6rem 0.8rem; color: #94a3b8; font-size: 0.9rem; font-weight: 700; }
         .highlight-col { background: #f8fafc; padding: 1.25rem; border-radius: 16px; }
 
         /* Right */
@@ -313,8 +342,12 @@ const Header = () => {
         .mini-profile-card a:hover { color: var(--primary); }
         .btn-logout { margin-top: 1rem; color: #ef4444; font-weight: 700; font-size: 0.9rem; }
         
-        .btn-primary-sm { background: var(--primary); color: white !important; text-align: center; padding: 0.75rem !important; border-radius: 10px; margin-bottom: 0.5rem; }
-        .text-link-sm { text-align: center; font-size: 0.8rem !important; }
+        .auth-nav-links { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-login-link { font-weight: 800; color: #475569; font-size: 0.9rem; }
+        .nav-login-link:hover { color: var(--primary); }
+
+        .btn-primary-sm { background: var(--primary); color: white !important; text-align: center; padding: 0.6rem 1.2rem !important; border-radius: 10px; font-weight: 800; font-size: 0.9rem; }
+        .btn-primary-sm:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 92, 151, 0.2); }
 
         /* Sidebar Mask */
         .sidebar-mask { position: fixed; inset: 0; background: rgba(1, 42, 74, 0.4); backdrop-filter: blur(4px); z-index: 5000; }
@@ -323,6 +356,7 @@ const Header = () => {
         .side-content { padding: 2rem; }
         .side-section label { font-size: 0.7rem; font-weight: 900; color: #cbd5e1; display: block; margin-bottom: 1rem; }
         .side-section a { display: block; font-size: 1.15rem; font-weight: 800; color: #012a4a; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
+        .empty-mobile-nav { display: block; color: #94a3b8; font-size: 0.95rem; font-weight: 700; padding: 0.8rem 0; }
         
         @keyframes slideR { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 

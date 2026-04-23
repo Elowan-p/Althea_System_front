@@ -1,5 +1,4 @@
 import { useParams, NavLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { 
   ShoppingCart, 
   Heart, 
@@ -14,25 +13,29 @@ import {
   FileText
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getProduct } from '../services/api';
+import { getProduct, getSimilarProducts } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Product = () => {
     const { id } = useParams();
-    const { t } = useTranslation();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
+    const [similarEquipment, setSimilarEquipment] = useState([]);
 
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);
             try {
-                const res = await getProduct(id);
-                setProduct(res.data);
+                const [productRes, similarRes] = await Promise.all([
+                    getProduct(id),
+                    getSimilarProducts(id)
+                ]);
+                setProduct(productRes.data);
+                setSimilarEquipment(similarRes.data);
             } catch (err) {
-                console.error("Error fetching product:", err);
+                console.error("Error fetching product data:", err);
             } finally {
                 setTimeout(() => setLoading(false), 800);
             }
@@ -42,11 +45,6 @@ const Product = () => {
 
     if (loading) return <Loader />;
     if (!product) return <div className="error-state container">Product not found or system error.</div>;
-
-    const similarEquipment = [
-        { id: 101, title: 'Althea Pro-Scan Z1', price: 42000, image: '/images/prod_scanner.png' },
-        { id: 102, title: 'Precision Scalpel Set', price: 1200, image: '/images/cat_surgical.png' }
-    ];
 
     return (
         <div className="product-detail-page modern-bg">
@@ -152,9 +150,9 @@ const Product = () => {
                     <div className="related-grid">
                         {similarEquipment.map(item => (
                             <NavLink to={`/product/${item.id}`} key={item.id} className="small-product-card card">
-                                <img src={item.image} alt={item.title} />
+                                <img src={item.pictureUrl || '/images/prod_scanner.png'} alt={item.title} />
                                 <h4>{item.title}</h4>
-                                <p>${item.price.toLocaleString()}</p>
+                                <p>${Number(item.price).toLocaleString()}</p>
                             </NavLink>
                         ))}
                     </div>

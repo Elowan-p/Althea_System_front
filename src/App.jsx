@@ -12,11 +12,15 @@ const Product = lazy(() => import('./pages/Product'));
 const Search = lazy(() => import('./pages/Search'));
 const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
+const Catalogue = lazy(() => import('./pages/Catalogue'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
+const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
 const AccountLayout = lazy(() => import('./pages/account/AccountLayout'));
 const Orders = lazy(() => import('./pages/account/Orders'));
+const Settings = lazy(() => import('./pages/account/Settings'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // Component for protected routes
@@ -32,28 +36,31 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/catalogue" element={<Catalogue />} />
           <Route path="/category/:id" element={<Category />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/contact" element={<Contact />} />
-
+          
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
 
-          {/* Private Routes */}
-          <Route path="/account/*" element={
+          {/* Protected Account Routes */}
+          <Route path="/account" element={
             <ProtectedRoute>
               <AccountLayout />
             </ProtectedRoute>
           }>
-            <Route path="orders" element={<Orders />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="orders" element={<Orders />} />
+              <Route index element={<Settings />} />
           </Route>
 
-          {/* Checkout (Open to guest or logged in) */}
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Redirect all unknown to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

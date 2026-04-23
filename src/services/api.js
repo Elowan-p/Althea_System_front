@@ -22,21 +22,29 @@ api.interceptors.request.use((config) => {
 // Home Service
 export const getHomeData = () => api.get('/home');
 
-// Category/Products Service
+// Category Service
+export const getCategories = () => api.get('/categories');
+export const getCategory = (id) => api.get(`/categories/${id}`);
 export const getCategoryProducts = (categoryId, params) => api.get(`/categories/${categoryId}/products`, { params });
+
+// Products Service
+export const getProducts = () => api.get('/products');
 export const getProduct = (id) => api.get(`/products/${id}`);
 export const getSimilarProducts = (id) => api.get(`/products/${id}/similar`);
-export const searchProducts = (filters) => api.post('/search', filters);
-
-// Cart & Order Service
-export const syncCart = (cartItems) => api.post('/cart', { items: cartItems });
-export const submitCheckout = (orderData) => api.post('/checkout', orderData);
-export const getOrders = (year) => api.get('/user/orders', { params: { year } });
+export const searchProducts = (query) => api.get('/products/search', { params: { q: query } });
 
 // Auth Service
 export const register = (data) => api.post('/auth/register', data);
+export const verifyEmail = (token) => api.get('/auth/verify-email', { params: { token } });
 export const login = (data) => api.post('/auth/login', data);
-export const resetPassword = (email) => api.post('/auth/reset-password', { email });
+export const logout = () => api.post('/auth/logout');
+export const forgotPassword = (email) => api.post('/auth/forgot-password', { email });
+export const resetPassword = (token, password) => api.post('/auth/reset-password', { token, password });
+
+// Cart & Order Service (Keep for future use even if not in current scope)
+export const syncCart = (cartItems) => api.post('/cart', { items: cartItems });
+export const submitCheckout = (orderData) => api.post('/checkout', orderData);
+export const getOrders = (year) => api.get('/user/orders', { params: { year } });
 
 // User Profile CRUD
 export const updateProfile = (data) => api.put('/user/profile', data);

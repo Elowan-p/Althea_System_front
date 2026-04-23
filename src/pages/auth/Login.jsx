@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { 
   Mail, 
   Lock, 
   ArrowRight, 
   ShieldCheck, 
   Building, 
-  Globe, 
   Eye, 
   EyeOff,
   AlertCircle
@@ -16,7 +14,6 @@ import { login } from '../../services/api';
 import Loader from '../../components/common/Loader';
 
 const Login = () => {
-    const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);

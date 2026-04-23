@@ -2,7 +2,7 @@ import { useParams, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Filter, Grid, List as ListIcon, Star, ChevronRight, SlidersHorizontal } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getCategoryProducts } from '../services/api';
+import { getCategory, getCategoryProducts } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Category = () => {
@@ -11,27 +11,28 @@ const Category = () => {
   const [viewMode, setViewMode] = useState('grid');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [categoryName, setCategoryName] = useState('');
+  const [category, setCategory] = useState(null);
 
   useEffect(() => {
-    const fetchCategoryData = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await getCategoryProducts(id);
-        setProducts(res.data);
-        if (res.data.length > 0) {
-            setCategoryName(res.data[0].category.title);
-        } else {
-            setCategoryName("Medical Equipment");
-        }
+        const [catRes, prodRes] = await Promise.all([
+            getCategory(id),
+            getCategoryProducts(id)
+        ]);
+        setCategory(catRes.data);
+        setProducts(prodRes.data);
       } catch (err) {
-        console.error("Error fetching category products:", err);
+        console.error("Error fetching category data:", err);
       } finally {
         setTimeout(() => setLoading(false), 800);
       }
     };
-    fetchCategoryData();
+    fetchData();
   }, [id]);
+
+  const categoryName = category?.title || "Medical Equipment";
 
   if (loading) return <Loader />;
 

@@ -61,38 +61,35 @@ const Home = () => {
         fetchData();
     }, []);
 
-    const categories = [
-        { 
-            id: 4, 
-            name: 'Surgical Systems', 
-            icon: <Activity size={32} />, 
-            image: '/medical_category_surgical_1773848658610.png',
-            desc: 'Precision instruments for complex interventions.'
-        },
-        { 
-            id: 5, 
-            name: 'Diagnostic Imaging', 
-            icon: <Layers size={32} />, 
-            image: '/medical_category_imaging_1773848678382.png',
-            desc: 'High-definition scanning and X-ray systems.'
-        },
-        { 
-            id: 6, 
-            name: 'Lab Automation', 
-            icon: <Dna size={32} />, 
-            image: '/medical_category_lab_1773848698329.png',
-            desc: 'Robotic analysis and laboratory excellence.'
-        },
-        { 
-            id: 7, 
-            name: 'Infrastructure', 
-            icon: <Warehouse size={32} />, 
-            image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop',
-            desc: 'Smart furniture and ward management tools.'
-        }
-    ];
+    const categoryIconMap = {
+        'Surgical Systems': <Activity size={32} />,
+        'Diagnostic Imaging': <Layers size={32} />,
+        'Lab Automation': <Dna size={32} />,
+        'Infrastructure': <Warehouse size={32} />,
+        'Surgical Equipment': <Activity size={32} />,
+        'Diagnostics': <Layers size={32} />,
+        'Laboratory Tools': <Dna size={32} />,
+        'Ward Furniture': <Warehouse size={32} />,
+    };
 
-    const topProducts = apiData?.topProducts || [
+    const categories = apiData?.categories?.length > 0 
+        ? apiData.categories.map(cat => ({
+            id: cat.id,
+            name: cat.title,
+            icon: categoryIconMap[cat.title] || <Activity size={32} />,
+            image: cat.pictureUrl || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop',
+            desc: `Specialized solutions for ${cat.title.toLowerCase()}.`
+        }))
+        : [];
+
+    const topProducts = apiData?.topProducts?.map(prod => ({
+        id: prod.id,
+        name: prod.title,
+        price: typeof prod.price === 'number' ? `$${prod.price.toLocaleString()}` : `$${prod.price}`,
+        rating: 4.8, // Static as it's not in the simplified home DTO
+        medicalDomain: prod.category || 'Medical',
+        image: prod.pictureUrl
+    })) || [
         { id: 101, name: 'Althea Pro-Scan Z1', price: '$42,000', rating: 4.8, medicalDomain: 'Radiology', image: 'https://images.unsplash.com/photo-1581093196277-9f608009874e?q=80&w=2070&auto=format&fit=crop' },
         { id: 102, name: 'Precision Scalpel Set', price: '$1,200', rating: 5.0, medicalDomain: 'Surgery', image: 'https://images.unsplash.com/photo-1612277795421-9bc7706a4a34?q=80&w=2070&auto=format&fit=crop' },
         { id: 103, name: 'SmartCare Vitals Monitor', price: '$5,500', rating: 4.7, medicalDomain: 'Diagnostics', image: 'https://images.unsplash.com/photo-1576091160550-217359f4ecf8?q=80&w=2070&auto=format&fit=crop' }
@@ -162,24 +159,31 @@ const Home = () => {
                         <h3>Institutional Divisions</h3>
                         <NavLink to="/search" className="text-cta">See All Categories <ArrowRight size={16} /></NavLink>
                     </div>
-                    <div className="categories-grid-premium">
-                        {categories.map(cat => (
-                            <NavLink key={cat.id} to={`/category/${cat.id}`} className="cat-card-premium">
-                                <div className="cat-image-bg" style={{ backgroundImage: `url(${cat.image})` }}></div>
-                                <div className="cat-content">
-                                    <div className="cat-icon-box">{cat.icon}</div>
-                                    <div className="cat-info">
-                                        <h4>{cat.name}</h4>
-                                        <p>{cat.desc}</p>
+                    {categories.length > 0 ? (
+                        <div className="categories-grid-premium">
+                            {categories.map(cat => (
+                                <NavLink key={cat.id} to={`/category/${cat.id}`} className="cat-card-premium">
+                                    <div className="cat-image-bg" style={{ backgroundImage: `url(${cat.image})` }}></div>
+                                    <div className="cat-content">
+                                        <div className="cat-icon-box">{cat.icon}</div>
+                                        <div className="cat-info">
+                                            <h4>{cat.name}</h4>
+                                            <p>{cat.desc}</p>
+                                        </div>
+                                        <div className="cat-footer">
+                                            <span>Enter Division</span>
+                                            <div className="nav-circ"><ChevronRight size={18} /></div>
+                                        </div>
                                     </div>
-                                    <div className="cat-footer">
-                                        <span>Enter Division</span>
-                                        <div className="nav-circ"><ChevronRight size={18} /></div>
-                                    </div>
-                                </div>
-                            </NavLink>
-                        ))}
-                    </div>
+                                </NavLink>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="empty-state">
+                            <p>No connected categories are available yet.</p>
+                            <NavLink to="/search" className="btn-primary">Browse Products</NavLink>
+                        </div>
+                    )}
                 </div>
             </section>
 
