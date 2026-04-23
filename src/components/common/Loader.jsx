@@ -19,7 +19,6 @@ const Loader = () => {
                     align-items: center;
                     justify-content: center;
                     z-index: 9999;
-                    animation: fadeOut 0.5s ease 2s forwards;
                 }
                 
                 .loader-container {

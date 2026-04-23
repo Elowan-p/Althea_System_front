@@ -35,7 +35,7 @@ const Catalogue = () => {
       console.error('Catalogue fetch error:', err);
       setError('Impossible de charger les données. Vérifiez la connexion au serveur.');
     } finally {
-      setTimeout(() => setLoading(false), 600);
+      setLoading(false);
     }
   }, []);
 

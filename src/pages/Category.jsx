@@ -26,7 +26,7 @@ const Category = () => {
       } catch (err) {
         console.error("Error fetching category data:", err);
       } finally {
-        setTimeout(() => setLoading(false), 800);
+        setLoading(false);
       }
     };
     fetchData();

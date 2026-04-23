@@ -57,7 +57,7 @@ const Register = () => {
     return (
         <div className="auth-page">
             <div className="auth-container">
-                <div className="auth-visual desktop-only register-visual">
+                <div className="auth-visual desktop-only">
                     <div className="visual-overlay">
                         <div className="visual-content">
                             <div className="visual-badge">Acces Professionnel</div>
@@ -193,11 +193,10 @@ const Register = () => {
             <style>{`
                 .auth-page {
                     max-width: 100vw;
-                    min-height: calc(100vh - var(--header-height));
+                    min-height: 100vh;
                     background: white;
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    align-items: stretch;
                 }
                 .auth-container {
                     display: grid;
@@ -205,13 +204,8 @@ const Register = () => {
                     width: 100%;
                     min-height: 100vh;
                 }
-                .register-visual {
-                    background: url('https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop');
-                    background-size: cover;
-                    background-position: center;
-                    position: relative;
-                }
                 .auth-visual {
+                    background: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop');
                     background-size: cover;
                     background-position: center;
                     position: relative;

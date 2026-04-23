@@ -9,14 +9,7 @@ import {
   Search, 
   Globe, 
   ChevronDown,
-  Activity,
-  Zap,
-  Building,
-  Wrench,
-  Award,
-  Layers,
-  Dna,
-  Warehouse
+  Activity
 } from 'lucide-react';
 import { getCategories } from '../../services/api';
 
@@ -30,13 +23,13 @@ const Header = () => {
 
   const categoryIconMap = {
     'Surgical Systems': <Activity size={16} />,
-    'Diagnostic Imaging': <Layers size={16} />,
-    'Lab Automation': <Dna size={16} />,
-    'Infrastructure': <Warehouse size={16} />,
+    'Diagnostic Imaging': <Activity size={16} />,
+    'Lab Automation': <Activity size={16} />,
+    'Infrastructure': <Activity size={16} />,
     'Surgical Equipment': <Activity size={16} />,
-    'Diagnostics': <Layers size={16} />,
-    'Laboratory Tools': <Dna size={16} />,
-    'Ward Furniture': <Warehouse size={16} />,
+    'Diagnostics': <Activity size={16} />,
+    'Laboratory Tools': <Activity size={16} />,
+    'Ward Furniture': <Activity size={16} />,
   };
 
   const cartCount = 3; 
@@ -110,40 +103,20 @@ const Header = () => {
                     </NavLink>
                     <div className="nav-accent"></div>
 
-                    <div className="mega-dropdown">
-                        <div className="mega-grid">
-                            <div className="mega-col">
-                                <h6>Catalogue</h6>
-                                <div className="mega-links">
-                                    <NavLink to="/catalogue">
-                                        <Activity size={16} /> Tous les produits
-                                    </NavLink>
-                                    {categories.length > 0 ? categories.map(cat => (
-                                        <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`}>
-                                            {categoryIconMap[cat.title] || <Activity size={16} />}
-                                            {cat.title}
-                                        </NavLink>
-                                    )) : (
-                                        <span className="empty-nav-state">Aucune catégorie</span>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="mega-col highlight-col">
-                                <h6>Accès rapide</h6>
-                                <div className="mega-links">
-                                    <NavLink to="/search?q=scanner">Scanners</NavLink>
-                                    <NavLink to="/search?q=robotic">Robotique</NavLink>
-                                    <NavLink to="/search?q=ward">Gestion de salle</NavLink>
-                                </div>
-                            </div>
-                            <div className="mega-col">
-                                <h6>Services</h6>
-                                <div className="mega-links">
-                                    <NavLink to="/contact"><Wrench size={16} /> Maintenance</NavLink>
-                                    <NavLink to="/contact"><Award size={16} /> Conformité</NavLink>
-                                    <NavLink to="/contact"><Building size={16} /> Logistique</NavLink>
-                                </div>
-                            </div>
+                    <div className="mega-dropdown mega-dropdown--single">
+                        <h6>Parcourir le catalogue</h6>
+                        <div className="mega-links">
+                            <NavLink to="/catalogue">
+                                <Activity size={16} /> Tous les produits
+                            </NavLink>
+                            {categories.length > 0 ? categories.map(cat => (
+                                <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`}>
+                                    {categoryIconMap[cat.title] || <Activity size={16} />}
+                                    {cat.title}
+                                </NavLink>
+                            )) : (
+                                <span className="empty-nav-state">Aucune catégorie disponible</span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -284,22 +257,21 @@ const Header = () => {
            left: 50%;
            transform: translateX(-50%) translateY(20px);
            background: white;
-           padding: 2.5rem;
+           padding: 2rem;
            border-radius: 20px;
            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.15);
            border: 1px solid #f1f5f9;
-           width: 700px;
+           width: 340px;
            visibility: hidden;
            opacity: 0;
            transition: all 0.3s ease;
         }
+        .mega-dropdown--single h6 { font-size: 0.7rem; font-weight: 950; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em; margin-bottom: 1rem; }
         .nav-item:hover .mega-dropdown { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
-        .mega-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
-        .mega-col h6 { font-size: 0.7rem; font-weight: 950; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+        .mega-links { display: flex; flex-direction: column; gap: 2px; }
         .mega-links a { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 0.9rem; font-weight: 700; color: #334155; }
         .mega-links a:hover { background: #f8fafc; color: var(--primary); }
         .empty-nav-state { display: block; padding: 0.6rem 0.8rem; color: #94a3b8; font-size: 0.9rem; font-weight: 700; }
-        .highlight-col { background: #f8fafc; padding: 1.25rem; border-radius: 16px; }
 
         /* Right */
         .flex-end { display: flex; align-items: center; gap: 2rem; justify-content: flex-end; }

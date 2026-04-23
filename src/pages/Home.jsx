@@ -55,7 +55,7 @@ const Home = () => {
           } catch (err) {
             console.error("Home Data Fetch Error:", err);
           } finally {
-            setTimeout(() => setLoading(false), 800);
+            setLoading(false);
           }
         };
         fetchData();
