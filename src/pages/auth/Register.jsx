@@ -11,6 +11,9 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
+  MapPin,
+  Hash,
+  Globe as GlobeIcon
 } from 'lucide-react';
 import { register } from '../../services/api';
 import Loader from '../../components/common/Loader';
@@ -22,12 +25,17 @@ const Register = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
         firstName: '',
         lastName: '',
+        email: '',
         company: '',
+        siret: '',
         phone: '',
+        address: '',
+        postalCode: '',
+        city: '',
+        country: 'France',
+        password: '',
     });
 
     const handleChange = (e) => {
@@ -133,19 +141,62 @@ const Register = () => {
                                         </div>
                                     </div>
 
-                                    <div className="field-group">
-                                        <label>Etablissement</label>
-                                        <div className="input-icon-wrap">
-                                            <Building size={18} />
-                                            <input type="text" name="company" placeholder="Clinique Althea" required value={formData.company} onChange={handleChange} />
+                                    <div className="form-row">
+                                        <div className="field-group">
+                                            <label>Etablissement</label>
+                                            <div className="input-icon-wrap">
+                                                <Building size={18} />
+                                                <input type="text" name="company" placeholder="Clinique Althea" required value={formData.company} onChange={handleChange} />
+                                            </div>
+                                        </div>
+                                        <div className="field-group">
+                                            <label>SIRET</label>
+                                            <div className="input-icon-wrap">
+                                                <Hash size={18} />
+                                                <input type="text" name="siret" placeholder="123 456 789 00012" value={formData.siret} onChange={handleChange} />
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div className="field-group">
-                                        <label>Telephone</label>
+                                        <label>Adresse</label>
                                         <div className="input-icon-wrap">
-                                            <Phone size={18} />
-                                            <input type="tel" name="phone" placeholder="+33 6 00 00 00 00" required value={formData.phone} onChange={handleChange} />
+                                            <MapPin size={18} />
+                                            <input type="text" name="address" placeholder="12 rue de la Paix" value={formData.address} onChange={handleChange} />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-row">
+                                        <div className="field-group">
+                                            <label>Code Postal</label>
+                                            <div className="input-icon-wrap">
+                                                <Hash size={18} />
+                                                <input type="text" name="postalCode" placeholder="75000" value={formData.postalCode} onChange={handleChange} />
+                                            </div>
+                                        </div>
+                                        <div className="field-group">
+                                            <label>Ville</label>
+                                            <div className="input-icon-wrap">
+                                                <MapPin size={18} />
+                                                <input type="text" name="city" placeholder="Paris" value={formData.city} onChange={handleChange} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-row">
+                                        <div className="field-group">
+                                            <label>Pays</label>
+                                            <div className="input-icon-wrap">
+                                                <GlobeIcon size={18} />
+                                                <input type="text" name="country" placeholder="France" value={formData.country} onChange={handleChange} />
+                                            </div>
+                                        </div>
+                                        <div className="field-group">
+                                            <label>Telephone</label>
+                                            <div className="input-icon-wrap">
+                                                <Phone size={18} />
+                                                <input type="tel" name="phone" placeholder="+33 6 00 00 00 00" required value={formData.phone} onChange={handleChange} />
+                                            </div>
                                         </div>
                                     </div>
 
@@ -227,12 +278,14 @@ const Register = () => {
                 .v-stat span { font-size: 0.85rem; opacity: 0.75; }
 
                 .auth-form-side {
-                    padding: 4rem;
+                    padding: 4rem 2rem;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: center;
                     background: #fcfdfe;
+                    overflow-y: auto;
+                    height: 100vh;
                 }
                 .form-card { width: 100%; max-width: 400px; }
                 .auth-header { text-align: center; margin-bottom: 3rem; }
@@ -283,12 +336,6 @@ const Register = () => {
                 .auth-security-footer { margin-top: 4rem; display: flex; gap: 2rem; color: #cbd5e1; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
                 .sec-item { display: flex; align-items: center; gap: 6px; }
 
-                .mobile-only { display: block; }
-                .desktop-only { display: none; }
-                @media (min-width: 1024px) {
-                    .mobile-only { display: none; }
-                    .desktop-only { display: block; }
-                }
                 @media (max-width: 1024px) {
                     .auth-container { grid-template-columns: 1fr; }
                     .auth-form-side { min-height: 100vh; padding: 2rem; }

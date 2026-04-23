@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// API documentation refers to Althea Systems internal services
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 const api = axios.create({
@@ -10,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Interceptor for handling tokens (authentication)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -36,7 +34,7 @@ export const searchProducts = (query) => api.get('/products/search', { params: {
 // Auth Service
 export const register = (data) => api.post('/auth/register', data);
 export const verifyEmail = (token) => api.get('/auth/verify-email', { params: { token } });
-export const login = (data) => api.post('/auth/login', data);
+export const login = (data) => api.post('/auth/login_check', data);
 export const logout = () => api.post('/auth/logout');
 export const forgotPassword = (email) => api.post('/auth/forgot-password', { email });
 export const resetPassword = (token, password) => api.post('/auth/reset-password', { token, password });
