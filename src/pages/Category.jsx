@@ -7,11 +7,13 @@ import Loader from '../components/common/Loader';
 
 const Category = () => {
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [viewMode, setViewMode] = useState('grid');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState(null);
+
+  const currentLang = i18n.language;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +29,7 @@ const Category = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, currentLang]);
 
   const categoryName = category?.title || "Medical Equipment";
 

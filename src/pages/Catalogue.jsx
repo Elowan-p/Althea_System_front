@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { Grid, List as ListIcon, Star, SlidersHorizontal, ChevronRight, X, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getProducts, getCategories } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Catalogue = () => {
+  const { i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState('grid');
   const [products, setProducts] = useState([]);
@@ -17,6 +19,8 @@ const Catalogue = () => {
   const activeCategoryId = searchParams.get('category')
     ? Number(searchParams.get('category'))
     : null;
+
+  const currentLang = i18n.language;
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -37,7 +41,7 @@ const Catalogue = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [currentLang]);
 
   useEffect(() => {
     fetchData();

@@ -5,16 +5,20 @@ import {
   Star,
   ChevronRight
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getProducts, searchProducts } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Search = () => {
+    const { i18n } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('q') || '';
     
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [internalQuery, setInternalQuery] = useState(query);
+
+    const currentLang = i18n.language;
 
     useEffect(() => {
         if (query.length >= 2) {
@@ -23,7 +27,7 @@ const Search = () => {
         }
 
         handleLoadAllProducts();
-    }, [query]);
+    }, [query, currentLang]);
 
     const handleSearch = async (searchTerm) => {
         setLoading(true);

@@ -14,14 +14,15 @@ import {
   Warehouse
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getHomeData } from '../services/api';
+import { getCategories, getProducts } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Home = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [apiData, setApiData] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [topProducts, setTopProducts] = useState([]);
 
     const slides = [
         {
@@ -33,7 +34,7 @@ const Home = () => {
         },
         {
           id: 2,
-          image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop', 
+          image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop',
           title: 'Advanced Diagnostic Tools',
           desc: 'Next-generation scanners and imaging technology. High-fidelity imaging for life-critical diagnostics.',
           cta: 'Learn More'
@@ -47,20 +48,6 @@ const Home = () => {
         return () => clearInterval(timer);
     }, [slides.length]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const res = await getHomeData();
-            if (res.data) setApiData(res.data);
-          } catch (err) {
-            console.error("Home Data Fetch Error:", err);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchData();
-    }, []);
-
     const categoryIconMap = {
         'Surgical Systems': <Activity size={32} />,
         'Diagnostic Imaging': <Layers size={32} />,
@@ -72,28 +59,43 @@ const Home = () => {
         'Ward Furniture': <Warehouse size={32} />,
     };
 
-    const categories = apiData?.categories?.length > 0 
-        ? apiData.categories.map(cat => ({
-            id: cat.id,
-            name: cat.title,
-            icon: categoryIconMap[cat.title] || <Activity size={32} />,
-            image: cat.pictureUrl || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop',
-            desc: `Specialized solutions for ${cat.title.toLowerCase()}.`
-        }))
-        : [];
+    const currentLang = i18n.language;
 
-    const topProducts = apiData?.topProducts?.map(prod => ({
-        id: prod.id,
-        name: prod.title,
-        price: typeof prod.price === 'number' ? `$${prod.price.toLocaleString()}` : `$${prod.price}`,
-        rating: 4.8, // Static as it's not in the simplified home DTO
-        medicalDomain: prod.category || 'Medical',
-        image: prod.pictureUrl
-    })) || [
-        { id: 101, name: 'Althea Pro-Scan Z1', price: '$42,000', rating: 4.8, medicalDomain: 'Radiology', image: 'https://images.unsplash.com/photo-1581093196277-9f608009874e?q=80&w=2070&auto=format&fit=crop' },
-        { id: 102, name: 'Precision Scalpel Set', price: '$1,200', rating: 5.0, medicalDomain: 'Surgery', image: 'https://images.unsplash.com/photo-1612277795421-9bc7706a4a34?q=80&w=2070&auto=format&fit=crop' },
-        { id: 103, name: 'SmartCare Vitals Monitor', price: '$5,500', rating: 4.7, medicalDomain: 'Diagnostics', image: 'https://images.unsplash.com/photo-1576091160550-217359f4ecf8?q=80&w=2070&auto=format&fit=crop' }
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            // Real endpoints: GET /api/categories and GET /api/products
+            const [catsRes, prodsRes] = await Promise.all([
+              getCategories(),
+              getProducts()
+            ]);
+
+            const catsData = Array.isArray(catsRes.data) ? catsRes.data : [];
+            setCategories(catsData.map(cat => ({
+              id: cat.id,
+              name: cat.title,
+              icon: categoryIconMap[cat.title] || <Activity size={32} />,
+              image: cat.pictureUrl || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop',
+              desc: `Specialized solutions for ${(cat.title || '').toLowerCase()}.`
+            })));
+
+            const prodsData = Array.isArray(prodsRes.data) ? prodsRes.data : [];
+            setTopProducts(prodsData.slice(0, 3).map(prod => ({
+              id: prod.id,
+              name: prod.title,
+              price: `$${Number(prod.price).toLocaleString()}`,
+              rating: 4.8,
+              medicalDomain: prod.medicalDomain || prod.category?.title || 'Medical',
+              image: prod.pictureUrl || null
+            })));
+          } catch (err) {
+            console.error('Home Data Fetch Error:', err);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchData();
+    }, [currentLang]);
 
     if (loading) return <Loader />;
 

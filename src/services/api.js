@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 const CACHE_TTL = 5 * 60 * 1000;
 
 const api = axios.create({
@@ -10,15 +10,31 @@ const api = axios.create({
   },
 });
 
+// ─── Request Interceptors ────────────────────────────────────────────────────
+
 api.interceptors.request.use((config) => {
+  // Bearer token
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  // Locale: read from i18next localStorage key, normalize to 2-char code
+  const rawLocale = localStorage.getItem('i18nextLng') || 'fr';
+  const locale = rawLocale.split('-')[0].toLowerCase(); // "fr-FR" → "fr"
+  if (!config.params) config.params = {};
+  // Don't override if caller explicitly set locale already
+  if (!config.params.locale) {
+    config.params.locale = locale;
+  }
+
   return config;
 }, (error) => Promise.reject(error));
 
+// ─── Cache Utilities ─────────────────────────────────────────────────────────
+
 const responseFromData = (data) => ({ data });
+
 const normalizeSearchValue = (value) => String(value ?? '')
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
@@ -27,48 +43,43 @@ const normalizeSearchValue = (value) => String(value ?? '')
 
 const cacheStore = new Map();
 
+// Clear ALL locale-sensitive caches when the user switches language
+// so every product/category is re-fetched in the new locale on next access
+if (typeof window !== 'undefined') {
+  window.addEventListener('languagechange', () => {
+    cacheStore.clear();
+  });
+}
+
 const getCachedEntry = (key) => {
   const entry = cacheStore.get(key);
 
-  if (!entry) {
-    return null;
-  }
+  if (!entry) return null;
 
   if (entry.data && Date.now() - entry.timestamp < CACHE_TTL) {
     return entry;
   }
 
-  if (entry.promise) {
-    return entry;
-  }
+  if (entry.promise) return entry;
 
   cacheStore.delete(key);
   return null;
 };
 
 const setCachedData = (key, data) => {
-  cacheStore.set(key, {
-    data,
-    timestamp: Date.now(),
-  });
+  cacheStore.set(key, { data, timestamp: Date.now() });
 };
 
 const seedProductCache = (product) => {
-  if (product?.id) {
-    setCachedData(`product:${product.id}`, product);
-  }
+  if (product?.id) setCachedData(`product:${product.id}`, product);
 };
 
 const seedCategoryCache = (category) => {
-  if (category?.id) {
-    setCachedData(`category:${category.id}`, category);
-  }
+  if (category?.id) setCachedData(`category:${category.id}`, category);
 };
 
 const seedProductsIntoEntityCache = (products) => {
-  if (Array.isArray(products)) {
-    products.forEach(seedProductCache);
-  }
+  if (Array.isArray(products)) products.forEach(seedProductCache);
 };
 
 const seedFullProductsCache = (products) => {
@@ -88,25 +99,13 @@ const seedCategoriesCache = (categories) => {
 const cachedGet = async (key, fetcher, { onSuccess } = {}) => {
   const cachedEntry = getCachedEntry(key);
 
-  if (cachedEntry?.data) {
-    return responseFromData(cachedEntry.data);
-  }
-
-  if (cachedEntry?.promise) {
-    return cachedEntry.promise;
-  }
+  if (cachedEntry?.data) return responseFromData(cachedEntry.data);
+  if (cachedEntry?.promise) return cachedEntry.promise;
 
   const requestPromise = fetcher()
     .then((response) => {
-      cacheStore.set(key, {
-        data: response.data,
-        timestamp: Date.now(),
-      });
-
-      if (onSuccess) {
-        onSuccess(response.data);
-      }
-
+      cacheStore.set(key, { data: response.data, timestamp: Date.now() });
+      if (onSuccess) onSuccess(response.data);
       return responseFromData(response.data);
     })
     .catch((error) => {
@@ -115,11 +114,11 @@ const cachedGet = async (key, fetcher, { onSuccess } = {}) => {
     });
 
   cacheStore.set(key, { promise: requestPromise });
-
   return requestPromise;
 };
 
-// Home Service
+// ─── Home Service ────────────────────────────────────────────────────────────
+
 export const getHomeData = () => cachedGet(
   'home',
   () => api.get('/home'),
@@ -131,7 +130,8 @@ export const getHomeData = () => cachedGet(
   }
 );
 
-// Category Service
+// ─── Category Service ────────────────────────────────────────────────────────
+
 export const getCategories = () => cachedGet(
   'categories',
   () => api.get('/categories'),
@@ -157,84 +157,95 @@ export const getCategory = (id) => cachedGet(
 export const getCategoryProducts = (categoryId, params) => cachedGet(
   `category-products:${categoryId}`,
   () => api.get(`/categories/${categoryId}/products`, { params }),
-  {
-    onSuccess: (data) => seedProductsIntoEntityCache(data),
-  }
+  { onSuccess: (data) => seedProductsIntoEntityCache(data) }
 );
 
-// Products Service
+// ─── Products Service ─────────────────────────────────────────────────────────
+
 export const getProducts = () => cachedGet(
   'products',
   () => api.get('/products'),
-  {
-    onSuccess: (data) => seedFullProductsCache(data),
-  }
+  { onSuccess: (data) => seedFullProductsCache(data) }
 );
 
 export const getProduct = (id) => cachedGet(
   `product:${id}`,
   () => api.get(`/products/${id}`),
-  {
-    onSuccess: (data) => seedProductCache(data),
-  }
+  { onSuccess: (data) => seedProductCache(data) }
 );
 
 export const getSimilarProducts = (id) => cachedGet(
   `product-similar:${id}`,
   () => api.get(`/products/${id}/similar`),
-  {
-    onSuccess: (data) => seedProductsIntoEntityCache(data),
-  }
+  { onSuccess: (data) => seedProductsIntoEntityCache(data) }
 );
 
+// Real backend search — GET /api/products/search?q=... (min 2 chars)
 export const searchProducts = async (query) => {
   const normalizedQuery = normalizeSearchValue(query);
+  if (normalizedQuery.length < 2) return responseFromData([]);
 
-  if (normalizedQuery.length < 2) {
-    return responseFromData([]);
-  }
-
-  const productsResponse = await getProducts();
-  const filteredProducts = (productsResponse.data || []).filter((product) => {
-    const searchableContent = normalizeSearchValue([
-      product?.title,
-      product?.description,
-      product?.medicalDomain,
-      product?.powerSupplyType,
-      product?.category?.title,
-    ].join(' '));
-
-    return searchableContent.includes(normalizedQuery);
-  });
-
-  return responseFromData(filteredProducts);
+  const response = await api.get('/products/search', { params: { q: query.trim() } });
+  return responseFromData(response.data);
 };
 
-// Auth Service
+// ─── Auth Service ─────────────────────────────────────────────────────────────
+
 export const register = (data) => api.post('/auth/register', data);
-export const verifyEmail = (token) => api.get('/auth/verify-email', { params: { token } });
-export const login = (data) => api.post('/auth/login_check', data);
+
+export const getUserProfile = () => api.get('/auth/me');
+export const updateUserProfile = (data) => api.put('/auth/me', data);
+
+// FIXED: path param — GET /api/auth/verify-email/{token}
+// Returns { message, token } — frontend must store the JWT
+export const verifyEmail = (token) => api.get(`/auth/verify-email/${token}`);
+
+// Lexik JWT expects "username" key (mapped to email by the security provider)
+export const login = (data) => api.post('/auth/login_check', {
+  username: data.username,
+  password: data.password,
+});
+
 export const logout = () => api.post('/auth/logout');
+
 export const forgotPassword = (email) => api.post('/auth/forgot-password', { email });
-export const resetPassword = (token, password) => api.post('/auth/reset-password', { token, password });
 
-// Cart & Order Service (Keep for future use even if not in current scope)
-export const syncCart = (cartItems) => api.post('/cart', { items: cartItems });
-export const submitCheckout = (orderData) => api.post('/checkout', orderData);
-export const getOrders = (year) => api.get('/user/orders', { params: { year } });
+// FIXED: path param + body only contains {password} — POST /api/auth/reset-password/{token}
+export const resetPassword = (token, password) =>
+  api.post(`/auth/reset-password/${token}`, { password });
 
-// User Profile CRUD
-export const updateProfile = (data) => api.put('/user/profile', data);
-export const getAddresses = () => api.get('/user/addresses');
-export const createAddress = (data) => api.post('/user/addresses', data);
-export const updateAddress = (id, data) => api.put(`/user/addresses/${id}`, data);
-export const deleteAddress = (id) => api.delete(`/user/addresses/${id}`);
+// ─── Cart & Order Service ─────────────────────────────────────────────────────
 
-export const getPaymentMethods = () => api.get('/user/payments');
-export const createPaymentMethod = (data) => api.post('/user/payments', data);
-export const deletePaymentMethod = (id) => api.delete(`/user/payments/${id}`);
+// GET /api/order/my-order — works for guest (session) and authenticated users (DB)
+export const getMyCart = () => api.get('/order/my-order');
 
-// Messaging Service
+// POST /api/order/add-item — { productId, quantity } — guest and authenticated
+export const addItemToCart = (productId, quantity = 1) =>
+  api.post('/order/add-item', { productId, quantity });
+
+// PATCH /api/order/update-items — { items: [{ itemId, quantity }] } — ROLE_USER required
+export const updateCartItems = (items) =>
+  api.patch('/order/update-items', { items });
+
+// DELETE /api/order/remove-item/{itemId} — ROLE_USER required
+export const removeCartItem = (itemId) =>
+  api.delete(`/order/remove-item/${itemId}`);
+
+// POST /api/order/checkout — returns { message, orderId, url } — ROLE_USER required
+export const checkoutCart = () => api.post('/order/checkout');
+
+// GET /api/order/success?session_id=... — Stripe success callback
+export const getOrderSuccess = (sessionId) =>
+  api.get('/order/success', { params: { session_id: sessionId } });
+
+// ─── Invoice Service ──────────────────────────────────────────────────────────
+
+// GET /api/invoice/{orderId} — returns PDF blob — ROLE_USER required, order status must be 'Payé'
+export const getInvoicePdf = (orderId) =>
+  api.get(`/invoice/${orderId}`, { responseType: 'blob' });
+
+// ─── Messaging Service ────────────────────────────────────────────────────────
+
 export const sendMessage = (data) => api.post('/contact', data);
 
 export default api;

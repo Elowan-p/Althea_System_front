@@ -22,6 +22,7 @@ const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
 const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Cancel = lazy(() => import('./pages/Cancel'));
 
 // Component for protected routes
 const ProtectedRoute = ({ children }) => {
@@ -60,6 +61,8 @@ function App() {
           </Route>
 
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/cancel" element={<Cancel />} />
           <Route path="/contact" element={<Contact />} />
 
           {/* Redirect all unknown to home */}

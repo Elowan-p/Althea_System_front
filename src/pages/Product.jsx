@@ -1,28 +1,34 @@
 import { useParams, NavLink } from 'react-router-dom';
-import { 
-  ShoppingCart, 
-  Heart, 
-  Share2, 
-  CheckCircle, 
-  Shield, 
-  Truck, 
+import {
+  ShoppingCart,
+  Heart,
+  Share2,
+  CheckCircle,
+  Shield,
+  Truck,
   ChevronRight,
   Plus,
   Minus,
   Star,
-  FileText
+  FileText,
+  Loader2
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getProduct, getSimilarProducts } from '../services/api';
+import { useTranslation } from 'react-i18next';
+import { getProduct, getSimilarProducts, addItemToCart } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Product = () => {
+    const { i18n } = useTranslation();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
     const [similarEquipment, setSimilarEquipment] = useState([]);
+    const [cartStatus, setCartStatus] = useState('idle'); // idle | loading | success | error
+
+    const currentLang = i18n.language;
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -41,7 +47,22 @@ const Product = () => {
             }
         };
         fetchProduct();
-    }, [id]);
+    }, [id, currentLang]);
+
+    const handleAddToCart = async () => {
+        if (!product || product.inStock <= 0) return;
+        setCartStatus('loading');
+        try {
+            await addItemToCart(product.id, quantity);
+            window.dispatchEvent(new Event('cartchange'));
+            setCartStatus('success');
+            setTimeout(() => setCartStatus('idle'), 2500);
+        } catch (err) {
+            console.error('Add to cart error:', err);
+            setCartStatus('error');
+            setTimeout(() => setCartStatus('idle'), 2500);
+        }
+    };
 
     if (loading) return <Loader />;
     if (!product) return <div className="error-state container">Product not found or system error.</div>;
@@ -99,9 +120,19 @@ const Product = () => {
                                 <span>{quantity}</span>
                                 <button onClick={() => setQuantity(q => q + 1)}><Plus size={18} /></button>
                             </div>
-                            <button className="btn-primary add-to-cart" disabled={product.inStock <= 0}>
-                                <ShoppingCart size={20} />
-                                {product.inStock > 0 ? "Deploy to Inventory" : "Request Availability"}
+                            <button
+                                className={`btn-primary add-to-cart ${cartStatus}`}
+                                disabled={product.inStock <= 0 || cartStatus === 'loading'}
+                                onClick={handleAddToCart}
+                            >
+                                {cartStatus === 'loading' && <Loader2 size={20} className="spin-icon" />}
+                                {cartStatus === 'success' && <CheckCircle size={20} />}
+                                {cartStatus === 'error' && <ShoppingCart size={20} />}
+                                {cartStatus === 'idle' && <ShoppingCart size={20} />}
+                                {cartStatus === 'loading' ? 'Adding...' :
+                                 cartStatus === 'success' ? 'Added to Cart!' :
+                                 cartStatus === 'error' ? 'Error — Retry' :
+                                 product.inStock > 0 ? 'Deploy to Inventory' : 'Request Availability'}
                             </button>
                             <button className="icon-btn-outline"><Heart size={20} /></button>
                             <button className="icon-btn-outline"><Share2 size={20} /></button>
@@ -199,8 +230,12 @@ const Product = () => {
                 .qty-selector { display: flex; align-items: center; gap: 1.5rem; background: #f1f5f9; padding: 0.6rem 1rem; border-radius: 12px; font-weight: 800; }
                 .qty-selector button { color: #64748b; transition: var(--transition); }
                 .qty-selector button:hover { color: var(--primary); }
-                
-                .add-to-cart { flex: 1; padding: 1.25rem !important; gap: 0.8rem; font-size: 1rem; }
+                .add-to-cart { flex: 1; padding: 1.25rem !important; gap: 0.8rem; font-size: 1rem; transition: all 0.3s ease; }
+                .add-to-cart.success { background: #059669 !important; }
+                .add-to-cart.error { background: #dc2626 !important; }
+                .add-to-cart.loading { opacity: 0.8; cursor: wait; }
+                .spin-icon { animation: spin 0.8s linear infinite; }
+                @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
                 .trust-signals { display: flex; flex-direction: column; gap: 1.25rem; }
                 .signal { display: flex; align-items: center; gap: 1rem; font-weight: 700; font-size: 0.9rem; }
