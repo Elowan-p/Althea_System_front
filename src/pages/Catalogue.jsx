@@ -6,7 +6,7 @@ import { getProducts, getCategories } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Catalogue = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState('grid');
   const [products, setProducts] = useState([]);
@@ -82,9 +82,9 @@ const Catalogue = () => {
       <section className="cat-hero-banner">
         <div className="container">
           <nav className="cat-breadcrumb">
-            <NavLink to="/">Accueil</NavLink>
+            <NavLink to="/">{t('catalogue.breadcrumb_home', 'Accueil')}</NavLink>
             <ChevronRight size={12} />
-            <span className="active">Catalogue de produits</span>
+            <span className="active">{t('catalogue.breadcrumb_catalogue', 'Catalogue de produits')}</span>
             {activeCategory && (
               <>
                 <ChevronRight size={12} />
@@ -93,17 +93,21 @@ const Catalogue = () => {
             )}
           </nav>
           <h1 className="cat-hero-title">
-            {activeCategory ? activeCategory.title : 'Catalogue de produits'}
+            {activeCategory ? activeCategory.title : t('catalogue.breadcrumb_catalogue', 'Catalogue de produits')}
           </h1>
           <p className="cat-hero-sub">
             {activeCategory
-              ? `Solutions spécialisées pour ${activeCategory.title.toLowerCase()}.`
-              : 'Découvrez l\'ensemble de notre gamme d\'équipements médicaux de haute précision.'}
+              ? (i18n.language.startsWith('ru')
+                  ? `Специализированные решения для ${activeCategory.title.toLowerCase()}.`
+                  : i18n.language.startsWith('en')
+                    ? `Specialized solutions for ${activeCategory.title.toLowerCase()}.`
+                    : `Solutions spécialisées pour ${activeCategory.title.toLowerCase()}.`)
+              : t('catalogue.hero_subtitle', 'Découvrez l\'ensemble de notre gamme d\'équipements médicaux de haute précision.')}
           </p>
           {loadTime && (
             <div className="load-time-badge">
               <Clock size={12} />
-              <span>Données chargées en {loadTime}s</span>
+              <span>{t('catalogue.load_time', { defaultValue: 'Données chargées en {{time}}s', time: loadTime })}</span>
             </div>
           )}
         </div>
@@ -115,7 +119,7 @@ const Catalogue = () => {
           <div className="sidebar-card">
             <div className="sidebar-header">
               <SlidersHorizontal size={16} />
-              <h3>Filtrer par catégorie</h3>
+              <h3>{t('catalogue.filter_by_category', 'Filtrer par catégorie')}</h3>
             </div>
             <ul className="cat-filter-list">
               <li>
@@ -123,7 +127,7 @@ const Catalogue = () => {
                   className={`cat-filter-btn ${!activeCategoryId ? 'active' : ''}`}
                   onClick={clearFilter}
                 >
-                  <span>Toutes les catégories</span>
+                  <span>{t('catalogue.all_categories', 'Toutes les catégories')}</span>
                   <span className="count-badge">{products.length}</span>
                 </button>
               </li>
@@ -164,21 +168,21 @@ const Catalogue = () => {
                 </span>
               )}
               <span className="results-info">
-                <strong>{sortedProducts.length}</strong> produit{sortedProducts.length !== 1 ? 's' : ''} trouvé{sortedProducts.length !== 1 ? 's' : ''}
+                <strong>{sortedProducts.length}</strong> {sortedProducts.length === 1 ? t('catalogue.products_count_one', 'produit trouvé') : t('catalogue.products_count_other', 'produits trouvés')}
               </span>
             </div>
             <div className="toolbar-right">
               <div className="sort-group">
-                <label>Trier :</label>
+                <label>{t('catalogue.sort_by', 'Trier :')}</label>
                 <select
                   className="minimal-select"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
-                  <option value="default">Par défaut</option>
-                  <option value="price-asc">Prix croissant</option>
-                  <option value="price-desc">Prix décroissant</option>
-                  <option value="name">Nom A-Z</option>
+                  <option value="default">{t('catalogue.sort_default', 'Par défaut')}</option>
+                  <option value="price-asc">{t('catalogue.sort_price_asc', 'Prix croissant')}</option>
+                  <option value="price-desc">{t('catalogue.sort_price_desc', 'Prix décroissant')}</option>
+                  <option value="name">{t('catalogue.sort_name', 'Nom A-Z')}</option>
                 </select>
               </div>
               <div className="view-toggle">
@@ -215,10 +219,10 @@ const Catalogue = () => {
                       alt={prod.title}
                     />
                     {prod.inStock <= 0 && (
-                      <span className="tag-oos">Stock limité</span>
+                      <span className="tag-oos">{t('catalogue.limited_supply', 'Stock limité')}</span>
                     )}
                     <div className="card-overlay">
-                      <button className="view-detail-btn">Voir les détails</button>
+                      <button className="view-detail-btn">{t('catalogue.view_details', 'Voir les détails')}</button>
                     </div>
                   </div>
                   <div className="card-info">
@@ -234,14 +238,14 @@ const Catalogue = () => {
                     <h3 className="item-title">{prod.title}</h3>
                     <div className="info-bottom">
                       <span className="item-price">
-                        {Number(prod.price).toLocaleString('fr-FR', {
+                        {Number(prod.price).toLocaleString(i18n.language, {
                           style: 'currency',
                           currency: 'EUR',
                         })}
                       </span>
                       <div className="stock-status">
                         <div className={`dot ${prod.inStock > 0 ? 'online' : 'offline'}`} />
-                        <span>{prod.inStock > 0 ? 'En stock' : 'Rupture'}</span>
+                        <span>{prod.inStock > 0 ? t('catalogue.in_stock', 'En stock') : t('catalogue.out_of_stock', 'Rupture')}</span>
                       </div>
                     </div>
                   </div>
@@ -250,9 +254,9 @@ const Catalogue = () => {
             </div>
           ) : (
             <div className="empty-state-full">
-              <p>Aucun produit disponible dans cette catégorie.</p>
+              <p>{t('catalogue.no_products', 'Aucun produit disponible dans cette catégorie.')}</p>
               <button onClick={clearFilter} className="btn-primary-sm-blue">
-                Voir tous les produits
+                {t('catalogue.view_all_products', 'Voir tous les produits')}
               </button>
             </div>
           )}

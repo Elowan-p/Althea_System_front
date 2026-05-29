@@ -82,19 +82,22 @@ const Header = () => {
            <div className="utility-left"><span>{t('header.subtitle', 'Althea Systems • Infrastructure médicale de précision')}</span></div>
            <div className="utility-right">
               <NavLink to="/contact">{t('header.technical_support', 'Support technique')}</NavLink>
-              <button className="lang-trigger" onClick={() => {
-                // Cycle: FR → EN → RU → FR
-                const current = i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'fr';
-                const cycle = ['fr', 'en', 'ru'];
-                const nextIndex = (cycle.indexOf(current) + 1) % cycle.length;
-                const next = cycle[nextIndex];
-                i18n.changeLanguage(next);
-                window.dispatchEvent(new Event('languagechange'));
-              }}>
-                <Globe size={13} />
-                <span className="lang-code">{(i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'FR').toUpperCase()}</span>
-                <span className="lang-arrow">↻</span>
-              </button>
+              <div className="lang-select-wrapper">
+                <Globe size={13} className="lang-select-icon" />
+                <select
+                  className="lang-select"
+                  value={i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'fr'}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    i18n.changeLanguage(next);
+                    window.dispatchEvent(new Event('languagechange'));
+                  }}
+                >
+                  <option value="fr">FR</option>
+                  <option value="en">EN</option>
+                  <option value="ru">RU</option>
+                </select>
+              </div>
            </div>
         </div>
       </div>
@@ -137,7 +140,7 @@ const Header = () => {
             <div className="flex-end">
                 <form className="search-wrap desktop-only" onSubmit={handleSearch}>
                     <Search size={18} />
-                    <input type="text" placeholder="Rechercher un produit..." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                    <input type="text" placeholder={t('header.search_placeholder', 'Rechercher un produit...')} value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                 </form>
 
                 <div className="actions-cluster">
@@ -201,11 +204,10 @@ const Header = () => {
         .top-utility { background: #f8fafc; border-bottom: 1px solid #f1f5f9; padding: 0.6rem 0; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
         .utils-flex { display: flex; justify-content: space-between; align-items: center; }
         .utility-right { display: flex; gap: 1.5rem; align-items: center; }
-        .lang-trigger { display: flex; align-items: center; gap: 4px; color: var(--text-main); font-weight: 800; cursor: pointer; border: 1px solid #e2e8f0; padding: 0.25rem 0.6rem; border-radius: 6px; transition: all 0.2s ease; }
-        .lang-trigger:hover { border-color: var(--primary); color: var(--primary); }
-        .lang-code { font-size: 0.7rem; letter-spacing: 0.05em; }
-        .lang-arrow { font-size: 0.9rem; opacity: 0.6; transition: transform 0.3s ease; }
-        .lang-trigger:hover .lang-arrow { transform: rotate(90deg); opacity: 1; }
+        .lang-select-wrapper { display: flex; align-items: center; border: 1px solid #cbd5e1; padding: 0.15rem 0.4rem; border-radius: 6px; transition: all 0.2s ease; background: transparent; }
+        .lang-select-wrapper:hover { border-color: var(--primary); }
+        .lang-select-icon { color: var(--text-main); }
+        .lang-select { border: none; background: transparent; font-size: 0.7rem; font-weight: 800; color: var(--text-main); outline: none; cursor: pointer; text-transform: uppercase; font-family: inherit; margin-left: 2px; padding: 2px; }
         .main-bar { padding: 1.25rem 0; transition: inherit; }
         .ultra-header.scrolled .main-bar { padding: 0.8rem 0; }
         .main-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; }

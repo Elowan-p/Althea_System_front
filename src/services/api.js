@@ -1,4 +1,5 @@
 import axios from 'axios';
+import i18n from 'i18next';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 const CACHE_TTL = 5 * 60 * 1000;
@@ -19,9 +20,8 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Locale: read from i18next localStorage key, normalize to 2-char code
-  const rawLocale = localStorage.getItem('i18nextLng') || 'fr';
-  const locale = rawLocale.split('-')[0].toLowerCase(); // "fr-FR" → "fr"
+  // Locale: read from active i18next language
+  const locale = (i18n.language || 'fr').split('-')[0].toLowerCase();
   if (!config.params) config.params = {};
   // Don't override if caller explicitly set locale already
   if (!config.params.locale) {
@@ -45,11 +45,9 @@ const cacheStore = new Map();
 
 // Clear ALL locale-sensitive caches when the user switches language
 // so every product/category is re-fetched in the new locale on next access
-if (typeof window !== 'undefined') {
-  window.addEventListener('languagechange', () => {
-    cacheStore.clear();
-  });
-}
+i18n.on('languageChanged', () => {
+  cacheStore.clear();
+});
 
 const getCachedEntry = (key) => {
   const entry = cacheStore.get(key);

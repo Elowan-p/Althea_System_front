@@ -5,7 +5,6 @@ import Loader from './components/common/Loader';
 import AccountLayout from './pages/account/AccountLayout';
 import Orders from './pages/account/Orders';
 import Settings from './pages/account/Settings';
-import './i18n'; // Initialize i18n
 import './index.css'; // Global CSS
 
 // Lazy loading components for performance

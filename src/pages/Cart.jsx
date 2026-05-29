@@ -33,7 +33,7 @@ const Cart = () => {
                 return {
                     ...item,
                     itemId: item.itemId ?? item.id ?? null,
-                    name: item.title || product.title || 'Unknown Product',
+                    name: product.title || item.title || 'Unknown Product',
                     image: product.pictureUrl || null,
                     category: product.category?.title || '',
                 };
