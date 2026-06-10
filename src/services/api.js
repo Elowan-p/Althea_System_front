@@ -11,19 +11,15 @@ const api = axios.create({
   },
 });
 
-// ─── Request Interceptors ────────────────────────────────────────────────────
 
 api.interceptors.request.use((config) => {
-  // Bearer token
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Locale: read from active i18next language
   const locale = (i18n.language || 'fr').split('-')[0].toLowerCase();
   if (!config.params) config.params = {};
-  // Don't override if caller explicitly set locale already
   if (!config.params.locale) {
     config.params.locale = locale;
   }
@@ -31,7 +27,6 @@ api.interceptors.request.use((config) => {
   return config;
 }, (error) => Promise.reject(error));
 
-// ─── Cache Utilities ─────────────────────────────────────────────────────────
 
 const responseFromData = (data) => ({ data });
 
@@ -43,8 +38,7 @@ const normalizeSearchValue = (value) => String(value ?? '')
 
 const cacheStore = new Map();
 
-// Clear ALL locale-sensitive caches when the user switches language
-// so every product/category is re-fetched in the new locale on next access
+
 i18n.on('languageChanged', () => {
   cacheStore.clear();
 });

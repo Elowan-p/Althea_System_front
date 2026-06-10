@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, NavLink, useNavigate } from 'react-router-dom';
 import { ShieldCheck, XCircle, Loader2, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { verifyEmail } from '../../services/api';
 
 const VerifyEmail = () => {
+    const { t } = useTranslation();
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token');
     const navigate = useNavigate();
@@ -14,7 +16,7 @@ const VerifyEmail = () => {
         const verify = async () => {
             if (!token) {
                 setStatus('error');
-                setMessage('Verification token is missing from the link.');
+                setMessage(t('auth.token_missing_verify', 'Verification token is missing from the link.'));
                 return;
             }
 
@@ -33,11 +35,11 @@ const VerifyEmail = () => {
             } catch (err) {
                 console.error('Email Verification Error:', err);
                 setStatus('error');
-                setMessage(err.response?.data?.error || 'Verification failed. The link may have expired.');
+                setMessage(err.response?.data?.error || t('auth.reset_failed', 'Verification failed. The link may have expired.'));
             }
         };
         verify();
-    }, [token]);
+    }, [token, t]);
 
     return (
         <div className="auth-page">
@@ -49,35 +51,34 @@ const VerifyEmail = () => {
                                 <span className="sym">A</span>
                                 <span className="txt">ALTHEA</span>
                             </NavLink>
-                            <h2>Security Verification</h2>
+                             <h2>{t('auth.verify_title')}</h2>
                         </header>
 
                         <div className="status-display">
                             {status === 'loading' && (
                                 <div className="loading-state pulse">
                                     <Loader2 className="spinner" size={48} />
-                                    <p>Verifying your institutional credentials...</p>
+                                    <p>{t('auth.verifying_creds')}</p>
                                 </div>
                             )}
 
                             {status === 'success' && (
                                 <div className="success-state pulse">
                                     <ShieldCheck size={64} color="var(--primary)" />
-                                    <h3>Email Verified</h3>
+                                    <h3>{t('auth.email_verified')}</h3>
                                     <p>
-                                        Your account has been successfully activated and you are now
-                                        logged in. Access your professional workspace below.
+                                        {t('auth.verify_success')}
                                     </p>
                                     <div className="verify-actions">
                                         <button
                                             className="btn-auth-submit"
                                             onClick={() => navigate('/account/orders', { replace: true })}
                                         >
-                                            <span>Open My Workspace</span>
+                                            <span>{t('auth.open_workspace')}</span>
                                             <ArrowRight size={20} />
                                         </button>
                                         <NavLink to="/catalogue" className="btn-outline-secondary">
-                                            Browse Catalogue
+                                            {t('product_page.breadcrumb_catalogue')}
                                         </NavLink>
                                     </div>
                                 </div>
@@ -86,14 +87,14 @@ const VerifyEmail = () => {
                             {status === 'error' && (
                                 <div className="error-state pulse">
                                     <XCircle size={64} color="#ef4444" />
-                                    <h3>Verification Failed</h3>
+                                    <h3>{t('auth.verify_failed')}</h3>
                                     <p>{message}</p>
                                     <NavLink
                                         to="/contact"
                                         className="btn-outline-primary"
                                         style={{ marginTop: '2rem', display: 'inline-block' }}
                                     >
-                                        Contact IT Support
+                                        {t('auth.contact_it')}
                                     </NavLink>
                                 </div>
                             )}

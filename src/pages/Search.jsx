@@ -10,7 +10,7 @@ import { getProducts, searchProducts } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Search = () => {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('q') || '';
     
@@ -64,24 +64,24 @@ const Search = () => {
             <section className="search-hero">
                 <div className="container">
                     <nav className="cat-breadcrumbs">
-                        <NavLink to="/">Accueil</NavLink>
+                        <NavLink to="/">{t('catalogue.breadcrumb_home', 'Accueil')}</NavLink>
                         <ChevronRight size={12} />
-                        <NavLink to="/catalogue">Catalogue</NavLink>
+                        <NavLink to="/catalogue">{t('product_page.breadcrumb_catalogue', 'Catalogue')}</NavLink>
                         <ChevronRight size={12} />
-                        <span className="active">Recherche d'équipement</span>
+                        <span className="active">{t('search_page.breadcrumb_active', "Recherche d'équipement")}</span>
                     </nav>
 
                     <div className="search-bar-wrap">
-                        <h1>Catalogue Explorer</h1>
+                        <h1>{t('search_page.explorer_title', 'Catalogue Explorer')}</h1>
                         <form onSubmit={onSearchSubmit} className="main-search-form">
                             <SearchIcon className="search-icon" size={24} />
                             <input 
                                 type="text" 
-                                placeholder="Search by equipment name, clinical domain, or specs..." 
+                                placeholder={t('search_page.placeholder', 'Search by equipment name, clinical domain, or specs...')} 
                                 value={internalQuery}
                                 onChange={(e) => setInternalQuery(e.target.value)}
                             />
-                            <button type="submit" className="btn-search">Scan Inventory</button>
+                            <button type="submit" className="btn-search">{t('search_page.scan_btn', 'Scan Inventory')}</button>
                         </form>
                     </div>
                 </div>
@@ -94,11 +94,11 @@ const Search = () => {
                     <>
                         <div className="results-header">
                             {query ? (
-                                <h2>Results for <span>"{query}"</span></h2>
+                                <h2>{t('search_page.results_for', 'Results for')} <span>"{query}"</span></h2>
                             ) : (
-                                <h2>Browse <span>Full Catalogue</span></h2>
+                                <h2>{t('search_page.browse', 'Browse')} <span>{t('search_page.full_catalogue', 'Full Catalogue')}</span></h2>
                             )}
-                            <p>{results.length} authorized items found</p>
+                            <p>{results.length} {t('search_page.items_found', 'authorized items found')}</p>
                         </div>
 
                         {results.length > 0 ? (
@@ -108,7 +108,7 @@ const Search = () => {
                                         <div className="card-media">
                                             <img src={prod.pictureUrl || '/images/prod_scanner.png'} alt={prod.title} />
                                             <div className="card-overlay">
-                                                <button className="view-detail-btn">Full Specs</button>
+                                                <button className="view-detail-btn">{t('search_page.full_specs', 'Full Specs')}</button>
                                             </div>
                                         </div>
                                         
@@ -117,7 +117,7 @@ const Search = () => {
                                                 <span className="cat-tag">{prod.medicalDomain || 'Clinical'}</span>
                                                 <div className="rating">
                                                     <Star size={12} fill="var(--accent)" color="var(--accent)" />
-                                                    <span>Verified</span>
+                                                    <span>{t('search_page.verified', 'Verified')}</span>
                                                 </div>
                                             </div>
                                             <h3 className="item-title">{prod.title}</h3>
@@ -125,7 +125,7 @@ const Search = () => {
                                                 <span className="item-price">${Number(prod.price).toLocaleString()}</span>
                                                 <div className="stock-status">
                                                     <div className={`dot online`}></div>
-                                                    <span>Ready</span>
+                                                    <span>{t('search_page.ready', 'Ready')}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,8 +136,8 @@ const Search = () => {
                             query.length >= 2 && (
                                 <div className="empty-search text-center">
                                     <div className="empty-icon"><SearchIcon size={64} opacity={0.2} /></div>
-                                    <h3>No equipment matches found</h3>
-                                    <p>Try adjusting your parameters or contact support for specialized procurement.</p>
+                                    <h3>{t('search_page.no_matches', 'No equipment matches found')}</h3>
+                                    <p>{t('search_page.no_matches_desc', 'Try adjusting your parameters or contact support for specialized procurement.')}</p>
                                     <button
                                         className="btn-outline-primary"
                                         onClick={() => {
@@ -145,7 +145,7 @@ const Search = () => {
                                             setSearchParams({});
                                         }}
                                     >
-                                        Clear Filters
+                                        {t('search_page.clear_filters', 'Clear Filters')}
                                     </button>
                                 </div>
                             )

@@ -36,7 +36,7 @@ const Orders = () => {
                     ...order,
                     items: (order.items || []).map(item => ({
                         ...item,
-                        title: productsMap[item.productId]?.title || item.title || 'Unknown Product'
+                        title: productsMap[item.productId]?.title || item.title || t('cart.unknown_product', 'Unknown Product')
                     }))
                 }));
 
@@ -46,7 +46,7 @@ const Orders = () => {
                     setOrders([]);
                 } else {
                     console.error('Orders fetch error:', err);
-                    setError(t('common.error', 'Unable to load your orders. Please try again later.'));
+                    setError(t('orders.error_load', 'Unable to load your orders. Please try again later.'));
                 }
             } finally {
                 setLoading(false);
@@ -70,7 +70,7 @@ const Orders = () => {
             URL.revokeObjectURL(url);
         } catch (err) {
             console.error('Invoice download error:', err);
-            alert(err.response?.data?.error || t('common.error', 'Unable to download invoice. The order may not be paid yet.'));
+            alert(err.response?.data?.error || t('orders.invoice_error', 'Unable to download invoice. The order may not be paid yet.'));
         } finally {
             setDownloadingId(null);
         }

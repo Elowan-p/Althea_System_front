@@ -93,7 +93,7 @@ const Header = () => {
     window.dispatchEvent(new Event('authchange'));
     setCartCount(0);
     setIsMenuOpen(false);
-    navigate('/', { replace: true });
+    window.dispatchEvent(new Event('logout-start'));
   };
 
   return (
@@ -144,12 +144,12 @@ const Header = () => {
                     </div>
                 )}
                 <div className="nav-item has-dropdown">
-                    <NavLink to="/catalogue" className="drop-trigger catalogue-trigger">Catalogue <ChevronDown size={14} /></NavLink>
+                    <NavLink to="/catalogue" className="drop-trigger catalogue-trigger">{t('catalogue.breadcrumb_catalogue', 'Catalogue')} <ChevronDown size={14} /></NavLink>
                     <div className="nav-accent"></div>
                     <div className="mega-dropdown mega-dropdown--single">
-                        <h6>Parcourir le catalogue</h6>
+                        <h6>{t('cart.browse_catalogue')}</h6>
                         <div className="mega-links">
-                            <NavLink to="/catalogue"><Activity size={16} /> Tous les produits</NavLink>
+                            <NavLink to="/catalogue"><Activity size={16} /> {t('catalogue.view_all_products', 'Tous les produits')}</NavLink>
                             {categories.map(cat => (
                                 <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`}>
                                     <Activity size={16} />{cat.title}
@@ -159,7 +159,7 @@ const Header = () => {
                     </div>
                 </div>
                 <div className="nav-item">
-                    <NavLink to="/contact">Contact</NavLink>
+                    <NavLink to="/contact">{t('footer.connect', 'Contact')}</NavLink>
                     <div className="nav-accent"></div>
                 </div>
             </nav>
@@ -221,7 +221,7 @@ const Header = () => {
                         <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
                     </div>
                     <div className="side-section">
-                        <label>Catégories</label>
+                        <label>{t('home.categories', 'Catégories')}</label>
                         {categories.map((cat) => (
                             <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`} onClick={() => setIsMenuOpen(false)}>{cat.title}</NavLink>
                         ))}

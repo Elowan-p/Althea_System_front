@@ -131,7 +131,7 @@ const Settings = () => {
                     <div className="form-row">
                         <div className="input-group">
                             <label>{t('settings.email', 'Institutional Email')}</label>
-                            <input type="email" name="email" value={user.email} disabled className="disabled-input" title="L'adresse email de connexion ne peut pas être modifiée." />
+                            <input type="email" name="email" value={user.email} disabled className="disabled-input" title={t('settings.email_readonly', "L'adresse email de connexion ne peut pas être modifiée.")} />
                         </div>
                         <div className="input-group">
                             <label>{t('settings.phone', 'Direct Phone')}</label>

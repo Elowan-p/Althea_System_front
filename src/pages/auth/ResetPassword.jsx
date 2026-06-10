@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useSearchParams, useNavigate, NavLink } from 'react-router-dom';
 import { Lock, Eye, EyeOff, ShieldCheck, AlertCircle, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { resetPassword } from '../../services/api';
 import Loader from '../../components/common/Loader';
 
 const ResetPassword = () => {
+    const { t } = useTranslation();
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token');
     const navigate = useNavigate();
@@ -20,12 +22,12 @@ const ResetPassword = () => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setError('Access keys do not match.');
+            setError(t('auth.keys_mismatch', 'Access keys do not match.'));
             return;
         }
 
         if (!token) {
-            setError('Reset token is missing from URL. Please use the link from your email.');
+            setError(t('auth.token_missing', 'Reset token is missing from URL. Please use the link from your email.'));
             return;
         }
 
@@ -42,7 +44,7 @@ const ResetPassword = () => {
             setError(
                 err.response?.data?.error ||
                 err.response?.data?.message ||
-                'Failed to update access key. The link may have expired.'
+                t('auth.reset_failed', 'Failed to update access key. The link may have expired.')
             );
         } finally {
             setLoading(false);
@@ -61,15 +63,15 @@ const ResetPassword = () => {
                                 <span className="sym">A</span>
                                 <span className="txt">ALTHEA</span>
                             </NavLink>
-                            <h2>New Access Key</h2>
-                            <p>Define a new security credential for your workstation</p>
+                            <h2>{t('auth.new_access_key')}</h2>
+                            <p>{t('auth.define_credential')}</p>
                         </header>
 
                         {success ? (
                             <div className="success-view text-center pulse">
                                 <ShieldCheck size={64} color="var(--primary)" />
-                                <h3>Key Updated</h3>
-                                <p>Your access key has been successfully reset. Redirecting to login...</p>
+                                <h3>{t('auth.key_updated')}</h3>
+                                <p>{t('auth.reset_success')}</p>
                             </div>
                         ) : (
                             <>
@@ -82,7 +84,7 @@ const ResetPassword = () => {
 
                                 <form onSubmit={handleSubmit} className="auth-form">
                                     <div className="field-group">
-                                        <label>New Access Key</label>
+                                        <label>{t('auth.new_access_key')}</label>
                                         <div className="input-icon-wrap">
                                             <Lock size={18} />
                                             <input
@@ -104,7 +106,7 @@ const ResetPassword = () => {
                                     </div>
 
                                     <div className="field-group">
-                                        <label>Confirm Access Key</label>
+                                        <label>{t('auth.confirm_key')}</label>
                                         <div className="input-icon-wrap">
                                             <Lock size={18} />
                                             <input
@@ -118,7 +120,7 @@ const ResetPassword = () => {
                                     </div>
 
                                     <button type="submit" className="btn-auth-submit">
-                                        <span>Update Credentials</span>
+                                        <span>{t('auth.update_credentials')}</span>
                                         <ArrowRight size={20} />
                                     </button>
                                 </form>
