@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, ArrowUp, Zap, ShieldCheck, HeartPulse } from 'lucide-react';
 
 const Footer = () => {
