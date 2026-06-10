@@ -11,9 +11,11 @@ import {
   AlertCircle,
   LoaderCircle
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { login } from '../../services/api';
 
 const Login = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +49,7 @@ const Login = () => {
             }
         } catch (err) {
             console.error("Login Error:", err);
-            setError(err.response?.data?.message || 'Invalid credentials for Althea Systems gateway.');
+            setError(err.response?.data?.message || t('auth.invalid_credentials'));
         } finally {
             setLoading(false);
         }
@@ -60,18 +62,18 @@ const Login = () => {
                 <div className="auth-visual desktop-only">
                     <div className="visual-overlay">
                         <div className="visual-content">
-                            <div className="visual-badge">Secure Institutional Access</div>
-                            <h1>Connecting Healthcare Excellence.</h1>
-                            <p>Access your organization's specialized equipment catalogue, manage procurement cycles, and track technical infrastructure deployments.</p>
+                            <div className="visual-badge">{t('auth.secure_access')}</div>
+                            <h1>{t('auth.connecting_excellence')}</h1>
+                            <p>{t('auth.connecting_desc')}</p>
                             
                             <div className="visual-stats">
                                 <div className="v-stat">
                                    <strong>2.5k+</strong>
-                                   <span>Hospitals Managed</span>
+                                   <span>{t('auth.hospitals_managed')}</span>
                                 </div>
                                 <div className="v-stat">
                                    <strong>99.9%</strong>
-                                   <span>System Uptime</span>
+                                   <span>{t('auth.uptime')}</span>
                                 </div>
                             </div>
                         </div>
@@ -86,8 +88,8 @@ const Login = () => {
                                 <span className="sym">A</span>
                                 <span className="txt">ALTHEA</span>
                             </NavLink>
-                            <h2>Professional Portal</h2>
-                            <p>Enter your institutional credentials to continue</p>
+                            <h2>{t('auth.portal_title')}</h2>
+                            <p>{t('auth.portal_desc')}</p>
                         </header>
 
                         {error && (
@@ -99,7 +101,7 @@ const Login = () => {
 
                         <form onSubmit={handleSubmit} className="auth-form">
                             <div className="field-group">
-                                <label>Business Email</label>
+                                <label>{t('auth.email_label')}</label>
                                 <div className="input-icon-wrap">
                                     <Mail size={18} />
                                     <input 
@@ -116,8 +118,8 @@ const Login = () => {
 
                             <div className="field-group">
                                 <div className="label-row">
-                                    <label>Access Key</label>
-                                    <NavLink to="/forgot-password">Trouble signing in?</NavLink>
+                                    <label>{t('auth.key_label')}</label>
+                                    <NavLink to="/forgot-password">{t('auth.trouble')}</NavLink>
                                 </div>
                                 <div className="input-icon-wrap">
                                     <Lock size={18} />
@@ -150,7 +152,7 @@ const Login = () => {
                                         checked={formData.rememberMe}
                                         onChange={handleChange}
                                     />
-                                    <span>Keep this workstation logged in</span>
+                                    <span>{t('auth.remember_me')}</span>
                                 </label>
                             </div>
 
@@ -158,11 +160,11 @@ const Login = () => {
                                 {loading ? (
                                     <>
                                         <LoaderCircle size={20} className="spin-icon" />
-                                        <span>Connexion en cours...</span>
+                                        <span>{t('auth.signing_in')}</span>
                                     </>
                                 ) : (
                                     <>
-                                        <span>Sign In to Workspace</span>
+                                        <span>{t('auth.sign_in_btn')}</span>
                                         <ArrowRight size={20} />
                                     </>
                                 )}
@@ -170,16 +172,16 @@ const Login = () => {
                         </form>
 
                         <footer className="auth-footer">
-                            <p>Management restricted to authorized clinical staff.</p>
+                            <p>{t('auth.restricted_notice')}</p>
                             <div className="access-prompt">
-                                New to Althea Systems? <NavLink to="/register">Apply for Access</NavLink>
+                                {t('auth.new_here')} <NavLink to="/register">{t('auth.apply_access')}</NavLink>
                             </div>
                         </footer>
                     </div>
 
                     <div className="auth-security-footer">
-                        <div className="sec-item"><ShieldCheck size={14} /> 256-bit AES Encryption</div>
-                        <div className="sec-item"><Building size={14} /> ISO 27001 Certified</div>
+                        <div className="sec-item"><ShieldCheck size={14} /> {t('auth.aes_encryption')}</div>
+                        <div className="sec-item"><Building size={14} /> {t('auth.iso_certified')}</div>
                     </div>
                 </div>
             </div>

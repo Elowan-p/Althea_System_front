@@ -7,10 +7,12 @@ import {
   ShieldCheck,
   AlertCircle
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { forgotPassword } from '../../services/api';
 import Loader from '../../components/common/Loader';
 
 const ForgotPassword = () => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -26,7 +28,7 @@ const ForgotPassword = () => {
             setSuccess(true);
         } catch (err) {
             console.error("Forgot Password Error:", err);
-            setError(err.response?.data?.message || 'Verification failed. Please check your email address.');
+            setError(err.response?.data?.message || t('auth.reset_failed'));
         } finally {
             setLoading(false);
         }
@@ -44,19 +46,19 @@ const ForgotPassword = () => {
                                 <span className="sym">A</span>
                                 <span className="txt">ALTHEA</span>
                             </NavLink>
-                            <h2>Reset Access Key</h2>
-                            <p>We'll send secure instructions to your business email</p>
+                            <h2>{t('auth.reset_access_key')}</h2>
+                            <p>{t('auth.secure_instructions')}</p>
                         </header>
-
+ 
                         {success ? (
                             <div className="success-view text-center pulse">
                                 <div className="success-icon-wrap" style={{ marginBottom: '1.5rem' }}>
                                     <ShieldCheck size={48} color="var(--primary)" />
                                 </div>
-                                <h3 style={{ marginBottom: '1rem', fontWeight: 800 }}>Dispatching Instructions</h3>
-                                <p style={{ color: '#64748b', marginBottom: '2rem' }}>A secure recovery link has been sent to <strong>{email}</strong>. Please follow the instructions to regain access.</p>
+                                <h3 style={{ marginBottom: '1rem', fontWeight: 800 }}>{t('auth.dispatching')}</h3>
+                                <p style={{ color: '#64748b', marginBottom: '2rem' }} dangerouslySetInnerHTML={{ __html: t('auth.recovery_sent', { email }) }}></p>
                                 <NavLink to="/login" className="back-link" style={{ justifyContent: 'center' }}>
-                                    <ArrowLeft size={16} /> Return to Sign In
+                                    <ArrowLeft size={16} /> {t('auth.return_signin')}
                                 </NavLink>
                             </div>
                         ) : (
@@ -67,10 +69,10 @@ const ForgotPassword = () => {
                                         <span>{error}</span>
                                     </div>
                                 )}
-
+ 
                                 <form onSubmit={handleSubmit} className="auth-form">
                                     <div className="field-group">
-                                        <label>Registered Email</label>
+                                        <label>{t('auth.registered_email')}</label>
                                         <div className="input-icon-wrap">
                                             <Mail size={18} />
                                             <input 
@@ -82,16 +84,16 @@ const ForgotPassword = () => {
                                             />
                                         </div>
                                     </div>
-
+ 
                                     <button type="submit" className="btn-auth-submit">
-                                        <span>Send Recovery Link</span>
+                                        <span>{t('auth.send_link')}</span>
                                         <ArrowRight size={20} />
                                     </button>
                                 </form>
-
+ 
                                 <footer className="auth-footer">
                                     <NavLink to="/login" className="back-link" style={{ justifyContent: 'center' }}>
-                                        <ArrowLeft size={16} /> Back to Login
+                                        <ArrowLeft size={16} /> {t('auth.back_login')}
                                     </NavLink>
                                 </footer>
                             </>

@@ -14,7 +14,6 @@ const Cart = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [items, setItems] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
     const [isGuest, setIsGuest] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
 
@@ -33,13 +32,13 @@ const Cart = () => {
                 return {
                     ...item,
                     itemId: item.itemId ?? item.id ?? null,
-                    name: product.title || item.title || 'Unknown Product',
+                    name: product.title || item.title || t('cart.unknown_product', 'Unknown Product'),
                     image: product.pictureUrl || null,
                     category: product.category?.title || '',
                 };
             });
         } catch {
-            return rawItems.map(item => ({ ...item, name: item.title || 'Unknown Product' }));
+            return rawItems.map(item => ({ ...item, name: item.title || t('cart.unknown_product', 'Unknown Product') }));
         }
     };
 
@@ -54,7 +53,6 @@ const Cart = () => {
 
             if (!data || (!Array.isArray(data.items) && typeof data.items !== 'object')) {
                 setItems([]);
-                setTotalPrice(0);
                 return;
             }
 
@@ -62,7 +60,6 @@ const Cart = () => {
                 // Authenticated cart — items have itemId, productId, title, price, quantity
                 const enriched = await enrichItems(data.items);
                 setItems(enriched);
-                setTotalPrice(data.totalPrice || 0);
             } else if (!hasToken && data.items && typeof data.items === 'object') {
                 // Guest cart — items is { [productId]: quantity }
                 const productsRes = await getProducts();
@@ -75,22 +72,19 @@ const Cart = () => {
                         itemId: null, // guest has no itemId
                         productId: parseInt(productId),
                         quantity,
-                        name: product.title || `Product #${productId}`,
+                        name: product.title || t('cart.product_placeholder', { id: productId, defaultValue: 'Product #{{id}}' }),
                         price: product.price || 0,
                         image: product.pictureUrl || null,
                         category: product.category?.title || '',
                     };
                 });
                 setItems(guestItems);
-                const total = guestItems.reduce((acc, i) => acc + i.price * i.quantity, 0);
-                setTotalPrice(total);
             } else {
                 setItems([]);
-                setTotalPrice(0);
             }
         } catch (err) {
             console.error('Cart fetch error:', err);
-            setError('Unable to load your cart. Please try again.');
+            setError(t('cart.error_load', 'Unable to load your cart. Please try again.'));
         } finally {
             setLoading(false);
         }
@@ -98,6 +92,7 @@ const Cart = () => {
 
     useEffect(() => {
         fetchCart();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLang]);
 
     const updateQuantity = async (itemId, newQuantity) => {
@@ -123,9 +118,7 @@ const Cart = () => {
         setActionLoading(true);
         try {
             await removeCartItem(itemId);
-            const removed = items.find(i => (i.itemId || i.id) === itemId);
             setItems(prev => prev.filter(i => (i.itemId || i.id) !== itemId));
-            if (removed) setTotalPrice(prev => prev - removed.price * removed.quantity);
             window.dispatchEvent(new Event('cartchange'));
         } catch (err) {
             console.error('Remove item error:', err);
@@ -173,7 +166,7 @@ const Cart = () => {
             {error && (
                 <div className="cart-error-banner">
                     <AlertTriangle size={18} /> {error}
-                    <button onClick={fetchCart}><RefreshCw size={14} /> Retry</button>
+                    <button onClick={fetchCart}><RefreshCw size={14} /> {t('cart.retry', 'Retry')}</button>
                 </div>
             )}
 

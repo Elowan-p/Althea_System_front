@@ -28,16 +28,16 @@ const Home = () => {
         {
           id: 1,
           image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop',
-          title: 'Precision in Every Solution',
-          desc: 'Top-tier medical hardware trusted by leading clinics worldwide. Engineered for zero-failure performance.',
-          cta: 'Explore Products'
+          title: t('home.slide1_title', 'Precision in Every Solution'),
+          desc: t('home.slide1_desc', 'Top-tier medical hardware trusted by leading clinics worldwide. Engineered for zero-failure performance.'),
+          cta: t('home.slide1_cta', 'Explore Products')
         },
         {
           id: 2,
           image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop',
-          title: 'Advanced Diagnostic Tools',
-          desc: 'Next-generation scanners and imaging technology. High-fidelity imaging for life-critical diagnostics.',
-          cta: 'Learn More'
+          title: t('home.slide2_title', 'Advanced Diagnostic Tools'),
+          desc: t('home.slide2_desc', 'Next-generation scanners and imaging technology. High-fidelity imaging for life-critical diagnostics.'),
+          cta: t('home.slide2_cta', 'Learn More')
         }
     ];
 
@@ -76,7 +76,11 @@ const Home = () => {
               name: cat.title,
               icon: categoryIconMap[cat.title] || <Activity size={32} />,
               image: cat.pictureUrl || 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop',
-              desc: `Specialized solutions for ${(cat.title || '').toLowerCase()}.`
+              desc: i18n.language.startsWith('ru')
+                  ? `Специализированные решения для ${(cat.title || '').toLowerCase()}.`
+                  : i18n.language.startsWith('en')
+                    ? `Specialized solutions for ${(cat.title || '').toLowerCase()}.`
+                    : `Solutions spécialisées pour ${(cat.title || '').toLowerCase()}.`
             })));
 
             const prodsData = Array.isArray(prodsRes.data) ? prodsRes.data : [];
@@ -95,6 +99,7 @@ const Home = () => {
           }
         };
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLang]);
 
     if (loading) return <Loader />;
@@ -114,7 +119,7 @@ const Home = () => {
                                     <NavLink to="/catalogue" className="btn-primary-lg">
                                         {slide.cta} <ArrowRight size={20} />
                                     </NavLink>
-                                    <NavLink to="/contact" className="btn-outline-white">Support Center</NavLink>
+                                    <NavLink to="/contact" className="btn-outline-white">{t('header.technical_support', 'Support Center')}</NavLink>
                                 </div>
                             </div>
                         </div>
@@ -130,25 +135,25 @@ const Home = () => {
             <section className="values-section">
                 <div className="container">
                     <div className="values-header">
-                        <label>Excellence in Service</label>
-                        <h2>The Althea Standard</h2>
-                        <p>We provide foundational infrastructure for the next generation of patient care.</p>
+                        <label>{t('home.excellence_label', 'Excellence in Service')}</label>
+                        <h2>{t('home.standard_title', 'The Althea Standard')}</h2>
+                        <p>{t('home.standard_desc', 'We provide foundational infrastructure for the next generation of patient care.')}</p>
                     </div>
                     <div className="values-grid">
                         <div className="value-card">
                             <div className="value-icon"><ShieldCheck size={40} /></div>
-                            <h4>Certified Quality</h4>
-                            <p>Full ISO 13485 compliance for critical medical applications.</p>
+                            <h4>{t('footer.certified_quality', 'Certified Quality')}</h4>
+                            <p>{t('home.certified_quality_desc', 'Full ISO 13485 compliance for critical medical applications.')}</p>
                         </div>
                         <div className="value-card">
                             <div className="value-icon"><Truck size={40} /></div>
-                            <h4>Global Logistics</h4>
-                            <p>Direct supply chain to 120+ countries with cold-chain support.</p>
+                            <h4>{t('home.global_logistics_title', 'Global Logistics')}</h4>
+                            <p>{t('home.global_logistics_desc', 'Direct supply chain to 120+ countries with cold-chain support.')}</p>
                         </div>
                         <div className="value-card">
                             <div className="value-icon"><Zap size={40} /></div>
-                            <h4>24/7 Tech Hub</h4>
-                            <p>Live technical monitoring and on-site expert maintenance.</p>
+                            <h4>{t('home.tech_hub_title', '24/7 Tech Hub')}</h4>
+                            <p>{t('home.tech_hub_desc', 'Live technical monitoring and on-site expert maintenance.')}</p>
                         </div>
                     </div>
                 </div>
@@ -158,8 +163,8 @@ const Home = () => {
             <section className="categories-section">
                 <div className="container">
                     <div className="section-header">
-                        <h3>Institutional Divisions</h3>
-                        <NavLink to="/catalogue" className="text-cta">See All Categories <ArrowRight size={16} /></NavLink>
+                        <h3>{t('home.divisions_title', 'Institutional Divisions')}</h3>
+                        <NavLink to="/catalogue" className="text-cta">{t('home.see_all', 'See All Categories')} <ArrowRight size={16} /></NavLink>
                     </div>
                     {categories.length > 0 ? (
                         <div className="categories-grid-premium">
@@ -173,7 +178,7 @@ const Home = () => {
                                             <p>{cat.desc}</p>
                                         </div>
                                         <div className="cat-footer">
-                                            <span>Enter Division</span>
+                                            <span>{t('home.enter_division', 'Enter Division')}</span>
                                             <div className="nav-circ"><ChevronRight size={18} /></div>
                                         </div>
                                     </div>
@@ -182,8 +187,8 @@ const Home = () => {
                         </div>
                     ) : (
                         <div className="empty-state">
-                            <p>No connected categories are available yet.</p>
-                            <NavLink to="/catalogue" className="btn-primary">Browse Products</NavLink>
+                            <p>{t('home.no_categories', 'No connected categories are available yet.')}</p>
+                            <NavLink to="/catalogue" className="btn-primary">{t('home.see_all', 'Browse Products')}</NavLink>
                         </div>
                     )}
                 </div>
@@ -193,8 +198,8 @@ const Home = () => {
             <section className="top-products-section">
                 <div className="container">
                     <div className="section-header">
-                        <h3>Critical Assets</h3>
-                        <p>Recently deployed technologies in European hospitals.</p>
+                        <h3>{t('home.critical_assets', 'Critical Assets')}</h3>
+                        <p>{t('home.critical_assets_desc', 'Recently deployed technologies in European hospitals.')}</p>
                     </div>
                     <div className="products-grid-premium">
                         {topProducts.map(prod => (
@@ -203,13 +208,13 @@ const Home = () => {
                                     <img src={prod.image} alt={prod.name} />
                                     <div className="prod-badge">{prod.medicalDomain}</div>
                                     <div className="prod-actions-overlay">
-                                        <NavLink to={`/product/${prod.id}`} className="view-btn">Full Specs</NavLink>
+                                        <NavLink to={`/product/${prod.id}`} className="view-btn">{t('search_page.full_specs', 'Full Specs')}</NavLink>
                                     </div>
                                 </div>
                                 <div className="prod-details">
                                     <div className="prod-rating">
                                         <Star size={14} fill="#fbbf24" color="#fbbf24" />
-                                        <span>{prod.rating} Internal Rating</span>
+                                        <span>{prod.rating} {t('home.internal_rating', 'Internal Rating')}</span>
                                     </div>
                                     <h4>{prod.name}</h4>
                                     <div className="prod-footer">

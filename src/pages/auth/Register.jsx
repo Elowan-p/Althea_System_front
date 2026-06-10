@@ -15,10 +15,12 @@ import {
   Hash,
   Globe as GlobeIcon
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { register } from '../../services/api';
 import Loader from '../../components/common/Loader';
 
 const Register = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +56,7 @@ const Register = () => {
             setTimeout(() => navigate('/login'), 2500);
         } catch (err) {
             console.error('Registration Error:', err);
-            setError(err.response?.data?.message || "L'inscription a echoue. Verifie les informations saisies.");
+            setError(err.response?.data?.message || t('auth.register_failed'));
         } finally {
             setLoading(false);
         }
@@ -68,18 +70,18 @@ const Register = () => {
                 <div className="auth-visual desktop-only">
                     <div className="visual-overlay">
                         <div className="visual-content">
-                            <div className="visual-badge">Acces Professionnel</div>
-                            <h1>Creez un espace clair et securise.</h1>
-                            <p>Inscrivez votre structure pour acceder au catalogue, aux commandes et a un suivi centralise.</p>
+                            <div className="visual-badge">{t('auth.register_visual_badge')}</div>
+                            <h1>{t('auth.register_visual_title')}</h1>
+                            <p>{t('auth.register_visual_desc')}</p>
 
                             <div className="visual-stats">
                                 <div className="v-stat">
-                                    <strong>Catalogue</strong>
-                                    <span>Categories simplifiees</span>
+                                    <strong>{t('auth.register_visual_stat_cat')}</strong>
+                                    <span>{t('auth.register_visual_stat_cat_sub')}</span>
                                 </div>
                                 <div className="v-stat">
-                                    <strong>Compte</strong>
-                                    <span>Gestion plus lisible</span>
+                                    <strong>{t('auth.register_visual_stat_acct')}</strong>
+                                    <span>{t('auth.register_visual_stat_acct_sub')}</span>
                                 </div>
                             </div>
                         </div>
@@ -93,17 +95,17 @@ const Register = () => {
                                 <span className="sym">A</span>
                                 <span className="txt">ALTHEA</span>
                             </NavLink>
-                            <h2>Creer un compte</h2>
-                            <p>Une interface proche de la connexion, mais dediee a l'inscription.</p>
+                            <h2>{t('auth.register_title')}</h2>
+                            <p>{t('auth.register_subtitle')}</p>
                         </header>
 
                         {success ? (
                             <div className="success-panel pulse">
                                 <ShieldCheck size={56} />
-                                <h3>Compte cree</h3>
-                                <p>Votre demande a bien ete enregistree. Redirection vers la connexion en cours.</p>
+                                <h3>{t('auth.register_success_title')}</h3>
+                                <p>{t('auth.register_success_desc')}</p>
                                 <NavLink to="/login" className="btn-auth-submit inline-submit">
-                                    Aller a la connexion
+                                    {t('auth.register_success_btn')}
                                 </NavLink>
                             </div>
                         ) : (
@@ -118,14 +120,14 @@ const Register = () => {
                                 <form onSubmit={handleSubmit} className="auth-form">
                                     <div className="form-row">
                                         <div className="field-group">
-                                            <label>Prenom</label>
+                                            <label>{t('auth.first_name')}</label>
                                             <div className="input-icon-wrap">
                                                 <UserIcon size={18} />
                                                 <input type="text" name="firstName" placeholder="Jean" required value={formData.firstName} onChange={handleChange} />
                                             </div>
                                         </div>
                                         <div className="field-group">
-                                            <label>Nom</label>
+                                            <label>{t('auth.last_name')}</label>
                                             <div className="input-icon-wrap">
                                                 <UserIcon size={18} />
                                                 <input type="text" name="lastName" placeholder="Dupont" required value={formData.lastName} onChange={handleChange} />
@@ -134,7 +136,7 @@ const Register = () => {
                                     </div>
 
                                     <div className="field-group">
-                                        <label>Email professionnel</label>
+                                        <label>{t('auth.email_prof')}</label>
                                         <div className="input-icon-wrap">
                                             <Mail size={18} />
                                             <input type="email" name="email" placeholder="nom@etablissement.fr" required value={formData.email} onChange={handleChange} />
@@ -143,14 +145,14 @@ const Register = () => {
 
                                     <div className="form-row">
                                         <div className="field-group">
-                                            <label>Etablissement</label>
+                                            <label>{t('auth.company')}</label>
                                             <div className="input-icon-wrap">
                                                 <Building size={18} />
                                                 <input type="text" name="company" placeholder="Clinique Althea" required value={formData.company} onChange={handleChange} />
                                             </div>
                                         </div>
                                         <div className="field-group">
-                                            <label>SIRET</label>
+                                            <label>{t('auth.siret')}</label>
                                             <div className="input-icon-wrap">
                                                 <Hash size={18} />
                                                 <input type="text" name="siret" placeholder="123 456 789 00012" value={formData.siret} onChange={handleChange} />
@@ -159,7 +161,7 @@ const Register = () => {
                                     </div>
 
                                     <div className="field-group">
-                                        <label>Adresse</label>
+                                        <label>{t('auth.address')}</label>
                                         <div className="input-icon-wrap">
                                             <MapPin size={18} />
                                             <input type="text" name="address" placeholder="12 rue de la Paix" value={formData.address} onChange={handleChange} />
@@ -168,14 +170,14 @@ const Register = () => {
 
                                     <div className="form-row">
                                         <div className="field-group">
-                                            <label>Code Postal</label>
+                                            <label>{t('auth.postal_code')}</label>
                                             <div className="input-icon-wrap">
                                                 <Hash size={18} />
                                                 <input type="text" name="postalCode" placeholder="75000" value={formData.postalCode} onChange={handleChange} />
                                             </div>
                                         </div>
                                         <div className="field-group">
-                                            <label>Ville</label>
+                                            <label>{t('auth.city')}</label>
                                             <div className="input-icon-wrap">
                                                 <MapPin size={18} />
                                                 <input type="text" name="city" placeholder="Paris" value={formData.city} onChange={handleChange} />
@@ -185,14 +187,14 @@ const Register = () => {
 
                                     <div className="form-row">
                                         <div className="field-group">
-                                            <label>Pays</label>
+                                            <label>{t('auth.country')}</label>
                                             <div className="input-icon-wrap">
                                                 <GlobeIcon size={18} />
                                                 <input type="text" name="country" placeholder="France" value={formData.country} onChange={handleChange} />
                                             </div>
                                         </div>
                                         <div className="field-group">
-                                            <label>Telephone</label>
+                                            <label>{t('auth.phone')}</label>
                                             <div className="input-icon-wrap">
                                                 <Phone size={18} />
                                                 <input type="tel" name="phone" placeholder="+33 6 00 00 00 00" required value={formData.phone} onChange={handleChange} />
@@ -201,7 +203,7 @@ const Register = () => {
                                     </div>
 
                                     <div className="field-group">
-                                        <label>Mot de passe</label>
+                                        <label>{t('auth.password')}</label>
                                         <div className="input-icon-wrap">
                                             <Lock size={18} />
                                             <input
@@ -219,15 +221,15 @@ const Register = () => {
                                     </div>
 
                                     <button type="submit" className="btn-auth-submit">
-                                        <span>Creer mon espace</span>
+                                        <span>{t('auth.register_btn')}</span>
                                         <ArrowRight size={20} />
                                     </button>
                                 </form>
 
                                 <footer className="auth-footer">
-                                    <p>Acces reserve aux utilisateurs autorises.</p>
+                                    <p>{t('auth.restricted_access')}</p>
                                     <div className="access-prompt">
-                                        Vous avez deja un compte ? <NavLink to="/login">Se connecter</NavLink>
+                                        {t('auth.already_account')} <NavLink to="/login">{t('auth.login_link')}</NavLink>
                                     </div>
                                 </footer>
                             </>
@@ -235,8 +237,8 @@ const Register = () => {
                     </div>
 
                     <div className="auth-security-footer">
-                        <div className="sec-item"><ShieldCheck size={14} /> Donnees securisees</div>
-                        <div className="sec-item"><Building size={14} /> Parcours harmonise</div>
+                        <div className="sec-item"><ShieldCheck size={14} /> {t('auth.data_secured')}</div>
+                        <div className="sec-item"><Building size={14} /> {t('auth.harmonized_path')}</div>
                     </div>
                 </div>
             </div>

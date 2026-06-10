@@ -1,4 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   User, 
   Package, 
@@ -8,6 +9,7 @@ import {
 } from 'lucide-react';
 
 const AccountLayout = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     
     const handleLogout = () => {
@@ -27,24 +29,24 @@ const AccountLayout = () => {
                             <User size={32} />
                         </div>
                         <div className="user-meta">
-                            <h4>Personal Workspace</h4>
-                            <p>Premium Institutional Access</p>
+                            <h4>{t('account_layout.personal_workspace', 'Personal Workspace')}</h4>
+                            <p>{t('account_layout.premium_access', 'Premium Institutional Access')}</p>
                         </div>
                     </div>
 
                     <nav className="sidebar-nav">
                         <NavLink to="/account/settings" className={({isActive}) => isActive ? 'active' : ''}>
-                            <Settings size={18} /> Parametres du compte
+                            <Settings size={18} /> {t('account_layout.settings_link', 'Account Settings')}
                         </NavLink>
                         <NavLink to="/account/orders" className={({isActive}) => isActive ? 'active' : ''}>
-                            <Package size={18} /> Mes commandes
+                            <Package size={18} /> {t('account_layout.orders_link', 'My Orders')}
                         </NavLink>
                         <div className="sidebar-note">
                             <ShieldCheck size={18} />
-                            <span>Sections facture, adresses et securite a brancher ensuite.</span>
+                            <span>{t('account_layout.sidebar_note', 'Invoice, address, and security sections to be connected next.')}</span>
                         </div>
                         <button className="nav-logout" onClick={handleLogout}>
-                            <LogOut size={18} /> Se deconnecter
+                            <LogOut size={18} /> {t('account_layout.logout', 'Sign Out')}
                         </button>
                     </nav>
                 </aside>

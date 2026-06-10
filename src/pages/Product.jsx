@@ -19,14 +19,14 @@ import { getProduct, getSimilarProducts, addItemToCart } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Product = () => {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
     const [similarEquipment, setSimilarEquipment] = useState([]);
-    const [cartStatus, setCartStatus] = useState('idle'); // idle | loading | success | error
+    const [cartStatus, setCartStatus] = useState('idle');
 
     const currentLang = i18n.language;
 
@@ -65,14 +65,14 @@ const Product = () => {
     };
 
     if (loading) return <Loader />;
-    if (!product) return <div className="error-state container">Product not found or system error.</div>;
+    if (!product) return <div className="error-state container">{t('product_page.not_found', 'Product not found or system error.')}</div>;
 
     return (
         <div className="product-detail-page modern-bg">
             <div className="container">
                 {/* Breadcrumbs */}
                 <nav className="prod-breadcrumbs">
-                    <NavLink to="/">Catalogue</NavLink>
+                    <NavLink to="/">{t('product_page.breadcrumb_catalogue', 'Catalogue')}</NavLink>
                     <ChevronRight size={14} />
                     <NavLink to={`/category/${product.category.id}`}>{product.category.title}</NavLink>
                     <ChevronRight size={14} />
@@ -84,11 +84,11 @@ const Product = () => {
                     <div className="media-side">
                         <div className="main-stage card-glass">
                             <img src={product.pictureUrl || '/images/prod_scanner.png'} alt={product.title} />
-                            {product.inStock <= 0 && <div className="oos-overlay">Limited Supply</div>}
+                            {product.inStock <= 0 && <div className="oos-overlay">{t('product_page.limited_supply', 'Limited Supply')}</div>}
                         </div>
                         <div className="badges-row">
-                            <div className="badge-item"><Shield size={18} /> 2 Year Global Warranty</div>
-                            <div className="badge-item"><Truck size={18} /> Secure Handling</div>
+                            <div className="badge-item"><Shield size={18} /> {t('product_page.warranty', '2 Year Global Warranty')}</div>
+                            <div className="badge-item"><Truck size={18} /> {t('product_page.secure_handling', 'Secure Handling')}</div>
                         </div>
                     </div>
 
@@ -105,13 +105,13 @@ const Product = () => {
                                     <Star size={16} fill="var(--accent)" color="var(--accent)" />
                                     <Star size={16} fill="var(--accent)" color="var(--accent)" />
                                 </div>
-                                <span>(24 Reviews)</span>
+                                <span>(24 {t('product_page.reviews', 'Reviews')})</span>
                             </div>
                         </header>
 
                         <div className="price-box">
                             <div className="price-main">${Number(product.price).toLocaleString()}</div>
-                            <div className="tax-tag">Excl. VAT (Institutional Pricing)</div>
+                            <div className="tax-tag">{t('product_page.excl_vat', 'Excl. VAT (Institutional Pricing)')}</div>
                         </div>
 
                         <div className="cta-block card">
@@ -129,10 +129,10 @@ const Product = () => {
                                 {cartStatus === 'success' && <CheckCircle size={20} />}
                                 {cartStatus === 'error' && <ShoppingCart size={20} />}
                                 {cartStatus === 'idle' && <ShoppingCart size={20} />}
-                                {cartStatus === 'loading' ? 'Adding...' :
-                                 cartStatus === 'success' ? 'Added to Cart!' :
-                                 cartStatus === 'error' ? 'Error — Retry' :
-                                 product.inStock > 0 ? 'Deploy to Inventory' : 'Request Availability'}
+                                {cartStatus === 'loading' ? t('common.loading', 'Adding...') :
+                                 cartStatus === 'success' ? t('product_page.added_cart', 'Added to Cart!') :
+                                 cartStatus === 'error' ? t('product_page.error_retry', 'Error — Retry') :
+                                 product.inStock > 0 ? t('product_page.deploy_inventory', 'Add to Cart') : t('product_page.request_availability', 'Request Availability')}
                             </button>
                             <button className="icon-btn-outline"><Heart size={20} /></button>
                             <button className="icon-btn-outline"><Share2 size={20} /></button>
@@ -141,11 +141,11 @@ const Product = () => {
                         <div className="trust-signals">
                             <div className={`signal ${product.inStock > 0 ? 'good' : 'bad'}`}>
                                 <CheckCircle size={18} />
-                                <span>{product.inStock > 0 ? `Ready for Dispatch (${product.inStock} units)` : "Awaiting Restock"}</span>
+                                <span>{product.inStock > 0 ? t('product_page.ready_dispatch', { count: product.inStock, defaultValue: `Ready for Dispatch (${product.inStock} units)` }) : t('product_page.awaiting_restock', "Awaiting Restock")}</span>
                             </div>
                             <div className="signal good">
                                 <FileText size={18} />
-                                <span>ISO 13485 Certified Infrastructure</span>
+                                <span>{t('product_page.iso_infra', 'ISO 13485 Certified Infrastructure')}</span>
                             </div>
                         </div>
                     </div>
@@ -154,22 +154,22 @@ const Product = () => {
                 {/* Tabs Section */}
                 <div className="tabs-area card">
                     <nav className="tabs-nav">
-                        <button className={activeTab === 'description' ? 'active' : ''} onClick={() => setActiveTab('description')}>Description</button>
-                        <button className={activeTab === 'specs' ? 'active' : ''} onClick={() => setActiveTab('specs')}>Technical Specifications</button>
-                        <button className={activeTab === 'support' ? 'active' : ''} onClick={() => setActiveTab('support')}>Institutional Support</button>
+                        <button className={activeTab === 'description' ? 'active' : ''} onClick={() => setActiveTab('description')}>{t('product_page.tab_description', 'Description')}</button>
+                        <button className={activeTab === 'specs' ? 'active' : ''} onClick={() => setActiveTab('specs')}>{t('product_page.tab_specs', 'Technical Specifications')}</button>
+                        <button className={activeTab === 'support' ? 'active' : ''} onClick={() => setActiveTab('support')}>{t('product_page.tab_support', 'Institutional Support')}</button>
                     </nav>
                     <div className="tab-content">
                         {activeTab === 'description' && (
                             <div className="rich-text">
                                 <p>{product.description}</p>
-                                <p>Standardized for hospital environments requiring high precision and maximum uptime.</p>
+                                <p>{t('product_page.standard_desc', 'Standardized for hospital environments requiring high precision and maximum uptime.')}</p>
                             </div>
                         )}
                         {activeTab === 'specs' && (
                             <div className="specs-list">
-                                <div className="spec-row"><strong>Standard</strong> <span>Medical Grade CE/FDA</span></div>
-                                <div className="spec-row"><strong>Origin</strong> <span>German Engineering</span></div>
-                                <div className="spec-row"><strong>Network</strong> <span>HL7/DICOM Compliant</span></div>
+                                <div className="spec-row"><strong>{t('product_page.spec_standard', 'Standard')}</strong> <span>{t('product_page.spec_standard_val', 'Medical Grade CE/FDA')}</span></div>
+                                <div className="spec-row"><strong>{t('product_page.spec_origin', 'Origin')}</strong> <span>{t('product_page.spec_origin_val', 'German Engineering')}</span></div>
+                                <div className="spec-row"><strong>{t('product_page.spec_network', 'Network')}</strong> <span>{t('product_page.spec_network_val', 'HL7/DICOM Compliant')}</span></div>
                             </div>
                         )}
                     </div>
@@ -177,7 +177,7 @@ const Product = () => {
 
                 {/* Related Section */}
                 <section className="related-section">
-                    <h2 className="section-title">Similar Equipment</h2>
+                    <h2 className="section-title">{t('product_page.similar_equipment', 'Similar Equipment')}</h2>
                     <div className="related-grid">
                         {similarEquipment.map(item => (
                             <NavLink to={`/product/${item.id}`} key={item.id} className="small-product-card card">

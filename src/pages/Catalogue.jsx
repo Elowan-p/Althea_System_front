@@ -20,8 +20,6 @@ const Catalogue = () => {
     ? Number(searchParams.get('category'))
     : null;
 
-  const currentLang = i18n.language;
-
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -37,11 +35,11 @@ const Catalogue = () => {
       setLoadTime(elapsed);
     } catch (err) {
       console.error('Catalogue fetch error:', err);
-      setError('Impossible de charger les données. Vérifiez la connexion au serveur.');
+      setError(t('catalogue.error_load', 'Impossible de charger les données. Vérifiez la connexion au serveur.'));
     } finally {
       setLoading(false);
     }
-  }, [currentLang]);
+  }, [t]);
 
   useEffect(() => {
     fetchData();
@@ -154,7 +152,7 @@ const Catalogue = () => {
           {error && (
             <div className="error-banner">
               <p>{error}</p>
-              <button onClick={fetchData} className="retry-btn">Réessayer</button>
+              <button onClick={fetchData} className="retry-btn">{t('cart.retry', 'Réessayer')}</button>
             </div>
           )}
 

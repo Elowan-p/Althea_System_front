@@ -31,7 +31,7 @@ const Category = () => {
     fetchData();
   }, [id, currentLang]);
 
-  const categoryName = category?.title || "Medical Equipment";
+  const categoryName = category?.title || t('category_page.default_title', "Medical Equipment");
 
   if (loading) return <Loader />;
 
@@ -41,14 +41,14 @@ const Category = () => {
       <section className="cat-hero">
         <div className="container">
           <nav className="cat-breadcrumbs">
-            <NavLink to="/">{t('home.welcome')}</NavLink>
+            <NavLink to="/">{t('catalogue.breadcrumb_home')}</NavLink>
             <ChevronRight size={12} />
             <span className="active">{categoryName}</span>
           </nav>
           
           <div className="hero-content">
             <h1 className="hero-title">{categoryName}</h1>
-            <p className="hero-subtitle">Discover state-of-the-art technological solutions specialized in {categoryName.toLowerCase()}. Engineered for precision, integrated for performance.</p>
+            <p className="hero-subtitle">{t('category_page.hero_subtitle', { category: categoryName.toLowerCase(), defaultValue: `Discover state-of-the-art technological solutions specialized in ${categoryName.toLowerCase()}. Engineered for precision, integrated for performance.` })}</p>
           </div>
         </div>
       </section>
@@ -59,10 +59,10 @@ const Category = () => {
             <div className="toolbar-sec">
                 <button className="btn-filter">
                     <SlidersHorizontal size={18} />
-                    <span>Filter & Refine</span>
+                    <span>{t('category_page.filter_refine', 'Filter & Refine')}</span>
                 </button>
                 <div className="results-badge">
-                    <strong>{products.length}</strong> {t('product.products_found')}
+                    <strong>{products.length}</strong> {products.length === 1 ? t('catalogue.products_count_one', 'produit trouvé') : t('catalogue.products_count_other', 'produits trouvés')}
                 </div>
             </div>
 
@@ -72,11 +72,11 @@ const Category = () => {
                     <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}><ListIcon size={18} /></button>
                 </div>
                 <div className="sort-group">
-                    <label>Sort By:</label>
+                    <label>{t('catalogue.sort_by', 'Sort By:')}</label>
                     <select className="minimal-select">
-                        <option>Featured</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
+                        <option>{t('category_page.sort_featured', 'Featured')}</option>
+                        <option>{t('catalogue.sort_price_asc', 'Price: Low to High')}</option>
+                        <option>{t('catalogue.sort_price_desc', 'Price: High to Low')}</option>
                     </select>
                 </div>
             </div>
@@ -87,9 +87,9 @@ const Category = () => {
                 <NavLink to={`/product/${prod.id}`} key={prod.id} className="premium-card">
                     <div className="card-media">
                         <img src={prod.pictureUrl || '/images/prod_scanner.png'} alt={prod.title} />
-                        {prod.inStock <= 0 && <span className="tag-oos">Limited Availability</span>}
+                        {prod.inStock <= 0 && <span className="tag-oos">{t('catalogue.limited_supply', 'Limited Availability')}</span>}
                         <div className="card-overlay">
-                           <button className="view-detail-btn">Quick View</button>
+                           <button className="view-detail-btn">{t('category_page.quick_view', 'Quick View')}</button>
                         </div>
                     </div>
                     
@@ -106,7 +106,7 @@ const Category = () => {
                             <span className="item-price">${Number(prod.price).toLocaleString()}</span>
                             <div className="stock-status">
                                 <div className={`dot ${prod.inStock > 0 ? 'online' : 'offline'}`}></div>
-                                <span>{prod.inStock > 0 ? "In Stock" : "Out of Stock"}</span>
+                                <span>{prod.inStock > 0 ? t('catalogue.in_stock', "In Stock") : t('catalogue.out_of_stock', "Out of Stock")}</span>
                             </div>
                         </div>
                     </div>
@@ -116,8 +116,8 @@ const Category = () => {
 
         {products.length === 0 && (
             <div className="empty-state">
-                <p>No equipment currently available in this specialized division.</p>
-                <NavLink to="/search" className="btn-primary">Explore General Catalogue</NavLink>
+                <p>{t('category_page.no_equipment', 'No equipment currently available in this specialized division.')}</p>
+                <NavLink to="/search" className="btn-primary">{t('category_page.explore_catalogue', 'Explore General Catalogue')}</NavLink>
             </div>
         )}
       </div>
