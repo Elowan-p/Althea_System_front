@@ -68,12 +68,9 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.dispatchEvent(new Event('authchange'));
     setCartCount(0);
     setIsMenuOpen(false);
-    navigate('/', { replace: true });
+    window.dispatchEvent(new Event('logout-start'));
   };
 
   return (

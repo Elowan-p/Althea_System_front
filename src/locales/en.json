@@ -351,7 +351,8 @@
     "logout": "Sign Out"
   },
   "loader": {
-    "initializing": "Initializing Premium Infrastructure..."
+    "initializing": "Initializing Premium Infrastructure...",
+    "logging_out": "Securing session and logging out..."
   },
   "product_page": {
     "not_found": "Product not found or system error.",

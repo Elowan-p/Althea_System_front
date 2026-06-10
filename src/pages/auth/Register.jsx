@@ -56,7 +56,7 @@ const Register = () => {
             setTimeout(() => navigate('/login'), 2500);
         } catch (err) {
             console.error('Registration Error:', err);
-            setError(err.response?.data?.message || t('auth.register_failed'));
+            setError(err.response?.data?.error || err.response?.data?.message || t('auth.register_failed'));
         } finally {
             setLoading(false);
         }

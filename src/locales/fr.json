@@ -351,7 +351,8 @@
     "logout": "Se déconnecter"
   },
   "loader": {
-    "initializing": "Initialisation de l'infrastructure premium..."
+    "initializing": "Initialisation de l'infrastructure premium...",
+    "logging_out": "Déconnexion sécurisée de la session..."
   },
   "product_page": {
     "not_found": "Produit introuvable ou erreur système.",

@@ -1,13 +1,14 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './components/common/Layout';
 import Loader from './components/common/Loader';
+import LogoutLoader from './components/common/LogoutLoader';
 import AccountLayout from './pages/account/AccountLayout';
 import Orders from './pages/account/Orders';
 import Settings from './pages/account/Settings';
-import './index.css'; // Global CSS
+import './index.css';
 
-// Lazy loading components for performance
 const Home = lazy(() => import('./pages/Home'));
 const Category = lazy(() => import('./pages/Category'));
 const Product = lazy(() => import('./pages/Product'));
@@ -23,32 +24,56 @@ const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Cancel = lazy(() => import('./pages/Cancel'));
 
-// Component for protected routes
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem('token'); // Simplification for context
+  const isAuthenticated = !!localStorage.getItem('token');
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleLogoutStart = () => {
+      setIsLoggingOut(true);
+      
+      // Clean up authentication storage during animation
+      setTimeout(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.dispatchEvent(new Event('authchange'));
+        window.dispatchEvent(new Event('cartchange'));
+      }, 1400);
+
+      // Navigate to homepage and close overlay
+      setTimeout(() => {
+        navigate('/', { replace: true });
+        setIsLoggingOut(false);
+      }, 2000);
+    };
+
+    window.addEventListener('logout-start', handleLogoutStart);
+    return () => window.removeEventListener('logout-start', handleLogoutStart);
+  }, [navigate]);
+
   return (
-    <Suspense fallback={<Loader />}>
-      <Layout>
+    <>
+      {isLoggingOut && <LogoutLoader />}
+      <Suspense fallback={<Loader />}>
+        <Layout>
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/catalogue" element={<Catalogue />} />
           <Route path="/category/:id" element={<Category />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/search" element={<Search />} />
           
-          {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
 
-          {/* Protected Account Routes */}
           <Route path="/account" element={
             <ProtectedRoute>
               <AccountLayout />
@@ -64,11 +89,11 @@ function App() {
           <Route path="/cancel" element={<Cancel />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* Redirect all unknown to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
     </Suspense>
+    </>
   );
 }
 
