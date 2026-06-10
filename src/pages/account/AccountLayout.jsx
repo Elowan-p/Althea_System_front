@@ -13,6 +13,7 @@ const AccountLayout = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('adminTwoFaVerified');
         window.dispatchEvent(new Event('authchange'));
         navigate('/', { replace: true });
     };

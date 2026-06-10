@@ -246,4 +246,65 @@ export const getInvoicePdf = (orderId) =>
 
 export const sendMessage = (data) => api.post('/contact', data);
 
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+// Clears the public data cache so admin mutations are reflected on the storefront
+export const clearApiCache = () => cacheStore.clear();
+
+// Admin Auth — POST /api/admin/auth/verify-2fa — { challengeId, code }
+export const verifyAdminTwoFA = (data) => api.post('/admin/auth/verify-2fa', data);
+
+// Admin Dashboard
+export const getDailySales = () => api.get('/admin/dashboard/sales/daily');
+export const getWeeklySales = () => api.get('/admin/dashboard/sales/weekly');
+export const getWeeklySalesByCategory = () => api.get('/admin/dashboard/sales/weekly-by-category');
+export const getCategoryShare = () => api.get('/admin/dashboard/sales/category-share');
+
+// Admin Products — params: { locale, limit, offset }
+export const getAdminProducts = (params) => api.get('/admin/products', { params });
+export const getAdminProduct = (id) => api.get(`/admin/products/${id}`);
+export const createAdminProduct = (data) => api.post('/admin/products', data);
+export const updateAdminProduct = (id, data) => api.patch(`/admin/products/${id}`, data);
+export const deleteAdminProduct = (id) => api.delete(`/admin/products/${id}`);
+// { action: 'publish' | 'unpublish' | 'delete', ids: [] }
+export const bulkAdminProducts = (data) => api.post('/admin/products/bulk', data);
+
+// Admin Categories (ROLE_ADMIN required on write operations)
+export const createCategory = (data) => api.post('/categories', data);
+export const updateCategory = (id, data) => api.patch(`/categories/${id}`, data);
+
+// Admin Orders — params: { status, limit, offset }
+export const getAdminOrders = (params) => api.get('/admin/orders', { params });
+export const getAdminOrder = (id) => api.get(`/admin/orders/${id}`);
+export const updateOrderStatus = (id, status) => api.patch(`/admin/orders/${id}/status`, { status });
+
+// Admin Contacts — params: { status, limit, offset }
+export const getAdminContacts = (params) => api.get('/admin/contact/messages', { params });
+export const getAdminContact = (id) => api.get(`/admin/contact/messages/${id}`);
+export const updateContactStatus = (id, status) => api.patch(`/admin/contact/messages/${id}/status`, { status });
+export const replyContact = (id, message) => api.post(`/admin/contact/messages/${id}/reply`, { message });
+
+// Admin Carousel
+export const getAdminCarousel = () => api.get('/admin/carousel');
+export const createCarouselItem = (data) => api.post('/admin/carousel', data);
+export const updateCarouselItem = (id, data) => api.patch(`/admin/carousel/${id}`, data);
+export const deleteCarouselItem = (id) => api.delete(`/admin/carousel/${id}`);
+// items: [{ id, order }]
+export const reorderCarousel = (items) => api.patch('/admin/carousel/reorder', { items });
+
+// Admin Homepage
+export const getAdminTopProducts = () => api.get('/admin/homepage/top-products');
+export const updateTopProducts = (productIds) => api.put('/admin/homepage/top-products', { productIds });
+
+// Admin Upload — multipart/form-data, field "file" — returns the uploaded file URL
+export const uploadFile = (file) => {
+  const form = new FormData();
+  form.append('file', file);
+  return api.post('/admin/upload', form, { headers: { 'Content-Type': 'multipart/form-data' } });
+};
+
+// Admin Chatbot — params: { limit, offset }
+export const getChatbotLogs = (params) => api.get('/admin/chatbot/logs', { params });
+export const getChatbotSession = (sessionId) => api.get(`/admin/chatbot/logs/${sessionId}`);
+
 export default api;

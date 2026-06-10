@@ -23,10 +23,39 @@ const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Cancel = lazy(() => import('./pages/Cancel'));
 
+// Lazy loading admin backoffice pages
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const ProductList = lazy(() => import('./pages/admin/products/ProductList'));
+const ProductForm = lazy(() => import('./pages/admin/products/ProductForm'));
+const CategoryList = lazy(() => import('./pages/admin/categories/CategoryList'));
+const CategoryForm = lazy(() => import('./pages/admin/categories/CategoryForm'));
+const OrderList = lazy(() => import('./pages/admin/orders/OrderList'));
+const OrderDetail = lazy(() => import('./pages/admin/orders/OrderDetail'));
+const ContactList = lazy(() => import('./pages/admin/contacts/ContactList'));
+const ContactDetail = lazy(() => import('./pages/admin/contacts/ContactDetail'));
+const CarouselManager = lazy(() => import('./pages/admin/carousel/CarouselManager'));
+const HomepageManager = lazy(() => import('./pages/admin/homepage/HomepageManager'));
+const ChatbotLogs = lazy(() => import('./pages/admin/chatbot/ChatbotLogs'));
+const TwoFA = lazy(() => import('./pages/admin/auth/TwoFA'));
+
 // Component for protected routes
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = !!localStorage.getItem('token'); // Simplification for context
   return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
+// Admin routes: JWT + ROLE_ADMIN + 2FA verification required
+const ProtectedAdminRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  let user = {};
+  try {
+    user = JSON.parse(localStorage.getItem('user') || '{}');
+  } catch { /* corrupted storage — treated as not admin */ }
+  const isAdmin = user?.roles?.includes('ROLE_ADMIN');
+  if (!token || !isAdmin) return <Navigate to="/login" replace />;
+  if (!localStorage.getItem('adminTwoFaVerified')) return <Navigate to="/admin/2fa" replace />;
+  return children;
 };
 
 function App() {
@@ -63,6 +92,29 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/cancel" element={<Cancel />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* Admin Backoffice Routes */}
+          <Route path="/admin/2fa" element={<TwoFA />} />
+          <Route path="/admin" element={
+            <ProtectedAdminRoute>
+              <AdminLayout />
+            </ProtectedAdminRoute>
+          }>
+            <Route index element={<Dashboard />} />
+            <Route path="products" element={<ProductList />} />
+            <Route path="products/new" element={<ProductForm />} />
+            <Route path="products/:id" element={<ProductForm />} />
+            <Route path="categories" element={<CategoryList />} />
+            <Route path="categories/new" element={<CategoryForm />} />
+            <Route path="categories/:id" element={<CategoryForm />} />
+            <Route path="orders" element={<OrderList />} />
+            <Route path="orders/:id" element={<OrderDetail />} />
+            <Route path="contacts" element={<ContactList />} />
+            <Route path="contacts/:id" element={<ContactDetail />} />
+            <Route path="carousel" element={<CarouselManager />} />
+            <Route path="homepage" element={<HomepageManager />} />
+            <Route path="chatbot" element={<ChatbotLogs />} />
+          </Route>
 
           {/* Redirect all unknown to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
