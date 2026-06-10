@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, MessageCircle, ArrowUp, Zap, ShieldCheck, HeartPulse } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, ArrowUp, Zap, ShieldCheck, HeartPulse } from 'lucide-react';
 
 const Footer = () => {
 
@@ -97,10 +97,6 @@ const Footer = () => {
                 <li><Phone size={18} /> +49 (0) 30 1234 5678</li>
                 <li><Mail size={18} /> systems@althea.med</li>
               </ul>
-              <button className="chat-trigger-btn">
-                <MessageCircle size={18} /> 
-                Open Live Support
-              </button>
             </div>
           </div>
         </div>
@@ -156,7 +152,7 @@ const Footer = () => {
         .contact-list li { display: flex; align-items: flex-start; gap: 0.8rem; color: #94a3b8; font-size: 0.95rem; }
         .contact-list svg { color: var(--primary); flex-shrink: 0; }
 
-        .chat-trigger-btn { margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem; background: var(--primary); color: white; padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600; width: 100%; justify-content: center; }
+
 
         .footer-bottom { margin-top: 5rem; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: #64748b; }
         .bottom-wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; }

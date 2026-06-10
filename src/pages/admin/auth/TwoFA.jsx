@@ -7,13 +7,6 @@ const TwoFA = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const token = localStorage.getItem('token');
-  let user = {};
-  try {
-    user = JSON.parse(localStorage.getItem('user') || '{}');
-  } catch { /* corrupted storage — treated as not admin */ }
-  const isAdmin = user?.roles?.includes('ROLE_ADMIN');
-
   const [challengeId, setChallengeId] = useState(
     searchParams.get('challengeId') || localStorage.getItem('adminChallengeId') || ''
   );
@@ -21,8 +14,8 @@ const TwoFA = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Admin account + JWT required before 2FA makes sense
-  if (!token || !isAdmin) return <Navigate to="/login" replace />;
+  // Challenge ID is required to perform 2FA verification
+  if (!challengeId) return <Navigate to="/login" replace />;
   // Already verified — straight to the backoffice
   if (localStorage.getItem('adminTwoFaVerified')) return <Navigate to="/admin" replace />;
 
@@ -41,9 +34,12 @@ const TwoFA = () => {
     setError('');
     try {
       const res = await verifyAdminTwoFA({ challengeId: challengeId.trim(), code });
-      // The backend may rotate the JWT after a successful 2FA check
+      // Store token and user details returned by the 2FA verify endpoint
       if (res.data?.token) {
         localStorage.setItem('token', res.data.token);
+        if (res.data?.user) {
+          localStorage.setItem('user', JSON.stringify(res.data.user));
+        }
         window.dispatchEvent(new Event('authchange'));
       }
       localStorage.setItem('adminTwoFaVerified', 'true');

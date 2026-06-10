@@ -7,7 +7,6 @@ import {
   Mail,
   GalleryHorizontal,
   Home,
-  Bot,
   ArrowLeft,
   ShieldCheck
 } from 'lucide-react';
@@ -18,9 +17,7 @@ const NAV_ITEMS = [
   { to: '/admin/categories', label: 'Catégories', icon: Layers },
   { to: '/admin/orders', label: 'Commandes', icon: ShoppingCart },
   { to: '/admin/contacts', label: 'Messages', icon: Mail },
-  { to: '/admin/carousel', label: 'Carousel', icon: GalleryHorizontal },
   { to: '/admin/homepage', label: "Page d'accueil", icon: Home },
-  { to: '/admin/chatbot', label: 'Chatbot', icon: Bot },
 ];
 
 const AdminLayout = () => {

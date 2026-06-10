@@ -272,6 +272,7 @@ export const bulkAdminProducts = (data) => api.post('/admin/products/bulk', data
 // Admin Categories (ROLE_ADMIN required on write operations)
 export const createCategory = (data) => api.post('/categories', data);
 export const updateCategory = (id, data) => api.patch(`/categories/${id}`, data);
+export const deleteCategory = (id) => api.delete(`/categories/${id}`);
 
 // Admin Orders — params: { status, limit, offset }
 export const getAdminOrders = (params) => api.get('/admin/orders', { params });
@@ -282,7 +283,7 @@ export const updateOrderStatus = (id, status) => api.patch(`/admin/orders/${id}/
 export const getAdminContacts = (params) => api.get('/admin/contact/messages', { params });
 export const getAdminContact = (id) => api.get(`/admin/contact/messages/${id}`);
 export const updateContactStatus = (id, status) => api.patch(`/admin/contact/messages/${id}/status`, { status });
-export const replyContact = (id, message) => api.post(`/admin/contact/messages/${id}/reply`, { message });
+export const replyContact = (id, message) => api.post(`/admin/contact/messages/${id}/reply`, { reply: message });
 
 // Admin Carousel
 export const getAdminCarousel = () => api.get('/admin/carousel');
@@ -302,9 +303,5 @@ export const uploadFile = (file) => {
   form.append('file', file);
   return api.post('/admin/upload', form, { headers: { 'Content-Type': 'multipart/form-data' } });
 };
-
-// Admin Chatbot — params: { limit, offset }
-export const getChatbotLogs = (params) => api.get('/admin/chatbot/logs', { params });
-export const getChatbotSession = (sessionId) => api.get(`/admin/chatbot/logs/${sessionId}`);
 
 export default api;

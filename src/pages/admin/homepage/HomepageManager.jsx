@@ -20,10 +20,10 @@ const HomepageManager = () => {
           getAdminProducts(),
           getAdminTopProducts(),
         ]);
-        setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
+        setProducts(Array.isArray(productsRes.data?.items) ? productsRes.data.items : []);
         const top = Array.isArray(topRes.data) ? topRes.data : [];
-        // Top products are full product objects (or {productId}) — keep their ids in order
-        setSelectedIds(top.map((p) => p.id ?? p.productId).filter((id) => id != null));
+        // Extract the nested product ID from the backend structure
+        setSelectedIds(top.map((p) => p.product?.id ?? p.productId ?? p.id).filter((id) => id != null));
       } catch (err) {
         console.error('Homepage manager load error:', err);
         setError('Impossible de charger les produits.');

@@ -34,9 +34,7 @@ const OrderList = lazy(() => import('./pages/admin/orders/OrderList'));
 const OrderDetail = lazy(() => import('./pages/admin/orders/OrderDetail'));
 const ContactList = lazy(() => import('./pages/admin/contacts/ContactList'));
 const ContactDetail = lazy(() => import('./pages/admin/contacts/ContactDetail'));
-const CarouselManager = lazy(() => import('./pages/admin/carousel/CarouselManager'));
 const HomepageManager = lazy(() => import('./pages/admin/homepage/HomepageManager'));
-const ChatbotLogs = lazy(() => import('./pages/admin/chatbot/ChatbotLogs'));
 const TwoFA = lazy(() => import('./pages/admin/auth/TwoFA'));
 
 // Component for protected routes
@@ -111,9 +109,7 @@ function App() {
             <Route path="orders/:id" element={<OrderDetail />} />
             <Route path="contacts" element={<ContactList />} />
             <Route path="contacts/:id" element={<ContactDetail />} />
-            <Route path="carousel" element={<CarouselManager />} />
             <Route path="homepage" element={<HomepageManager />} />
-            <Route path="chatbot" element={<ChatbotLogs />} />
           </Route>
 
           {/* Redirect all unknown to home */}

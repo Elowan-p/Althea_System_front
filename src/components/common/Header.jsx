@@ -12,7 +12,22 @@ const Header = () => {
   const [searchValue, setSearchValue] = useState('');
   const [categories, setCategories] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [isAdmin, setIsAdmin] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+
+  const checkAdmin = useCallback(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setIsAdmin(false);
+      return;
+    }
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      setIsAdmin(!!user?.roles?.includes('ROLE_ADMIN'));
+    } catch {
+      setIsAdmin(false);
+    }
+  }, []);
 
   const fetchCartCount = useCallback(async () => {
     try {
@@ -42,10 +57,15 @@ const Header = () => {
   }, [currentLang]);
 
   useEffect(() => {
+    checkAdmin();
     fetchCartCount();
 
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    const syncAuth = () => { setIsAuthenticated(!!localStorage.getItem('token')); fetchCartCount(); };
+    const syncAuth = () => {
+      setIsAuthenticated(!!localStorage.getItem('token'));
+      checkAdmin();
+      fetchCartCount();
+    };
     const syncCart = () => fetchCartCount();
 
     window.addEventListener('scroll', handleScroll);
@@ -59,7 +79,7 @@ const Header = () => {
       window.removeEventListener('authchange', syncAuth);
       window.removeEventListener('cartchange', syncCart);
     };
-  }, [fetchCartCount]);
+  }, [fetchCartCount, checkAdmin]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -117,6 +137,12 @@ const Header = () => {
             </div>
 
             <nav className="desktop-only center-nav">
+                {isAdmin && (
+                    <div className="nav-item">
+                        <NavLink to="/admin">{t('header.dashboard', 'Dashboard')}</NavLink>
+                        <div className="nav-accent"></div>
+                    </div>
+                )}
                 <div className="nav-item has-dropdown">
                     <NavLink to="/catalogue" className="drop-trigger catalogue-trigger">Catalogue <ChevronDown size={14} /></NavLink>
                     <div className="nav-accent"></div>
@@ -158,6 +184,9 @@ const Header = () => {
                                     <div className="profile-header">{t('header.workspace', 'Espace de travail')}</div>
                                     <NavLink to="/account/settings">{t('header.my_profile', 'Mon profil')}</NavLink>
                                     <NavLink to="/account/orders">{t('header.quick_orders', 'Commandes rapides')}</NavLink>
+                                    {isAdmin && (
+                                        <NavLink to="/admin">{t('header.admin_dashboard', 'Backoffice')}</NavLink>
+                                    )}
                                     <button className="btn-logout" onClick={handleLogout}>{t('header.sign_out', 'Déconnexion')}</button>
                                 </div>
                             </div>
@@ -185,6 +214,9 @@ const Header = () => {
                     <div className="side-section">
                         <label>Navigation principale</label>
                         <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Accueil</NavLink>
+                        {isAdmin && (
+                            <NavLink to="/admin" onClick={() => setIsMenuOpen(false)}>{t('header.dashboard', 'Dashboard')}</NavLink>
+                        )}
                         <NavLink to="/catalogue" onClick={() => setIsMenuOpen(false)}>Catalogue de produits</NavLink>
                         <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
                     </div>

@@ -41,7 +41,7 @@ const ProductList = () => {
     setError('');
     try {
       const res = await getAdminProducts();
-      setProducts(Array.isArray(res.data) ? res.data : []);
+      setProducts(Array.isArray(res.data?.items) ? res.data.items : []);
     } catch (err) {
       console.error('Admin products fetch error:', err);
       setError('Impossible de charger les produits.');

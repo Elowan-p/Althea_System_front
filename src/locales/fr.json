@@ -142,5 +142,9 @@
     "out_of_stock": "Rupture",
     "limited_supply": "Stock limité",
     "view_details": "Voir les détails"
+  },
+  "contact": {
+    "send": "Envoyer le message",
+    "sending": "Envoi en cours..."
   }
 }

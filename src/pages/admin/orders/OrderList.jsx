@@ -40,7 +40,7 @@ const OrderList = () => {
         if (statusFilter) params.status = statusFilter;
         const res = await getAdminOrders(params);
         if (cancelled) return;
-        const data = Array.isArray(res.data) ? res.data : [];
+        const data = Array.isArray(res.data?.items) ? res.data.items : [];
         setOrders(data);
         setSeenStatuses((prev) => {
           const merged = new Set(prev);

@@ -142,5 +142,9 @@
     "out_of_stock": "Out of Stock",
     "limited_supply": "Limited Supply",
     "view_details": "View Details"
+  },
+  "contact": {
+    "send": "Send Message",
+    "sending": "Sending..."
   }
 }

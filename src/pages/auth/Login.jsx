@@ -44,6 +44,9 @@ const Login = () => {
                 localStorage.setItem('user', JSON.stringify(res.data.user));
                 window.dispatchEvent(new Event('authchange'));
                 navigate('/account/orders', { replace: true });
+            } else if (res.data.requires2fa) {
+                localStorage.setItem('adminChallengeId', res.data.challengeId);
+                navigate(`/admin/2fa?challengeId=${res.data.challengeId}`, { replace: true });
             }
         } catch (err) {
             console.error("Login Error:", err);

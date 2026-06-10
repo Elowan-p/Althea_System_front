@@ -41,7 +41,7 @@ const ContactList = () => {
         if (statusFilter) params.status = statusFilter;
         const res = await getAdminContacts(params);
         if (cancelled) return;
-        const data = Array.isArray(res.data) ? res.data : [];
+        const data = Array.isArray(res.data?.items) ? res.data.items : [];
         setMessages(data);
         setSeenStatuses((prev) => {
           const merged = new Set(prev);

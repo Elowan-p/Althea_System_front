@@ -1,13 +1,32 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Pencil, Loader2, AlertCircle, Layers, ImageOff } from 'lucide-react';
-import { getCategories } from '../../../services/api';
+import { Plus, Pencil, Trash2, Loader2, AlertCircle, Layers, ImageOff } from 'lucide-react';
+import { getCategories, deleteCategory, clearApiCache } from '../../../services/api';
 
 const CategoryList = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [confirm, setConfirm] = useState(null); // { id, title }
+  const [working, setWorking] = useState(false);
+
+  const runDelete = async (id) => {
+    setWorking(true);
+    setError('');
+    try {
+      await deleteCategory(id);
+      clearApiCache();
+      setCategories((prev) => prev.filter((c) => c.id !== id));
+      setConfirm(null);
+    } catch (err) {
+      console.error('Category delete error:', err);
+      setError(err.response?.data?.error || 'La suppression a échoué. Assurez-vous que la catégorie ne contient aucun produit.');
+      setConfirm(null);
+    } finally {
+      setWorking(false);
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -98,12 +117,40 @@ const CategoryList = () => {
                       >
                         <Pencil size={15} />
                       </button>
+                      <button
+                        className="adm-icon-btn danger"
+                        title="Supprimer"
+                        onClick={() => setConfirm({ id: cat.id, title: cat.title })}
+                      >
+                        <Trash2 size={15} />
+                      </button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {confirm && (
+        <div className="adm-modal-overlay" onClick={() => !working && setConfirm(null)}>
+          <div className="adm-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Confirmer la suppression</h3>
+            <p>
+              La catégorie <strong>{confirm.title}</strong> sera définitivement supprimée.
+              Cette action est irréversible et échouera si la catégorie contient encore des produits.
+            </p>
+            <div className="adm-modal-actions">
+              <button className="adm-btn" disabled={working} onClick={() => setConfirm(null)}>
+                Annuler
+              </button>
+              <button className="adm-btn danger" disabled={working} onClick={() => runDelete(confirm.id)}>
+                {working ? <Loader2 size={15} className="adm-spin" /> : <Trash2 size={15} />}
+                Supprimer
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
