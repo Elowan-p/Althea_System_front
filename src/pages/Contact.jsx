@@ -10,12 +10,16 @@ import {
   Hospital, 
   MessageSquare, 
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Loader2
 } from 'lucide-react';
+import { sendMessage } from '../services/api';
 
 const Contact = () => {
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,13 +28,28 @@ const Contact = () => {
     message: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate API call
-    console.log("Submitting Contact Form:", formData);
-    setTimeout(() => {
-       setSubmitted(true);
-    }, 1000);
+    setLoading(true);
+    setError('');
+
+    // Prepend Name and Hospital to the message so they are saved in the DB
+    const fullMessage = `Name: ${formData.name}\nHospital: ${formData.hospital}\n\nMessage:\n${formData.message}`;
+
+    try {
+      await sendMessage({
+        email: formData.email,
+        subject: formData.subject,
+        message: fullMessage,
+        source: 'form'
+      });
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Error submitting contact form:", err);
+      setError(err.response?.data?.error || "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -39,9 +58,18 @@ const Contact = () => {
         <div className="container">
           <div className="success-card card">
              <div className="icon-pulse"><CheckCircle size={60} color="#10b981" /></div>
-             <h2>{t('contact.submitted_title', 'Message Received')}</h2>
-             <p>{t('contact.submitted_desc', 'Our medical coordination team will review your inquiry and get back to you within 24 business hours.')}</p>
-             <button className="btn-primary" onClick={() => setSubmitted(false)}>{t('contact.send_another', 'Send another message')}</button>
+             <h2>Message Received</h2>
+             <p>Our medical coordination team will review your inquiry and get back to you within 24 business hours.</p>
+             <button className="btn-primary" onClick={() => {
+                setFormData({
+                  name: '',
+                  email: '',
+                  hospital: '',
+                  subject: 'General Inquiry',
+                  message: ''
+                });
+                setSubmitted(false);
+             }}>Send another message</button>
           </div>
         </div>
       </div>
@@ -132,8 +160,18 @@ const Contact = () => {
                    ></textarea>
                 </div>
 
-                <button type="submit" className="submit-btn">
-                   <Send size={18} /> {t('contact.send', 'Send Message')}
+                {error && (
+                   <div className="form-error-msg" style={{ color: '#ef4444', marginBottom: '1.2rem', fontSize: '0.95rem', fontWeight: 600 }}>
+                      {error}
+                   </div>
+                )}
+
+                <button type="submit" className="submit-btn" disabled={loading}>
+                   {loading ? (
+                      <><Loader2 size={18} className="adm-spin" /> {t('contact.sending')}</>
+                   ) : (
+                      <><Send size={18} /> {t('contact.send')}</>
+                   )}
                 </button>
              </form>
           </div>
