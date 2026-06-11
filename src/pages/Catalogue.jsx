@@ -76,7 +76,7 @@ const Catalogue = () => {
 
   return (
     <div className="catalogue-page">
-      {/* Hero Banner */}
+      {}
       <section className="cat-hero-banner">
         <div className="container">
           <nav className="cat-breadcrumb">
@@ -112,7 +112,7 @@ const Catalogue = () => {
       </section>
 
       <div className="container catalogue-layout">
-        {/* Sidebar Filters */}
+        {}
         <aside className="cat-sidebar">
           <div className="sidebar-card">
             <div className="sidebar-header">
@@ -147,7 +147,7 @@ const Catalogue = () => {
           </div>
         </aside>
 
-        {/* Main Content */}
+        {}
         <main className="cat-main-content">
           {error && (
             <div className="error-banner">
@@ -156,7 +156,7 @@ const Catalogue = () => {
             </div>
           )}
 
-          {/* Toolbar */}
+          {}
           <div className="cat-toolbar-bar">
             <div className="toolbar-left">
               {activeCategoryId && (
@@ -202,7 +202,7 @@ const Catalogue = () => {
             </div>
           </div>
 
-          {/* Products Grid */}
+          {}
           {sortedProducts.length > 0 ? (
             <div className={`product-flow ${viewMode}`}>
               {sortedProducts.map((prod) => (

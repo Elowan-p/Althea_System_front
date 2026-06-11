@@ -14,7 +14,7 @@ import {
   Warehouse
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getCategories, getProducts } from '../services/api';
+import { getCategories, getTopProducts } from '../services/api';
 import Loader from '../components/common/Loader';
 
 const Home = () => {
@@ -64,10 +64,9 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            // Real endpoints: GET /api/categories and GET /api/products
-            const [catsRes, prodsRes] = await Promise.all([
+            const [catsRes, topProdsRes] = await Promise.all([
               getCategories(),
-              getProducts()
+              getTopProducts()
             ]);
 
             const catsData = Array.isArray(catsRes.data) ? catsRes.data : [];
@@ -83,14 +82,14 @@ const Home = () => {
                     : `Solutions spécialisées pour ${(cat.title || '').toLowerCase()}.`
             })));
 
-            const prodsData = Array.isArray(prodsRes.data) ? prodsRes.data : [];
-            setTopProducts(prodsData.slice(0, 3).map(prod => ({
-              id: prod.id,
-              name: prod.title,
-              price: `$${Number(prod.price).toLocaleString()}`,
+            const topProdsData = Array.isArray(topProdsRes.data) ? topProdsRes.data : [];
+            setTopProducts(topProdsData.map(prod => ({
+              id: prod.product?.id ?? prod.id,
+              name: prod.product?.title ?? prod.title,
+              price: `$${Number(prod.product?.price ?? prod.price).toLocaleString()}`,
               rating: 4.8,
-              medicalDomain: prod.medicalDomain || prod.category?.title || 'Medical',
-              image: prod.pictureUrl || null
+              medicalDomain: prod.product?.medicalDomain ?? prod.product?.category?.title ?? prod.medicalDomain ?? prod.category?.title ?? 'Medical',
+              image: prod.product?.pictureUrl ?? prod.pictureUrl ?? null
             })));
           } catch (err) {
             console.error('Home Data Fetch Error:', err);
@@ -99,14 +98,13 @@ const Home = () => {
           }
         };
         fetchData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLang]);
 
     if (loading) return <Loader />;
 
     return (
         <div className="home-page">
-            {/* Ultra Hero Carousel */}
+            {}
             <section className="hero-section">
                 <div className="hero-carousel">
                     {slides.map((slide, idx) => (
@@ -131,7 +129,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Core Values Section */}
+            {}
             <section className="values-section">
                 <div className="container">
                     <div className="values-header">
@@ -159,7 +157,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Premium Categories Grid */}
+            {}
             <section className="categories-section">
                 <div className="container">
                     <div className="section-header">
@@ -194,7 +192,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Featured Products */}
+            {}
             <section className="top-products-section">
                 <div className="container">
                     <div className="section-header">

@@ -37,7 +37,7 @@ const Category = () => {
 
   return (
     <div className="category-page modern-bg">
-      {/* Premium Hero Banner */}
+      {}
       <section className="cat-hero">
         <div className="container">
           <nav className="cat-breadcrumbs">
@@ -53,7 +53,7 @@ const Category = () => {
         </div>
       </section>
 
-      {/* Main Content Area */}
+      {}
       <div className="container cat-main">
         <div className="cat-toolbar card-glass">
             <div className="toolbar-sec">

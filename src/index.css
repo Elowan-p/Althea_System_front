@@ -1,5 +1,5 @@
 :root {
-  /* Color Palette - Medical Professional */
+  
   --primary: #005c97;
   --primary-light: #36d1dc;
   --secondary: #2c3e50;
@@ -12,16 +12,16 @@
   --success: #10b981;
   --border: #e2e8f0;
 
-  /* Typography */
+  
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
-  /* Layout */
+  
   --header-height: 70px;
   --container-width: 1200px;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-  /* Transitions */
+  
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -64,7 +64,6 @@ button {
   transition: var(--transition);
 }
 
-/* Global Layout */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -79,7 +78,6 @@ button {
   padding: 2rem 1rem;
 }
 
-/* Base UI Components Styles */
 .card {
   background: var(--white);
   border-radius: 12px;
@@ -118,7 +116,6 @@ button {
   text-align: center;
 }
 
-/* Global Layout Extras */
 .container {
   width: 100%;
   max-width: var(--container-width);
@@ -131,7 +128,6 @@ button {
   min-height: 100vh;
 }
 
-/* Breadcrumbs */
 .cat-breadcrumbs {
   display: flex;
   align-items: center;
@@ -152,7 +148,6 @@ button {
   color: var(--primary);
 }
 
-/* Premium Design System - Product Cards & Grids */
 .product-flow.grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -327,7 +322,6 @@ button {
   z-index: 5;
 }
 
-/* Glassmorphism & UI Extras */
 .card-glass {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
@@ -336,7 +330,6 @@ button {
   border-radius: 20px;
 }
 
-/* Mobile Adjustments (Mobile First) */
 @media (max-width: 768px) {
   .section-title {
     font-size: 1.5rem;

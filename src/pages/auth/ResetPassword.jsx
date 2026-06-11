@@ -35,7 +35,7 @@ const ResetPassword = () => {
         setError('');
 
         try {
-            // FIXED: POST /api/auth/reset-password/{token} with body { password }
+            
             await resetPassword(token, password);
             setSuccess(true);
             setTimeout(() => navigate('/login'), 3000);

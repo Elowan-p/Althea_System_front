@@ -30,7 +30,7 @@ const Footer = () => {
 
   return (
     <footer className="footer-premium">
-      {/* Top Banner: Values */}
+      {}
       <div className="footer-values">
         <div className="container">
           <div className="value-item">
@@ -57,11 +57,11 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Main Footer Content */}
+      {}
       <div className="footer-main">
         <div className="container">
           <div className="footer-grid">
-            {/* Column 1: Brand Info */}
+            {}
             <div className="footer-col brand-col">
               <NavLink to="/" className="brand-footer">
                 <span className="b-main">ALTHEA</span>
@@ -77,7 +77,7 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Links Columns */}
+            {}
             <div className="footer-col">
               <h4>{t('footer.solutions', 'Solutions')}</h4>
               <ul>
@@ -91,7 +91,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Column 4: Contact */}
+            {}
             <div className="footer-col contact-col">
               <h4>{t('footer.connect', 'Connect')}</h4>
               <ul className="contact-list">
@@ -104,7 +104,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Legal */}
+      {}
       <div className="footer-bottom">
         <div className="container bottom-wrap">
           <p className="copyright">{t('footer.rights_reserved', '© 2026 Althea Systems AG. All rights reserved.')}</p>
@@ -153,8 +153,6 @@ const Footer = () => {
 
         .contact-list li { display: flex; align-items: flex-start; gap: 0.8rem; color: #94a3b8; font-size: 0.95rem; }
         .contact-list svg { color: var(--primary); flex-shrink: 0; }
-
-
 
         .footer-bottom { margin-top: 5rem; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: #64748b; }
         .bottom-wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; }

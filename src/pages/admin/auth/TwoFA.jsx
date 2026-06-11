@@ -14,9 +14,9 @@ const TwoFA = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Challenge ID is required to perform 2FA verification
+  
   if (!challengeId) return <Navigate to="/login" replace />;
-  // Already verified — straight to the backoffice
+  
   if (localStorage.getItem('adminTwoFaVerified')) return <Navigate to="/admin" replace />;
 
   const handleSubmit = async (e) => {
@@ -34,7 +34,7 @@ const TwoFA = () => {
     setError('');
     try {
       const res = await verifyAdminTwoFA({ challengeId: challengeId.trim(), code });
-      // Store token and user details returned by the 2FA verify endpoint
+      
       if (res.data?.token) {
         localStorage.setItem('token', res.data.token);
         if (res.data?.user) {

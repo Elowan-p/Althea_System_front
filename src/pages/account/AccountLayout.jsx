@@ -23,7 +23,7 @@ const AccountLayout = () => {
     return (
         <div className="account-layout modern-bg">
             <div className="container layout-grid">
-                {/* Sidebar Navigation */}
+                {}
                 <aside className="account-sidebar">
                     <div className="sidebar-header">
                         <div className="user-avatar">
@@ -52,7 +52,7 @@ const AccountLayout = () => {
                     </nav>
                 </aside>
 
-                {/* Main Content Area */}
+                {}
                 <main className="account-main-content">
                     <Outlet />
                 </main>

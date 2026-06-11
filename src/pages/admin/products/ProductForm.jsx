@@ -11,7 +11,6 @@ import {
 const LANGS = ['fr', 'en', 'ru'];
 const EMPTY_I18N = { title: '', description: '', powerSupplyType: '', medicalDomain: '' };
 
-// The upload endpoint returns the file URL — key name depends on backend version
 const extractUploadUrl = (data) =>
   data?.url || data?.fileUrl || data?.path || data?.location || data?.filePath || '';
 
@@ -120,7 +119,7 @@ const ProductForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Only ship non-empty translated fields so we never overwrite with blanks
+  
   const buildTranslation = (values) => {
     const out = {};
     Object.entries(values).forEach(([key, val]) => {

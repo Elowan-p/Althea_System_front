@@ -19,7 +19,7 @@ const Cart = () => {
 
     const currentLang = i18n.language;
 
-    // Enrich cart items with product metadata (image, category title) from cached product list
+    
     const enrichItems = async (rawItems) => {
         try {
             const productsRes = await getProducts();
@@ -28,7 +28,7 @@ const Cart = () => {
             );
             return rawItems.map(item => {
                 const product = productsMap[item.productId] || {};
-                // Backend may return 'id' or 'itemId' — normalize to itemId
+                
                 return {
                     ...item,
                     itemId: item.itemId ?? item.id ?? null,
@@ -57,11 +57,11 @@ const Cart = () => {
             }
 
             if (hasToken && Array.isArray(data.items)) {
-                // Authenticated cart — items have itemId, productId, title, price, quantity
+                
                 const enriched = await enrichItems(data.items);
                 setItems(enriched);
             } else if (!hasToken && data.items && typeof data.items === 'object') {
-                // Guest cart — items is { [productId]: quantity }
+                
                 const productsRes = await getProducts();
                 const productsMap = Object.fromEntries(
                     (productsRes.data || []).map(p => [p.id, p])
@@ -69,7 +69,7 @@ const Cart = () => {
                 const guestItems = Object.entries(data.items).map(([productId, quantity]) => {
                     const product = productsMap[parseInt(productId)] || {};
                     return {
-                        itemId: null, // guest has no itemId
+                        itemId: null, 
                         productId: parseInt(productId),
                         quantity,
                         name: product.title || t('cart.product_placeholder', { id: productId, defaultValue: 'Product #{{id}}' }),
@@ -92,13 +92,13 @@ const Cart = () => {
 
     useEffect(() => {
         fetchCart();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, [currentLang]);
 
     const updateQuantity = async (itemId, newQuantity) => {
         if (isGuest || !itemId) return;
         if (newQuantity < 1) {
-            // If decrementing below 1, remove the item instead
+            
             return removeItem(itemId);
         }
         setActionLoading(true);
@@ -170,7 +170,7 @@ const Cart = () => {
                 </div>
             )}
 
-            {/* Guest notice */}
+            {}
             {isGuest && (
                 <div className="guest-banner">
                     <div className="guest-banner-icon"><ShieldCheck size={28} /></div>

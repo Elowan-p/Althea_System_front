@@ -8,7 +8,7 @@ const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [confirm, setConfirm] = useState(null); // { id, title }
+  const [confirm, setConfirm] = useState(null); 
   const [working, setWorking] = useState(false);
 
   const runDelete = async (id) => {

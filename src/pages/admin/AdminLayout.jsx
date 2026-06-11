@@ -8,7 +8,8 @@ import {
   GalleryHorizontal,
   Home,
   ArrowLeft,
-  ShieldCheck
+  ShieldCheck,
+  MessageSquare
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -17,6 +18,7 @@ const NAV_ITEMS = [
   { to: '/admin/categories', label: 'Catégories', icon: Layers },
   { to: '/admin/orders', label: 'Commandes', icon: ShoppingCart },
   { to: '/admin/contacts', label: 'Messages', icon: Mail },
+  { to: '/admin/chatbot', label: 'Chatbot', icon: MessageSquare },
   { to: '/admin/homepage', label: "Page d'accueil", icon: Home },
 ];
 
@@ -56,7 +58,7 @@ const AdminLayout = () => {
         <Outlet />
       </main>
 
-      {/* Shared backoffice styles — every /admin page relies on the .adm-* classes below */}
+      {}
       <style>{`
         .admin-shell {
           display: grid;

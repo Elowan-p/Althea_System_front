@@ -33,7 +33,7 @@ const Contact = () => {
     setLoading(true);
     setError('');
 
-    // Prepend Name and Hospital to the message so they are saved in the DB
+    
     const fullMessage = `Name: ${formData.name}\nHospital: ${formData.hospital}\n\nMessage:\n${formData.message}`;
 
     try {
@@ -78,7 +78,7 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
-      {/* Hero Header */}
+      {}
       <section className="contact-hero">
         <div className="container">
           <div className="hero-content-wrap">
@@ -91,7 +91,7 @@ const Contact = () => {
       <section className="contact-body-section container">
         <div className="contact-grid">
           
-          {/* Left: Contact Form */}
+          {}
           <div className="contact-form-card card shadow-lg">
              <div className="form-header">
                 <h3>{t('contact.form_title', 'Send a Message')}</h3>
@@ -176,7 +176,7 @@ const Contact = () => {
              </form>
           </div>
 
-          {/* Right: Info & Details */}
+          {}
           <div className="contact-info-wrap">
              <div className="info-block card">
                 <header className="block-header">
@@ -222,7 +222,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Map Placeholder Section */}
+      {}
       <section className="map-section container">
          <div className="map-placeholder">
             <div className="map-overlay">
