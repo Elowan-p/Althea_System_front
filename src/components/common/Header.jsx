@@ -69,7 +69,7 @@ const Header = () => {
   useEffect(() => {
     checkAdmin();
     fetchCartCount();
-
+    
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     const syncAuth = () => {
       setIsAuthenticated(!!localStorage.getItem('token'));
@@ -172,11 +172,7 @@ const Header = () => {
             <div className="flex-start">
                 <button className="burger-btn mobile-only" onClick={() => setIsMenuOpen(true)}><Menu size={24} /></button>
                 <NavLink to="/" className="brand-logo">
-                    <div className="logo-symbol">A</div>
-                    <div className="logo-text">
-                        <span className="main">ALTHEA</span>
-                        <span className="sub">SYSTEMS</span>
-                    </div>
+                    <img src="/images/logo.png" alt="Althea Systems" className="logo-img" />
                 </NavLink>
             </div>
 
@@ -251,7 +247,9 @@ const Header = () => {
         <div className="sidebar-mask" onClick={() => setIsMenuOpen(false)}>
             <div className="sidebar-panel" onClick={e => e.stopPropagation()}>
                 <header className="side-header">
-                    <div className="brand-logo"><div className="logo-symbol">A</div><div className="brand-text-sm">ALTHEA</div></div>
+                    <div className="brand-logo">
+                        <img src="/images/logo.png" alt="Althea Systems" className="logo-img" />
+                    </div>
                     <button className="close-side" onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
                 </header>
                 <div className="side-content">
@@ -367,6 +365,8 @@ const Header = () => {
         .brand-logo { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; transition: var(--transition); }
         .brand-logo:hover { transform: scale(1.02); }
         .logo-symbol { background: var(--primary-gradient); color: white; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: 900; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0, 92, 151, 0.25); }
+        .logo-img { height: 140px; width: auto; object-fit: contain; transition: var(--transition); margin: -45px 0; }
+        .ultra-header.scrolled .logo-img { height: 110px; margin: -32px 0; }
         .logo-text { display: flex; flex-direction: column; line-height: 1; }
         .logo-text .main { font-weight: 900; font-size: 1.4rem; color: var(--secondary); letter-spacing: -0.05em; }
         .logo-text .sub { font-weight: 500; font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.2em; }
@@ -521,9 +521,11 @@ const Header = () => {
           .flex-start { gap: 1rem; }
           .flex-end { gap: 1rem; }
           .actions-cluster { gap: 1rem; }
+          .logo-img { height: 110px; margin: -32px 0; }
         }
         @media (max-width: 480px) {
           .logo-symbol { width: 38px; height: 38px; font-size: 1.25rem; border-radius: 10px; }
+          .logo-img { height: 90px; margin: -25px 0; width: auto; }
           .logo-text .main { font-size: 1.15rem; }
           .logo-text .sub { font-size: 0.65rem; }
           .cart-icon-box { width: 40px; height: 40px; }
