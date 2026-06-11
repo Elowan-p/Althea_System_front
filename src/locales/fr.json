@@ -115,7 +115,27 @@
     "notif_desc": "Configurez vos alertes pour le statut des commandes, les cycles de maintenance et les mises à jour réglementaires.",
     "loading": "Chargement de votre profil institutionnel...",
     "error_load": "Impossible de charger les données du profil.",
-    "error_save": "Une erreur est survenue lors de la sauvegarde."
+    "error_save": "Une erreur est survenue lors de la sauvegarde.",
+    "display_prefs": "Préférences d'affichage",
+    "accessibility_title": "Accessibilité malvoyants",
+    "accessibility_desc": "Agrandit les textes, améliore les contrastes et active les indicateurs de focus sur la page produit.",
+    "accessibility_on": "Activé — cliquer pour désactiver",
+    "accessibility_off": "Désactivé — cliquer pour activer",
+    "accessibility_label_on": "Activé",
+    "accessibility_label_off": "Désactivé"
+  },
+  "product_page": {
+    "skip_to_content": "Aller au contenu principal",
+    "aria_breadcrumb": "Fil d'Ariane",
+    "aria_decrease_qty": "Diminuer la quantité",
+    "aria_increase_qty": "Augmenter la quantité",
+    "aria_qty_value": "Quantité sélectionnée : {{count}}",
+    "aria_wishlist": "Ajouter aux favoris",
+    "aria_share": "Partager ce produit",
+    "aria_tabs_label": "Informations sur le produit",
+    "aria_cart_live_added": "Produit ajouté au panier avec succès",
+    "aria_cart_live_error": "Erreur lors de l'ajout au panier",
+    "a11y_banner": "Mode accessibilité activé — Textes agrandis et contrastes renforcés"
   },
   "common": {
     "next": "Suivant",

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ShoppingCart, Menu, X, User, Search, Globe, ChevronDown, Activity } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, Search, Globe, ChevronDown, Activity, Eye, EyeOff } from 'lucide-react';
 import { getCategories, getMyCart } from '../../services/api';
 
 const Header = () => {
@@ -16,6 +16,14 @@ const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [a11yMode, setA11yMode] = useState(() => localStorage.getItem('accessibilityMode') === 'true');
+
+  const toggleA11y = () => {
+    const next = !a11yMode;
+    setA11yMode(next);
+    localStorage.setItem('accessibilityMode', String(next));
+    window.dispatchEvent(new Event('accessibilitychange'));
+  };
 
   const checkAdmin = useCallback(() => {
     const token = localStorage.getItem('token');
@@ -146,6 +154,15 @@ const Header = () => {
                   <option value="ru">RU</option>
                 </select>
               </div>
+              <button
+                className={`a11y-util-btn${a11yMode ? ' on' : ''}`}
+                onClick={toggleA11y}
+                aria-pressed={a11yMode}
+                aria-label={a11yMode ? t('settings.accessibility_on', 'Accessibilité activée — cliquer pour désactiver') : t('settings.accessibility_off', 'Accessibilité désactivée — cliquer pour activer')}
+                title={a11yMode ? t('settings.accessibility_title', 'Accessibilité malvoyants') + ' — ON' : t('settings.accessibility_title', 'Accessibilité malvoyants') + ' — OFF'}
+              >
+                {a11yMode ? <EyeOff size={13} /> : <Eye size={13} />}
+              </button>
            </div>
         </div>
       </div>
@@ -287,6 +304,15 @@ const Header = () => {
                             <option value="en">EN</option>
                             <option value="ru">RU</option>
                         </select>
+                        <button
+                            className={`a11y-side-btn${a11yMode ? ' on' : ''}`}
+                            onClick={toggleA11y}
+                            aria-pressed={a11yMode}
+                            aria-label={a11yMode ? t('settings.accessibility_on', 'Accessibilité activée — cliquer pour désactiver') : t('settings.accessibility_off', 'Accessibilité désactivée — cliquer pour activer')}
+                        >
+                            {a11yMode ? <EyeOff size={16} /> : <Eye size={16} />}
+                            <span>{a11yMode ? t('settings.accessibility_label_on', 'Activé') : t('settings.accessibility_label_off', 'Désactivé')}</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -358,7 +384,15 @@ const Header = () => {
         .side-section label { font-size: 0.7rem; font-weight: 900; color: #cbd5e1; display: block; margin-bottom: 1rem; }
         .side-section a { display: block; font-size: 1.15rem; font-weight: 800; color: #012a4a; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
         .side-logout { display: block; width: 100%; text-align: left; font-size: 1.15rem; font-weight: 800; color: #ef4444; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
+        .a11y-util-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 1px solid #cbd5e1; border-radius: 6px; background: transparent; color: #64748b; cursor: pointer; transition: all 0.2s ease; }
+        .a11y-util-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .a11y-util-btn.on { border-color: var(--primary); background: var(--primary); color: white; }
+        .a11y-util-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
         .side-lang { display: flex; align-items: center; gap: 0.6rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; color: #64748b; }
+        .a11y-side-btn { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.35rem 0.75rem; background: transparent; color: #64748b; cursor: pointer; font-size: 0.8rem; font-weight: 700; font-family: inherit; transition: all 0.2s ease; }
+        .a11y-side-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .a11y-side-btn.on { border-color: var(--primary); background: var(--primary); color: white; }
+        .a11y-side-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
         @keyframes slideR { from { transform: translateX(-100%); } to { transform: translateX(0); } }
         .mobile-only { display: block; }
         .desktop-only { display: none; }
