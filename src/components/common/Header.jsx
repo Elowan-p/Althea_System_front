@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, Menu, X, User, Search, Globe, ChevronDown, Activity } from 'lucide-react';
@@ -8,7 +8,9 @@ const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const accountHubRef = useRef(null);
   const [searchValue, setSearchValue] = useState('');
   const [categories, setCategories] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -81,6 +83,30 @@ const Header = () => {
     };
   }, [fetchCartCount, checkAdmin]);
 
+  // Mobile sidebar: lock body scroll and allow closing with Escape
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleKey = (e) => { if (e.key === 'Escape') setIsMenuOpen(false); };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [isMenuOpen]);
+
+  // Profile dropdown: close when clicking outside (hover is unreliable on touch)
+  useEffect(() => {
+    if (!isProfileOpen) return;
+    const handleClickOutside = (e) => {
+      if (accountHubRef.current && !accountHubRef.current.contains(e.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', handleClickOutside);
+    return () => document.removeEventListener('pointerdown', handleClickOutside);
+  }, [isProfileOpen]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) navigate(`/search?q=${searchValue}`);
@@ -93,6 +119,7 @@ const Header = () => {
     window.dispatchEvent(new Event('authchange'));
     setCartCount(0);
     setIsMenuOpen(false);
+    setIsProfileOpen(false);
     window.dispatchEvent(new Event('logout-start'));
   };
 
@@ -177,15 +204,15 @@ const Header = () => {
                             <NavLink to="/register" className="btn-primary-sm">{t('header.register', "S'inscrire")}</NavLink>
                         </div>
                     ) : (
-                        <div className="account-hub">
-                            <button className="icon-action-btn"><User size={24} /></button>
-                            <div className="profile-dropdown-container">
+                        <div className="account-hub" ref={accountHubRef}>
+                            <button className="icon-action-btn" onClick={() => setIsProfileOpen(prev => !prev)}><User size={24} /></button>
+                            <div className={`profile-dropdown-container ${isProfileOpen ? 'open' : ''}`}>
                                 <div className="mini-profile-card">
                                     <div className="profile-header">{t('header.workspace', 'Espace de travail')}</div>
-                                    <NavLink to="/account/settings">{t('header.my_profile', 'Mon profil')}</NavLink>
-                                    <NavLink to="/account/orders">{t('header.quick_orders', 'Commandes rapides')}</NavLink>
+                                    <NavLink to="/account/settings" onClick={() => setIsProfileOpen(false)}>{t('header.my_profile', 'Mon profil')}</NavLink>
+                                    <NavLink to="/account/orders" onClick={() => setIsProfileOpen(false)}>{t('header.quick_orders', 'Commandes rapides')}</NavLink>
                                     {isAdmin && (
-                                        <NavLink to="/admin">{t('header.admin_dashboard', 'Backoffice')}</NavLink>
+                                        <NavLink to="/admin" onClick={() => setIsProfileOpen(false)}>{t('header.admin_dashboard', 'Backoffice')}</NavLink>
                                     )}
                                     <button className="btn-logout" onClick={handleLogout}>{t('header.sign_out', 'Déconnexion')}</button>
                                 </div>
@@ -211,6 +238,10 @@ const Header = () => {
                     <button className="close-side" onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
                 </header>
                 <div className="side-content">
+                    <form className="side-search" onSubmit={(e) => { handleSearch(e); setIsMenuOpen(false); }}>
+                        <Search size={18} />
+                        <input type="text" placeholder={t('header.search_placeholder', 'Rechercher un produit...')} value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                    </form>
                     <div className="side-section">
                         <label>Navigation principale</label>
                         <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Accueil</NavLink>
@@ -225,6 +256,37 @@ const Header = () => {
                         {categories.map((cat) => (
                             <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`} onClick={() => setIsMenuOpen(false)}>{cat.title}</NavLink>
                         ))}
+                    </div>
+                    <div className="side-section">
+                        <label>{t('header.workspace', 'Espace de travail')}</label>
+                        {isAuthenticated ? (
+                            <>
+                                <NavLink to="/account/settings" onClick={() => setIsMenuOpen(false)}>{t('header.my_profile', 'Mon profil')}</NavLink>
+                                <NavLink to="/account/orders" onClick={() => setIsMenuOpen(false)}>{t('header.quick_orders', 'Commandes rapides')}</NavLink>
+                                <button className="side-logout" onClick={handleLogout}>{t('header.sign_out', 'Déconnexion')}</button>
+                            </>
+                        ) : (
+                            <>
+                                <NavLink to="/login" onClick={() => setIsMenuOpen(false)}>{t('header.sign_in', 'Connexion')}</NavLink>
+                                <NavLink to="/register" onClick={() => setIsMenuOpen(false)}>{t('header.register', "S'inscrire")}</NavLink>
+                            </>
+                        )}
+                    </div>
+                    <div className="side-lang">
+                        <Globe size={16} />
+                        <select
+                            className="lang-select"
+                            value={i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'fr'}
+                            onChange={(e) => {
+                                const next = e.target.value;
+                                i18n.changeLanguage(next);
+                                window.dispatchEvent(new Event('languagechange'));
+                            }}
+                        >
+                            <option value="fr">FR</option>
+                            <option value="en">EN</option>
+                            <option value="ru">RU</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -274,7 +336,8 @@ const Header = () => {
         .badge { position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; min-width: 18px; height: 18px; padding: 0 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; border-radius: 99px; border: 2.5px solid white; }
         .account-hub { position: relative; display: flex; align-items: center; height: 100%; }
         .profile-dropdown-container { position: absolute; top: 100%; right: 0; padding-top: 1rem; visibility: hidden; opacity: 0; transition: all 0.2s ease; z-index: 10; }
-        .account-hub:hover .profile-dropdown-container { visibility: visible; opacity: 1; }
+        .profile-dropdown-container.open { visibility: visible; opacity: 1; }
+        @media (min-width: 1024px) { .account-hub:hover .profile-dropdown-container { visibility: visible; opacity: 1; } }
         .mini-profile-card { width: 240px; background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.15); border: 1px solid #f1f5f9; }
         .profile-header { font-size: 0.7rem; font-weight: 900; color: #94a3b8; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.05em; }
         .mini-profile-card a { display: block; padding: 0.6rem 0; font-size: 0.95rem; font-weight: 700; color: #334155; }
@@ -286,16 +349,33 @@ const Header = () => {
         .btn-primary-sm { background: var(--primary); color: white !important; text-align: center; padding: 0.6rem 1.2rem !important; border-radius: 10px; font-weight: 800; font-size: 0.9rem; }
         .btn-primary-sm:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 92, 151, 0.2); }
         .sidebar-mask { position: fixed; inset: 0; background: rgba(1, 42, 74, 0.4); backdrop-filter: blur(4px); z-index: 5000; }
-        .sidebar-panel { width: 340px; height: 100%; background: white; animation: slideR 0.4s ease; }
-        .side-header { padding: 2rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-        .side-content { padding: 2rem; }
+        .sidebar-panel { width: min(340px, 85vw); height: 100%; background: white; animation: slideR 0.4s ease; display: flex; flex-direction: column; overflow-y: auto; }
+        .side-header { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .side-content { padding: 1.5rem; }
+        .side-search { display: flex; align-items: center; gap: 0.8rem; background: #f1f5f9; padding: 0.7rem 1rem; border-radius: 12px; margin-bottom: 2rem; color: #64748b; }
+        .side-search input { border: none; background: transparent; outline: none; font-size: 0.95rem; font-weight: 600; width: 100%; font-family: inherit; }
         .side-section { margin-bottom: 2rem; }
         .side-section label { font-size: 0.7rem; font-weight: 900; color: #cbd5e1; display: block; margin-bottom: 1rem; }
         .side-section a { display: block; font-size: 1.15rem; font-weight: 800; color: #012a4a; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
+        .side-logout { display: block; width: 100%; text-align: left; font-size: 1.15rem; font-weight: 800; color: #ef4444; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
+        .side-lang { display: flex; align-items: center; gap: 0.6rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; color: #64748b; }
         @keyframes slideR { from { transform: translateX(-100%); } to { transform: translateX(0); } }
         .mobile-only { display: block; }
         .desktop-only { display: none; }
         @media (min-width: 1024px) { .mobile-only { display: none; } .desktop-only { display: flex; } }
+        @media (max-width: 1023px) {
+          .main-bar { padding: 1rem 0; }
+          .main-flex { gap: 1rem; }
+          .flex-start { gap: 1rem; }
+          .flex-end { gap: 1rem; }
+          .actions-cluster { gap: 1rem; }
+        }
+        @media (max-width: 480px) {
+          .logo-symbol { width: 38px; height: 38px; font-size: 1.25rem; border-radius: 10px; }
+          .logo-text .main { font-size: 1.15rem; }
+          .logo-text .sub { font-size: 0.65rem; }
+          .cart-icon-box { width: 40px; height: 40px; }
+        }
       `}</style>
     </header>
   );

@@ -345,3 +345,15 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+  .card {
+    padding: 1.25rem;
+  }
+}

@@ -216,7 +216,7 @@ const HomepageManager = () => {
         .search-wrap {
           display: flex; align-items: center; gap: 0.6rem;
           background: white; border: 1.5px solid var(--border); border-radius: 10px;
-          padding: 0.6rem 1rem; width: 320px; color: #94a3b8;
+          padding: 0.6rem 1rem; width: 320px; max-width: 100%; color: #94a3b8;
         }
         .search-wrap input { border: none; outline: none; font-weight: 600; font-size: 0.9rem; width: 100%; background: transparent; }
 

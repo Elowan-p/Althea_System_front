@@ -415,6 +415,9 @@ const ProductForm = () => {
         @media (max-width: 1200px) {
           .form-grid { grid-template-columns: 1fr; }
         }
+        @media (max-width: 640px) {
+          .two-cols { grid-template-columns: 1fr; }
+        }
       `}</style>
     </div>
   );

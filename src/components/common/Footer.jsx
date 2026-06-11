@@ -170,8 +170,12 @@ const Footer = () => {
            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 640px) {
-           .footer-grid { grid-template-columns: 1fr; }
+           .footer-premium { padding-top: 3rem; }
+           .footer-values { padding-bottom: 2.5rem; margin-bottom: 2.5rem; }
+           .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
            .footer-values .container { flex-direction: column; gap: 2rem; }
+           .footer-bottom { margin-top: 3rem; }
+           .bottom-wrap { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
            .legal-links { flex-direction: column; gap: 1rem; }
         }
       `}</style>

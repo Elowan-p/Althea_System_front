@@ -339,9 +339,16 @@ const Register = () => {
                 .sec-item { display: flex; align-items: center; gap: 6px; }
 
                 @media (max-width: 1024px) {
-                    .auth-container { grid-template-columns: 1fr; }
-                    .auth-form-side { min-height: 100vh; padding: 2rem; }
+                    .auth-container { grid-template-columns: 1fr; min-height: 0; }
+                    .auth-form-side { min-height: 0; height: auto; overflow-y: visible; padding: 3rem 2rem; }
                     .form-row { grid-template-columns: 1fr; }
+                }
+                @media (max-width: 640px) {
+                    .auth-form-side { padding: 2.5rem 1.25rem; }
+                    .auth-header { margin-bottom: 2rem; }
+                    .auth-header h2 { font-size: 1.5rem; }
+                    .success-panel { padding: 2rem 1.25rem; }
+                    .auth-security-footer { margin-top: 2.5rem; flex-wrap: wrap; justify-content: center; gap: 1rem; }
                 }
             `}</style>
         </div>

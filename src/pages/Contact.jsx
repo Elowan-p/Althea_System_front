@@ -347,6 +347,20 @@ const Contact = () => {
         @media (max-width: 768px) {
            .form-row { grid-template-columns: 1fr; }
         }
+        @media (max-width: 640px) {
+           .contact-hero { padding: 4rem 0; }
+           .contact-hero h1 { font-size: 1.9rem; }
+           .hero-content-wrap p { font-size: 1rem; }
+           .contact-body-section { margin-top: -2.5rem; margin-bottom: 4rem; }
+           .contact-grid { gap: 1.5rem; }
+           .contact-form-card { padding: 1.5rem !important; }
+           .form-header { margin-bottom: 1.5rem; }
+           .form-header h3 { font-size: 1.5rem; }
+           .map-section { margin-bottom: 4rem; }
+           .map-placeholder { height: 260px; }
+           .contact-submitted-view { padding: 5rem 0; }
+           .success-card { padding: 2.5rem 1.5rem !important; }
+        }
       `}</style>
     </div>
   );

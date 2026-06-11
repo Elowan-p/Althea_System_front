@@ -384,11 +384,23 @@ const Catalogue = () => {
         .retry-btn { background: #ef4444; color: white; padding: 0.5rem 1.2rem; border-radius: 8px; font-weight: 800; font-size: 0.85rem; }
 
         @media (max-width: 1024px) {
-          .catalogue-layout { grid-template-columns: 1fr; }
+          .catalogue-layout { grid-template-columns: 1fr; gap: 1.5rem; }
           .cat-sidebar { position: static; }
+          .sidebar-card { position: static; padding: 1.5rem; }
           .cat-hero-title { font-size: 2rem; }
           .product-flow.list .premium-card { flex-direction: column; height: auto; }
           .product-flow.list .card-media { width: 100%; height: 200px; }
+        }
+        @media (max-width: 640px) {
+          .cat-hero-banner { padding: 2.5rem 0 2rem; margin-bottom: 1.5rem; }
+          .cat-hero-title { font-size: 1.6rem; }
+          .cat-hero-sub { font-size: 0.95rem; }
+          .catalogue-layout { padding-bottom: 3rem; }
+          .cat-toolbar-bar { flex-direction: column; align-items: stretch; gap: 1rem; padding: 1rem; }
+          .toolbar-left { flex-wrap: wrap; }
+          .toolbar-right { justify-content: space-between; gap: 1rem; }
+          .product-flow.grid { grid-template-columns: 1fr; gap: 1.5rem; }
+          .card-media { height: 200px; padding: 1.5rem; }
         }
       `}</style>
     </div>
