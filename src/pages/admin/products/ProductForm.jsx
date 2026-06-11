@@ -11,7 +11,6 @@ import {
 const LANGS = ['fr', 'en', 'ru'];
 const EMPTY_I18N = { title: '', description: '', powerSupplyType: '', medicalDomain: '' };
 
-// The upload endpoint returns the file URL — key name depends on backend version
 const extractUploadUrl = (data) =>
   data?.url || data?.fileUrl || data?.path || data?.location || data?.filePath || '';
 
@@ -120,7 +119,7 @@ const ProductForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Only ship non-empty translated fields so we never overwrite with blanks
+  
   const buildTranslation = (values) => {
     const out = {};
     Object.entries(values).forEach(([key, val]) => {
@@ -280,6 +279,83 @@ const ProductForm = () => {
               </p>
             )}
           </div>
+
+          <div className="form-bottom">
+            <div className="adm-card">
+              <h2 className="card-title">Tarification & stock</h2>
+              <div className="bottom-fields-grid">
+                <div className="adm-field">
+                  <label className="adm-label">Prix (€) *</label>
+                  <input
+                    className="adm-input"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={form.price}
+                    onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))}
+                    placeholder="199.99"
+                  />
+                  {fieldErrors.price && <span className="field-error">{fieldErrors.price}</span>}
+                </div>
+                <div className="adm-field">
+                  <label className="adm-label">Stock *</label>
+                  <input
+                    className="adm-input"
+                    type="number"
+                    step="1"
+                    min="0"
+                    value={form.inStock}
+                    onChange={(e) => setForm((prev) => ({ ...prev, inStock: e.target.value }))}
+                  />
+                  {fieldErrors.inStock && <span className="field-error">{fieldErrors.inStock}</span>}
+                </div>
+                <div className="adm-field" style={{ marginBottom: 0 }}>
+                  <label className="adm-label">Catégorie *</label>
+                  <select
+                    className="adm-select"
+                    value={form.categoryId}
+                    onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))}
+                  >
+                    <option value="">— Sélectionner —</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>{cat.title}</option>
+                    ))}
+                  </select>
+                  {fieldErrors.categoryId && <span className="field-error">{fieldErrors.categoryId}</span>}
+                </div>
+              </div>
+            </div>
+
+            <div className="adm-card">
+              <h2 className="card-title">Options</h2>
+              <div className="checks-stack">
+                <label className="adm-check">
+                  <input
+                    type="checkbox"
+                    checked={form.isPublished}
+                    onChange={(e) => setForm((prev) => ({ ...prev, isPublished: e.target.checked }))}
+                  />
+                  Publié sur le site
+                </label>
+                <label className="adm-check">
+                  <input
+                    type="checkbox"
+                    checked={form.isPortable}
+                    onChange={(e) => setForm((prev) => ({ ...prev, isPortable: e.target.checked }))}
+                  />
+                  Portable
+                </label>
+                <label className="adm-check">
+                  <input
+                    type="checkbox"
+                    checked={form.isOneTimeUse}
+                    onChange={(e) => setForm((prev) => ({ ...prev, isOneTimeUse: e.target.checked }))}
+                  />
+                  Usage unique
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="form-side">
@@ -308,79 +384,6 @@ const ProductForm = () => {
               />
             </div>
           </div>
-
-          <div className="adm-card">
-            <h2 className="card-title">Tarification & stock</h2>
-            <div className="adm-field">
-              <label className="adm-label">Prix (€) *</label>
-              <input
-                className="adm-input"
-                type="number"
-                step="0.01"
-                min="0"
-                value={form.price}
-                onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))}
-                placeholder="199.99"
-              />
-              {fieldErrors.price && <span className="field-error">{fieldErrors.price}</span>}
-            </div>
-            <div className="adm-field">
-              <label className="adm-label">Stock *</label>
-              <input
-                className="adm-input"
-                type="number"
-                step="1"
-                min="0"
-                value={form.inStock}
-                onChange={(e) => setForm((prev) => ({ ...prev, inStock: e.target.value }))}
-              />
-              {fieldErrors.inStock && <span className="field-error">{fieldErrors.inStock}</span>}
-            </div>
-            <div className="adm-field" style={{ marginBottom: 0 }}>
-              <label className="adm-label">Catégorie *</label>
-              <select
-                className="adm-select"
-                value={form.categoryId}
-                onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))}
-              >
-                <option value="">— Sélectionner —</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.title}</option>
-                ))}
-              </select>
-              {fieldErrors.categoryId && <span className="field-error">{fieldErrors.categoryId}</span>}
-            </div>
-          </div>
-
-          <div className="adm-card">
-            <h2 className="card-title">Options</h2>
-            <div className="checks-stack">
-              <label className="adm-check">
-                <input
-                  type="checkbox"
-                  checked={form.isPublished}
-                  onChange={(e) => setForm((prev) => ({ ...prev, isPublished: e.target.checked }))}
-                />
-                Publié sur le site
-              </label>
-              <label className="adm-check">
-                <input
-                  type="checkbox"
-                  checked={form.isPortable}
-                  onChange={(e) => setForm((prev) => ({ ...prev, isPortable: e.target.checked }))}
-                />
-                Portable
-              </label>
-              <label className="adm-check">
-                <input
-                  type="checkbox"
-                  checked={form.isOneTimeUse}
-                  onChange={(e) => setForm((prev) => ({ ...prev, isOneTimeUse: e.target.checked }))}
-                />
-                Usage unique
-              </label>
-            </div>
-          </div>
         </div>
       </form>
 
@@ -388,8 +391,23 @@ const ProductForm = () => {
         .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; }
         .back-link:hover { color: var(--primary); }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; align-items: start; }
-        .form-main, .form-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 320px;
+          gap: 1.5rem;
+          align-items: start;
+        }
+        .form-main { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+        .form-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+
+        .form-bottom {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+          align-items: start;
+        }
+
+        .bottom-fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
         .card-title { font-size: 1rem; font-weight: 850; color: #012a4a; margin-bottom: 1.25rem; }
         .card-head-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; }
@@ -414,6 +432,8 @@ const ProductForm = () => {
 
         @media (max-width: 1200px) {
           .form-grid { grid-template-columns: 1fr; }
+          .form-bottom { grid-template-columns: 1fr; }
+          .bottom-fields-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 640px) {
           .two-cols { grid-template-columns: 1fr; }

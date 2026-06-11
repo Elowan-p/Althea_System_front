@@ -22,7 +22,7 @@ const HomepageManager = () => {
         ]);
         setProducts(Array.isArray(productsRes.data?.items) ? productsRes.data.items : []);
         const top = Array.isArray(topRes.data) ? topRes.data : [];
-        // Extract the nested product ID from the backend structure
+        
         setSelectedIds(top.map((p) => p.product?.id ?? p.productId ?? p.id).filter((id) => id != null));
       } catch (err) {
         console.error('Homepage manager load error:', err);

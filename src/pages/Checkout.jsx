@@ -27,7 +27,7 @@ const Checkout = () => {
         let stepTimers = [];
 
         const initiateCheckout = async () => {
-            // Animate steps while we wait for the API
+            
             steps.forEach((step, i) => {
                 const t = setTimeout(() => setCurrentStep(i), step.delay);
                 stepTimers.push(t);
@@ -38,7 +38,7 @@ const Checkout = () => {
                 const stripeUrl = res.data?.url;
                 if (!stripeUrl) throw new Error('No checkout URL returned from server.');
 
-                // Give the last animation step a moment to show
+                
                 setTimeout(() => {
                     window.location.href = stripeUrl;
                 }, 4200);

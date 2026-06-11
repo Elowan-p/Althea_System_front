@@ -61,7 +61,7 @@ const Login = () => {
     return (
         <div className="auth-page">
             <div className="auth-container">
-                {/* Left Side: Visual/Branding */}
+                {}
                 <div className="auth-visual desktop-only">
                     <div className="visual-overlay">
                         <div className="visual-content">
@@ -83,7 +83,7 @@ const Login = () => {
                     </div>
                 </div>
 
-                {/* Right Side: Form */}
+                {}
                 <div className="auth-form-side">
                     <div className="form-card">
                         <header className="auth-header">

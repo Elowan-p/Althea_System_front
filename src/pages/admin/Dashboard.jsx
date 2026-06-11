@@ -49,9 +49,6 @@ const formatLabel = (value) => {
   return str;
 };
 
-// The dashboard endpoints are not strictly typed — normalize whatever shape
-// the backend returns (array, wrapped array, or single stats object) into
-// rows of { name, <metric>: number, ... } usable by Recharts.
 const unwrapArray = (data) => {
   if (Array.isArray(data)) return data;
   if (data && typeof data === 'object') {
@@ -73,7 +70,7 @@ const toChartData = (raw) => unwrapArray(raw).map((row, i) => {
     if (isNumeric(val)) {
       out[key] = Number(val);
     } else if (val && typeof val === 'object' && !Array.isArray(val)) {
-      // Flatten nested numeric maps, e.g. { categories: { "Diagnostic": 120 } }
+      
       Object.entries(val).forEach(([nk, nv]) => {
         if (isNumeric(nv)) out[nk] = Number(nv);
       });

@@ -15,19 +15,19 @@ i18n
       en: { translation: enTranslation },
       ru: { translation: ruTranslation },
     },
-    // French is the default language of the platform
+    
     fallbackLng: 'fr',
     lng: localStorage.getItem('i18nextLng') || 'fr',
     interpolation: {
-      escapeValue: false, // React already safe from XSS
+      escapeValue: false, 
     },
     detection: {
       order: ['localStorage', 'cookie', 'navigator'],
       caches: ['localStorage', 'cookie'],
-      // If stored language is not one of our 3 supported, ignore it
+      
       lookupLocalStorage: 'i18nextLng',
     },
-    // Restrict supported languages to only fr, en, ru
+    
     supportedLngs: ['fr', 'en', 'ru'],
     nonExplicitSupportedLngs: false,
     cleanCode: true,

@@ -100,7 +100,7 @@ const Product = () => {
                 </nav>
 
                 <div className="product-grid">
-                    {/* Media Section */}
+                    {}
                     <div className="media-side">
                         <div className="main-stage card-glass">
                             <img src={product.pictureUrl || '/images/prod_scanner.png'} alt={product.title} />
@@ -112,7 +112,7 @@ const Product = () => {
                         </div>
                     </div>
 
-                    {/* Info Section */}
+                    {}
                     <div className="info-side">
                         <header className="info-header">
                             <span className="domain-pill">{product.medicalDomain}</span>
@@ -192,7 +192,7 @@ const Product = () => {
                     </div>
                 </div>
 
-                {/* Tabs Section */}
+                {}
                 <div className="tabs-area card">
                     <div className="tabs-nav" role="tablist" aria-label={t('product_page.aria_tabs_label', 'Informations sur le produit')}>
                         <button
@@ -263,7 +263,7 @@ const Product = () => {
                     </div>
                 </div>
 
-                {/* Related Section */}
+                {}
                 <section className="related-section">
                     <h2 className="section-title">{t('product_page.similar_equipment', 'Similar Equipment')}</h2>
                     <div className="related-grid">

@@ -8,7 +8,7 @@ const LogoutLoader = () => {
   const [phaseText, setPhaseText] = useState('');
 
   useEffect(() => {
-    // Phase texts based on progress
+    
     const updatePhase = (prog) => {
       if (prog < 35) {
         setPhaseText(t('loader.logging_out', 'Déconnexion sécurisée de la session...'));

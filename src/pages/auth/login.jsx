@@ -15,7 +15,7 @@ function Login() {
             userAuthService.getInfo(response.data.userId)
             .then((userInfo) => {
                 localStorage.setItem('userInfo', JSON.stringify(userInfo.data));
-                // @TODO : redirect to home page
+                
         });
         } else {
             setIsError(true);

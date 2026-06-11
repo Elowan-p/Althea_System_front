@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Pour la redirection
+import { useNavigate } from "react-router-dom"; 
 import { userAuthService } from "../../api/userAuth";
 
 function Register() {
@@ -19,7 +19,7 @@ function Register() {
             const response = await userAuthService.register(userData);
 
             if (response.status === 200 || response.status === 201) {
-                // Sauvegarde du token
+                
                 localStorage.setItem('token', response.data.token);
 
                 const userInfo = await userAuthService.getInfo(response.data.userId);

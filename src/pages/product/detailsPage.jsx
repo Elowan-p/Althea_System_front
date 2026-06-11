@@ -25,12 +25,12 @@ const DetailsPage = () => {
         if (id) fetchData();
     }, [id]);
 
-    if (loading) return <p>Chargement...</p>; // @TODO : Faire un skeleton 
-    if (error) return <p>Erreur : {error.message}</p>; // Faire un vra composant erreur 
+    if (loading) return <p>Chargement...</p>; 
+    if (error) return <p>Erreur : {error.message}</p>; 
 
     return (
         <div>
-            /** A afficher : photo, titre, descirption, prix, promo, produits similaires */
+            
             <img src={productData.pictureURL} alt={productData.title} />
             <h1>{productData.title}</h1>
             <p>{productData.description}</p>
