@@ -1,0 +1,7 @@
+.conv-id { font-weight: 900; color: var(--slate-400); font-size: 0.8rem; }
+.conv-email { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--slate-800); }
+.conv-last-msg { max-width: 280px; color: var(--slate-500); font-size: 0.85rem; }
+.row-actions { display: flex; gap: 0.5rem; }
+
+.adm-badge--lg { font-size: 0.8rem; padding: 0.4rem 0.9rem; }
+.conv-anon { color: var(--text-muted); font-style: italic; }

@@ -1,0 +1,3 @@
+.order-id-link { font-weight: 900; color: var(--primary); }
+.cell-total { font-weight: 800; color: var(--navy-900); white-space: nowrap; }
+.row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }

@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2, AlertCircle, Inbox, Eye, ChevronLeft, ChevronRight, Filter, MessageSquare } from 'lucide-react';
 import { getAdminChatbotConversations } from '../../../services/api';
+import './ChatbotConversationList.css';
 
 const PAGE_LIMIT = 20;
 
@@ -59,7 +60,7 @@ const ChatbotConversationList = () => {
           <p className="adm-sub">Toutes les sessions ouvertes via le widget d'assistance</p>
         </div>
         {meta && (
-          <span className="adm-badge blue" style={{ fontSize: '0.8rem', padding: '0.4rem 0.9rem' }}>
+          <span className="adm-badge blue adm-badge--lg">
             {meta.total} conversation{meta.total > 1 ? 's' : ''}
           </span>
         )}
@@ -69,7 +70,7 @@ const ChatbotConversationList = () => {
         <Filter size={16} color="#94a3b8" />
         <select
           className="adm-select"
-          style={{ width: 220 }}
+          className="u-w-220"
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
         >
@@ -107,7 +108,7 @@ const ChatbotConversationList = () => {
                 <th>Statut</th>
                 <th>Dernier message</th>
                 <th>Date</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th className="u-text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -117,10 +118,10 @@ const ChatbotConversationList = () => {
                   <td>
                     <div className="conv-email">
                       <MessageSquare size={14} color="#94a3b8" />
-                      {conv.email || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>Anonyme</span>}
+                      {conv.email || <span className="conv-anon">Anonyme</span>}
                     </div>
                   </td>
-                  <td>{conv.subject || <span style={{ color: '#94a3b8' }}>—</span>}</td>
+                  <td>{conv.subject || <span className="u-muted">—</span>}</td>
                   <td>
                     <span className={`adm-badge ${statusBadge(conv.status)}`}>
                       {STATUS_LABELS[conv.status] ?? conv.status ?? '—'}
@@ -131,11 +132,11 @@ const ChatbotConversationList = () => {
                       ? conv.lastMessage.content.length > 60
                         ? `${conv.lastMessage.content.slice(0, 60)}…`
                         : conv.lastMessage.content
-                      : <span style={{ color: '#94a3b8' }}>—</span>}
+                      : <span className="u-muted">—</span>}
                   </td>
                   <td>{formatDate(conv.updatedAt ?? conv.createdAt)}</td>
                   <td>
-                    <div className="row-actions" style={{ justifyContent: 'flex-end' }}>
+                    <div className="row-actions u-justify-end">
                       <Link to={`/admin/chatbot/${conv.id}`} className="adm-icon-btn" title="Voir la conversation">
                         <Eye size={15} />
                       </Link>
@@ -158,12 +159,6 @@ const ChatbotConversationList = () => {
         </button>
       </div>
 
-      <style>{`
-        .conv-id { font-weight: 900; color: #94a3b8; font-size: 0.8rem; }
-        .conv-email { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; color: #1e293b; }
-        .conv-last-msg { max-width: 280px; color: #64748b; font-size: 0.85rem; }
-        .row-actions { display: flex; gap: 0.5rem; }
-      `}</style>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   getAdminProduct, createAdminProduct, updateAdminProduct,
   getCategories, uploadFile, clearApiCache
 } from '../../../services/api';
+import './ProductForm.css';
 
 const LANGS = ['fr', 'en', 'ru'];
 const EMPTY_I18N = { title: '', description: '', powerSupplyType: '', medicalDomain: '' };
@@ -119,7 +120,6 @@ const ProductForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  
   const buildTranslation = (values) => {
     const out = {};
     Object.entries(values).forEach(([key, val]) => {
@@ -309,7 +309,7 @@ const ProductForm = () => {
                   />
                   {fieldErrors.inStock && <span className="field-error">{fieldErrors.inStock}</span>}
                 </div>
-                <div className="adm-field" style={{ marginBottom: 0 }}>
+                <div className="adm-field u-mb-0">
                   <label className="adm-label">Catégorie *</label>
                   <select
                     className="adm-select"
@@ -373,7 +373,7 @@ const ProductForm = () => {
               {uploading ? 'Upload en cours...' : 'Uploader une image'}
               <input type="file" accept="image/*" hidden disabled={uploading} onChange={handleUpload} />
             </label>
-            <div className="adm-field" style={{ marginTop: '1rem', marginBottom: 0 }}>
+            <div className="adm-field u-mt-1 u-mb-0">
               <label className="adm-label">URL de l'image</label>
               <input
                 className="adm-input"
@@ -387,58 +387,6 @@ const ProductForm = () => {
         </div>
       </form>
 
-      <style>{`
-        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .back-link:hover { color: var(--primary); }
-
-        .form-grid {
-          display: grid;
-          grid-template-columns: 1fr 320px;
-          gap: 1.5rem;
-          align-items: start;
-        }
-        .form-main { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
-        .form-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
-
-        .form-bottom {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.5rem;
-          align-items: start;
-        }
-
-        .bottom-fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .card-title { font-size: 1rem; font-weight: 850; color: #012a4a; margin-bottom: 1.25rem; }
-        .card-head-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; }
-        .card-head-row .card-title { margin-bottom: 0; }
-
-        .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .field-error { font-size: 0.78rem; font-weight: 700; color: var(--error); }
-        .i18n-hint { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: #f8fafc; padding: 0.7rem 1rem; border-radius: 10px; }
-
-        .img-preview {
-          height: 200px; border-radius: 14px; border: 1.5px dashed var(--border);
-          background: #fcfdfe; display: flex; align-items: center; justify-content: center;
-          margin-bottom: 1rem; overflow: hidden;
-        }
-        .img-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .img-placeholder { color: #cbd5e1; }
-        .upload-btn { width: 100%; cursor: pointer; }
-        .upload-btn.disabled { opacity: 0.6; pointer-events: none; }
-
-        .checks-stack { display: flex; flex-direction: column; gap: 0.9rem; }
-
-        @media (max-width: 1200px) {
-          .form-grid { grid-template-columns: 1fr; }
-          .form-bottom { grid-template-columns: 1fr; }
-          .bottom-fields-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 640px) {
-          .two-cols { grid-template-columns: 1fr; }
-        }
-      `}</style>
     </div>
   );
 };

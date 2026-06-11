@@ -4,6 +4,7 @@ import {
   ArrowLeft, Loader2, AlertCircle, Send, MailCheck, CheckCircle2, Mail, Calendar, User
 } from 'lucide-react';
 import { getAdminContact, updateContactStatus, replyContact } from '../../../services/api';
+import './ContactDetail.css';
 
 const STATUS_LABELS = { new: 'Nouveau', read: 'Lu', replied: 'Répondu' };
 
@@ -99,7 +100,7 @@ const ContactDetail = () => {
     return (
       <div>
         <Link to="/admin/contacts" className="back-link"><ArrowLeft size={15} /> Retour aux messages</Link>
-        <div className="adm-error" style={{ marginTop: '1rem' }}>
+        <div className="adm-error u-mt-1">
           <AlertCircle size={18} />
           <span>{error || 'Message introuvable.'}</span>
         </div>
@@ -179,7 +180,7 @@ const ContactDetail = () => {
               disabled={sending}
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="u-flex-end">
             <button type="submit" className="adm-btn primary" disabled={sending || !reply.trim()}>
               {sending ? <Loader2 size={16} className="adm-spin" /> : <Send size={16} />}
               Envoyer la réponse
@@ -188,23 +189,6 @@ const ContactDetail = () => {
         </form>
       </div>
 
-      <style>{`
-        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .back-link:hover { color: var(--primary); }
-
-        .contact-detail-page .adm-title { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-
-        .msg-card { margin-bottom: 1.5rem; }
-        .msg-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; padding-bottom: 1.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; }
-        .msg-meta-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; font-weight: 700; color: #475569; }
-        .msg-meta-item svg { color: #94a3b8; }
-        .msg-email { color: var(--primary); }
-        .msg-email:hover { text-decoration: underline; }
-
-        .msg-body { font-size: 0.95rem; color: #334155; font-weight: 550; line-height: 1.8; white-space: pre-wrap; }
-
-        .card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 850; color: #012a4a; margin-bottom: 1.25rem; }
-      `}</style>
     </div>
   );
 };

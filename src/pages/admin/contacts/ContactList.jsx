@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2, AlertCircle, Inbox, Eye, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
 import { getAdminContacts } from '../../../services/api';
+import './ContactList.css';
 
 const PAGE_SIZE = 20;
 const DEFAULT_STATUSES = ['new', 'read', 'replied'];
@@ -79,7 +80,7 @@ const ContactList = () => {
         <Filter size={16} color="#94a3b8" />
         <select
           className="adm-select"
-          style={{ width: 220 }}
+          className="u-w-220"
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
         >
@@ -117,7 +118,7 @@ const ContactList = () => {
                 <th>Sujet</th>
                 <th>Date</th>
                 <th>Statut</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th className="u-text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -168,15 +169,6 @@ const ContactList = () => {
         </button>
       </div>
 
-      <style>{`
-        .row-unread td { background: #fafcff; }
-        .sender-cell { display: flex; flex-direction: column; }
-        .sender-name { font-weight: 800; color: #1e293b; }
-        .sender-email { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
-        .subject-link { font-weight: 750; color: #1e293b; }
-        .subject-link:hover { color: var(--primary); }
-        .row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-      `}</style>
     </div>
   );
 };

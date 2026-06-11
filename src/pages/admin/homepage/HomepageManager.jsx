@@ -3,6 +3,7 @@ import {
   Loader2, AlertCircle, CheckCircle2, Save, Star, Search, X, ImageOff
 } from 'lucide-react';
 import { getAdminProducts, getAdminTopProducts, updateTopProducts, clearApiCache } from '../../../services/api';
+import './HomepageManager.css';
 
 const HomepageManager = () => {
   const [products, setProducts] = useState([]);
@@ -143,7 +144,7 @@ const HomepageManager = () => {
         <table className="adm-table">
           <thead>
             <tr>
-              <th style={{ width: 40 }}></th>
+              <th className="u-w-40"></th>
               <th>Image</th>
               <th>Titre</th>
               <th>Prix</th>
@@ -172,8 +173,8 @@ const HomepageManager = () => {
                     <div className="adm-thumb thumb-placeholder"><ImageOff size={18} /></div>
                   )}
                 </td>
-                <td style={{ fontWeight: 750, color: '#1e293b' }}>{product.title}</td>
-                <td style={{ fontWeight: 800, color: '#012a4a', whiteSpace: 'nowrap' }}>
+                <td className="hp-name">{product.title}</td>
+                <td className="hp-price">
                   {Number(product.price).toLocaleString('fr-FR')} €
                 </td>
                 <td>{product.category?.title || '—'}</td>
@@ -186,7 +187,7 @@ const HomepageManager = () => {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
+                <td colSpan={6} className="hp-empty-cell">
                   Aucun produit ne correspond à la recherche.
                 </td>
               </tr>
@@ -195,34 +196,6 @@ const HomepageManager = () => {
         </table>
       </div>
 
-      <style>{`
-        .top-selection { margin-bottom: 1.25rem; border: 1.5px solid #fde68a; background: #fffdf5; }
-        .card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 850; color: #012a4a; margin-bottom: 1rem; }
-        .card-title svg { color: var(--accent); }
-        .muted-note { font-size: 0.88rem; color: var(--text-muted); font-weight: 600; }
-
-        .selected-chips { display: flex; flex-wrap: wrap; gap: 0.7rem; }
-        .selected-chip {
-          display: flex; align-items: center; gap: 0.6rem;
-          background: white; border: 1px solid var(--border); border-radius: 99px;
-          padding: 0.35rem 0.6rem 0.35rem 0.4rem;
-          font-size: 0.82rem; font-weight: 750; color: #1e293b;
-        }
-        .selected-chip img, .chip-placeholder { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
-        .chip-placeholder { display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #cbd5e1; }
-        .selected-chip button { display: flex; align-items: center; color: #94a3b8; }
-        .selected-chip button:hover { color: var(--error); }
-
-        .search-wrap {
-          display: flex; align-items: center; gap: 0.6rem;
-          background: white; border: 1.5px solid var(--border); border-radius: 10px;
-          padding: 0.6rem 1rem; width: 320px; max-width: 100%; color: #94a3b8;
-        }
-        .search-wrap input { border: none; outline: none; font-weight: 600; font-size: 0.9rem; width: 100%; background: transparent; }
-
-        .adm-table input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
-        .thumb-placeholder { display: flex; align-items: center; justify-content: center; color: #cbd5e1; }
-      `}</style>
     </div>
   );
 };

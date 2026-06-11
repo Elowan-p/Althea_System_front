@@ -1,0 +1,4 @@
+.cat-title-link { font-weight: 750; color: var(--slate-800); }
+.cat-title-link:hover { color: var(--primary); }
+.row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+.thumb-placeholder { display: flex; align-items: center; justify-content: center; color: var(--slate-300); }
