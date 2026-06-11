@@ -103,6 +103,41 @@ const VerifyEmail = () => {
                 </div>
             </div>
             <style>{`
+                .auth-page {
+                    max-width: 100vw;
+                    min-height: calc(100vh - var(--header-height, 80px));
+                    background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 50%, #f0f7ff 100%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 4rem 1rem;
+                }
+                .auth-container {
+                    width: 100%;
+                    max-width: 480px;
+                    background: white;
+                    border-radius: 28px;
+                    box-shadow: 0 40px 80px -20px rgba(0, 92, 151, 0.15);
+                    border: 1px solid #bfdbfe;
+                    overflow: hidden;
+                }
+                .auth-form-side {
+                    padding: 3.5rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    background: white;
+                }
+                .form-card { width: 100%; }
+                .auth-header { text-align: center; margin-bottom: 2.5rem; }
+                .auth-logo { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem; text-decoration: none; }
+                .auth-logo .sym { background: var(--primary); color: white; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: 900; font-size: 1.4rem; }
+                .auth-logo .txt { font-size: 1.6rem; font-weight: 900; color: #012a4a; letter-spacing: -0.05em; }
+                .auth-header h2 { font-size: 1.8rem; font-weight: 850; color: #012a4a; }
+                .btn-auth-submit { width: 100%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1.1rem; border-radius: 14px; font-weight: 800; font-size: 1rem; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+                .btn-auth-submit:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0, 92, 151, 0.25); }
+                .pulse { animation: p 0.4s ease; }
+                @keyframes p { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
                 .text-center { text-align: center; }
                 .spinner { animation: spin 2s linear infinite; margin: 0 auto 1.5rem; color: var(--primary); }
                 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -111,6 +146,12 @@ const VerifyEmail = () => {
                 .verify-actions { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; align-items: center; }
                 .btn-outline-primary { border: 2px solid var(--primary); color: var(--primary); padding: 0.8rem 2rem; border-radius: 12px; font-weight: 800; text-decoration: none; }
                 .btn-outline-secondary { color: #64748b; font-weight: 700; font-size: 0.9rem; text-decoration: underline; }
+
+                @media (max-width: 600px) {
+                    .auth-page { padding: 1.5rem 0.5rem; }
+                    .auth-form-side { padding: 2rem 1.5rem; }
+                    .success-state h3, .error-state h3 { font-size: 1.5rem; }
+                }
             `}</style>
         </div>
     );

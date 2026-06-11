@@ -54,6 +54,14 @@ const Cancel = () => {
                 .btn-support { display: flex; align-items: center; gap: 0.6rem; border: 1.5px solid #e2e8f0; color: #475569; padding: 0.9rem 1.8rem; border-radius: 14px; font-weight: 800; font-size: 0.95rem; text-decoration: none; }
                 .btn-support:hover { border-color: var(--primary); color: var(--primary); }
                 .cancel-note { font-size: 0.8rem; color: #94a3b8; font-style: italic; }
+
+                @media (max-width: 480px) {
+                    .cancel-page { padding: 2rem 1rem; }
+                    .cancel-card { padding: 2.5rem 1.5rem; border-radius: 20px; }
+                    .cancel-card h1 { font-size: 1.6rem; }
+                    .cancel-actions { flex-direction: column; align-items: stretch; }
+                    .btn-resume, .btn-support { justify-content: center; }
+                }
             `}</style>
         </div>
     );

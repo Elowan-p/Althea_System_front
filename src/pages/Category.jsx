@@ -233,8 +233,19 @@ const Category = () => {
 
         @media (max-width: 1024px) {
             .hero-title { font-size: 2.5rem; }
-            .cat-toolbar { flex-direction: column; gap: 1.5rem; align-items: flex-start; padding: 1.5rem; }
-            .toolbar-sec { width: 100%; justify-content: space-between; }
+            .cat-toolbar { flex-direction: column; gap: 1.5rem; align-items: flex-start; padding: 1.5rem; position: static; }
+            .toolbar-sec { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        }
+        @media (max-width: 768px) {
+            .cat-hero { padding: 3rem 0 2rem; margin-bottom: 2rem; }
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .product-flow.grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .product-flow.list .premium-card { flex-direction: column; height: auto; }
+            .product-flow.list .card-media { width: 100%; height: 220px; }
+            .card-media { height: 220px; padding: 1.5rem; }
+            .card-info { padding: 1.5rem; }
+            .item-title { font-size: 1.2rem; }
         }
       `}</style>
     </div>

@@ -386,7 +386,15 @@ const Orders = () => {
                     .page-header-flex { flex-direction: column; align-items: flex-start; gap: 2rem; }
                     .order-search { width: 100%; }
                     .order-price { text-align: left; min-width: auto; }
-                    .order-actions { justify-content: flex-start; width: 100%; }
+                    .order-actions { justify-content: flex-start; width: 100%; min-width: 0; flex-wrap: wrap; }
+                    .order-main-info { min-width: 0; }
+                }
+                @media (max-width: 640px) {
+                    .page-header-flex { margin-bottom: 2rem; padding-bottom: 1.25rem; gap: 1.25rem; }
+                    .page-title { font-size: 1.6rem; }
+                    .order-card-premium { padding: 1.25rem; }
+                    .orders-loading, .orders-empty { padding: 2.5rem 1rem; }
+                    .items-table th, .items-table td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
                 }
             `}</style>
         </div>

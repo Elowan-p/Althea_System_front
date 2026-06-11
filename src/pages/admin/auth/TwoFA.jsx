@@ -169,6 +169,11 @@ const TwoFA = () => {
         .twofa-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         .twofa-spin { animation: twofa-spin 0.8s linear infinite; }
         @keyframes twofa-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        @media (max-width: 480px) {
+          .twofa-page { padding: 2rem 1rem; }
+          .twofa-card { padding: 2rem 1.5rem; border-radius: 20px; }
+        }
       `}</style>
     </div>
   );
