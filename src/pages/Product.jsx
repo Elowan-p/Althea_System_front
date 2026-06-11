@@ -317,29 +317,45 @@ const Product = () => {
                     border: 0;
                 }
 
-                .a11y-mode .prod-title { font-size: 4.2rem !important; line-height: 1.2 !important; }
-                .a11y-mode .price-main { font-size: 3.8rem !important; }
-                .a11y-mode .tax-tag { font-size: 1rem !important; }
-                .a11y-mode .rating-row { font-size: 1.05rem !important; }
-                .a11y-mode .domain-pill { font-size: 0.9rem !important; padding: 0.5rem 1.2rem !important; }
-                .a11y-mode .badge-item { font-size: 0.95rem !important; }
-                .a11y-mode .signal span { font-size: 1rem !important; }
-                .a11y-mode .rich-text p { font-size: 1.25rem !important; line-height: 2.1 !important; }
-                .a11y-mode .spec-row { font-size: 1.05rem !important; padding: 1.25rem 0 !important; }
-                .a11y-mode .tabs-nav button { font-size: 1rem !important; padding: 1.8rem 2.8rem !important; }
-                .a11y-mode .add-to-cart { font-size: 1.05rem !important; }
-                .a11y-mode .small-product-card h4 { font-size: 1.2rem !important; }
-                .a11y-mode .small-product-card p { font-size: 1.05rem !important; }
+                /* ── Accessibilité malvoyants ── */
+                .a11y-mode .prod-title { font-size: 5.5rem !important; line-height: 1.15 !important; letter-spacing: 0 !important; }
+                .a11y-mode .price-main { font-size: 5rem !important; }
+                .a11y-mode .tax-tag { font-size: 1.2rem !important; font-weight: 700 !important; }
+                .a11y-mode .rating-row { font-size: 1.15rem !important; gap: 1.5rem !important; }
+                .a11y-mode .domain-pill { font-size: 1rem !important; padding: 0.6rem 1.4rem !important; }
+                .a11y-mode .badge-item { font-size: 1.1rem !important; gap: 0.8rem !important; }
+                .a11y-mode .signal { font-size: 1.1rem !important; gap: 1.2rem !important; }
+                .a11y-mode .signal span { font-size: 1.15rem !important; }
+                .a11y-mode .prod-breadcrumbs { font-size: 1rem !important; gap: 1rem !important; }
+                .a11y-mode .rich-text p { font-size: 1.5rem !important; line-height: 2.3 !important; margin-bottom: 2rem !important; color: #1e293b !important; }
+                .a11y-mode .spec-row { font-size: 1.25rem !important; padding: 1.5rem 0 !important; }
+                .a11y-mode .spec-row strong { font-size: 1.25rem !important; }
+                .a11y-mode .tabs-nav button { font-size: 1.15rem !important; padding: 2rem 3rem !important; }
+                .a11y-mode .tab-content { padding: 3.5rem !important; }
+                .a11y-mode .add-to-cart { font-size: 1.2rem !important; padding: 1.5rem !important; min-height: 60px !important; }
+                .a11y-mode .qty-selector { font-size: 1.4rem !important; padding: 1rem 1.5rem !important; gap: 2rem !important; }
+                .a11y-mode .qty-selector button { transform: scale(1.3) !important; }
+                .a11y-mode .icon-btn-outline { width: 56px !important; height: 56px !important; }
+                .a11y-mode .small-product-card h4 { font-size: 1.35rem !important; }
+                .a11y-mode .small-product-card p { font-size: 1.2rem !important; }
+                .a11y-mode .section-title { font-size: 2.2rem !important; }
+                .a11y-mode .info-side { gap: 2.5rem !important; }
+                .a11y-mode .price-box { border-left-width: 7px !important; padding-left: 2rem !important; }
                 .a11y-mode *:focus-visible {
-                    outline: 3px solid #005c97 !important;
-                    outline-offset: 4px !important;
+                    outline: 4px solid #005c97 !important;
+                    outline-offset: 5px !important;
                     border-radius: 4px !important;
                 }
-                .a11y-mode .qty-selector button:focus-visible,
-                .a11y-mode .icon-btn-outline:focus-visible,
-                .a11y-mode .btn-primary:focus-visible {
-                    outline: 3px solid #005c97 !important;
-                    outline-offset: 4px !important;
+                /* Overrides media queries */
+                @media (max-width: 1024px) {
+                    .a11y-mode .prod-title { font-size: 4rem !important; }
+                    .a11y-mode .price-main { font-size: 3.8rem !important; }
+                }
+                @media (max-width: 640px) {
+                    .a11y-mode .prod-title { font-size: 3rem !important; }
+                    .a11y-mode .price-main { font-size: 3rem !important; }
+                    .a11y-mode .rich-text p { font-size: 1.3rem !important; }
+                    .a11y-mode .tabs-nav button { font-size: 1rem !important; padding: 1.2rem 1.5rem !important; }
                 }
 
                 .product-detail-page { padding-bottom: 8rem; }
