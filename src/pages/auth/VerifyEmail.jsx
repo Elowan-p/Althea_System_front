@@ -9,7 +9,7 @@ const VerifyEmail = () => {
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token');
     const navigate = useNavigate();
-    const [status, setStatus] = useState('loading'); // loading | success | error
+    const [status, setStatus] = useState('loading'); 
     const [message, setMessage] = useState('');
 
     useEffect(() => {
@@ -21,13 +21,13 @@ const VerifyEmail = () => {
             }
 
             try {
-                // Backend returns { message, token } — store JWT and log user in immediately
+                
                 const res = await verifyEmail(token);
                 const jwt = res.data?.token;
 
                 if (jwt) {
                     localStorage.setItem('token', jwt);
-                    // Notify all components (Header cart count, auth state, etc.)
+                    
                     window.dispatchEvent(new Event('authchange'));
                 }
 

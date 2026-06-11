@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './components/common/Layout';
 import Loader from './components/common/Loader';
@@ -24,7 +24,6 @@ const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Cancel = lazy(() => import('./pages/Cancel'));
 
-// Lazy loading admin backoffice pages
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const ProductList = lazy(() => import('./pages/admin/products/ProductList'));
@@ -37,24 +36,34 @@ const ContactList = lazy(() => import('./pages/admin/contacts/ContactList'));
 const ContactDetail = lazy(() => import('./pages/admin/contacts/ContactDetail'));
 const HomepageManager = lazy(() => import('./pages/admin/homepage/HomepageManager'));
 const TwoFA = lazy(() => import('./pages/admin/auth/TwoFA'));
+const ChatbotConversationList = lazy(() => import('./pages/admin/chatbot/ChatbotConversationList'));
+const ChatbotConversationDetail = lazy(() => import('./pages/admin/chatbot/ChatbotConversationDetail'));
 
-// Component for protected routes
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = !!localStorage.getItem('token');
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
-// Admin routes: JWT + ROLE_ADMIN + 2FA verification required
 const ProtectedAdminRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   let user = {};
   try {
     user = JSON.parse(localStorage.getItem('user') || '{}');
-  } catch { /* corrupted storage — treated as not admin */ }
+  } catch {  }
   const isAdmin = user?.roles?.includes('ROLE_ADMIN');
   if (!token || !isAdmin) return <Navigate to="/login" replace />;
   if (!localStorage.getItem('adminTwoFaVerified')) return <Navigate to="/admin/2fa" replace />;
   return children;
+};
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
 };
 
 function App() {
@@ -65,7 +74,7 @@ function App() {
     const handleLogoutStart = () => {
       setIsLoggingOut(true);
       
-      // Clean up authentication storage during animation
+      
       setTimeout(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -73,7 +82,7 @@ function App() {
         window.dispatchEvent(new Event('cartchange'));
       }, 1400);
 
-      // Navigate to homepage and close overlay
+      
       setTimeout(() => {
         navigate('/', { replace: true });
         setIsLoggingOut(false);
@@ -86,6 +95,7 @@ function App() {
 
   return (
     <>
+      <ScrollToTop />
       {isLoggingOut && <LogoutLoader />}
       <Suspense fallback={<Loader />}>
         <Layout>
@@ -117,7 +127,7 @@ function App() {
           <Route path="/cancel" element={<Cancel />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* Admin Backoffice Routes */}
+          {}
           <Route path="/admin/2fa" element={<TwoFA />} />
           <Route path="/admin" element={
             <ProtectedAdminRoute>
@@ -135,10 +145,12 @@ function App() {
             <Route path="orders/:id" element={<OrderDetail />} />
             <Route path="contacts" element={<ContactList />} />
             <Route path="contacts/:id" element={<ContactDetail />} />
+            <Route path="chatbot" element={<ChatbotConversationList />} />
+            <Route path="chatbot/:id" element={<ChatbotConversationDetail />} />
             <Route path="homepage" element={<HomepageManager />} />
           </Route>
 
-          {/* Redirect all unknown to home */}
+          {}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

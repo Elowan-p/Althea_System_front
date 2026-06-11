@@ -73,7 +73,7 @@ const CategoryForm = () => {
       title: titles.fr.trim(),
       pictureUrl: pictureUrl.trim(),
     };
-    // Only ship non-empty translations so we never overwrite with blanks
+    
     const translations = {};
     if (titles.en.trim()) translations.en = { title: titles.en.trim() };
     if (titles.ru.trim()) translations.ru = { title: titles.ru.trim() };

@@ -8,5 +8,5 @@ export const userAuthService = {
         apiClient.post('/auth/logout');
     },
     getInfo: async (id) => apiClient.get(`/auth/info/${id}`),
-    // @TODO Rajouter les ofnctions que tu veux ici EN RAPPORT AVEC LES USERS SEULEMENT FDPPP 
+    
 }

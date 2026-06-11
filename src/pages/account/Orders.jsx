@@ -4,8 +4,6 @@ import { getInvoicePdf, getProducts } from '../../services/api';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
 
-// Backend endpoint for completed orders history (ROLE_USER)
-// Returns array of Orders where status !== 'cart'
 const getMyOrders = () => api.get('/order/history');
 
 const Orders = () => {
@@ -23,7 +21,7 @@ const Orders = () => {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                // Fetch orders and products list in parallel to enrich with localized titles
+                
                 const [ordersRes, productsRes] = await Promise.all([
                     getMyOrders(),
                     getProducts()

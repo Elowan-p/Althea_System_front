@@ -70,7 +70,7 @@ const Product = () => {
     return (
         <div className="product-detail-page modern-bg">
             <div className="container">
-                {/* Breadcrumbs */}
+                {}
                 <nav className="prod-breadcrumbs">
                     <NavLink to="/">{t('product_page.breadcrumb_catalogue', 'Catalogue')}</NavLink>
                     <ChevronRight size={14} />
@@ -80,7 +80,7 @@ const Product = () => {
                 </nav>
 
                 <div className="product-grid">
-                    {/* Media Section */}
+                    {}
                     <div className="media-side">
                         <div className="main-stage card-glass">
                             <img src={product.pictureUrl || '/images/prod_scanner.png'} alt={product.title} />
@@ -92,7 +92,7 @@ const Product = () => {
                         </div>
                     </div>
 
-                    {/* Info Section */}
+                    {}
                     <div className="info-side">
                         <header className="info-header">
                             <span className="domain-pill">{product.medicalDomain}</span>
@@ -151,7 +151,7 @@ const Product = () => {
                     </div>
                 </div>
 
-                {/* Tabs Section */}
+                {}
                 <div className="tabs-area card">
                     <nav className="tabs-nav">
                         <button className={activeTab === 'description' ? 'active' : ''} onClick={() => setActiveTab('description')}>{t('product_page.tab_description', 'Description')}</button>
@@ -175,7 +175,7 @@ const Product = () => {
                     </div>
                 </div>
 
-                {/* Related Section */}
+                {}
                 <section className="related-section">
                     <h2 className="section-title">{t('product_page.similar_equipment', 'Similar Equipment')}</h2>
                     <div className="related-grid">

@@ -10,7 +10,7 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token'); // @ TODO : change token location into cookies and not localStorage because it is peepee poopoo
+    const token = localStorage.getItem('token'); 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

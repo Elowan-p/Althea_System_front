@@ -33,7 +33,7 @@ const ProductList = () => {
   const [sortField, setSortField] = useState('title');
   const [sortDir, setSortDir] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [confirm, setConfirm] = useState(null); // { type: 'single'|'bulk', ids: [] }
+  const [confirm, setConfirm] = useState(null); 
   const [working, setWorking] = useState(false);
 
   const fetchProducts = useCallback(async () => {

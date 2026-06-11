@@ -21,7 +21,7 @@ const CarouselManager = () => {
   const [error, setError] = useState('');
   const [working, setWorking] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [editing, setEditing] = useState(null); // null | { id?, ...form }
+  const [editing, setEditing] = useState(null); 
   const [form, setForm] = useState(EMPTY_FORM);
   const [confirmDelete, setConfirmDelete] = useState(null);
 
@@ -62,7 +62,7 @@ const CarouselManager = () => {
 
     const next = [...items];
     [next[index], next[target]] = [next[target], next[index]];
-    // Re-number sequentially so the backend gets a clean, gap-free ordering
+    
     const renumbered = next.map((item, i) => ({ ...item, order: i + 1 }));
     setItems(renumbered);
 
