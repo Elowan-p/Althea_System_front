@@ -343,6 +343,18 @@ const Cart = () => {
               .sticky-aside { position: static; }
               .guest-banner { flex-direction: column; text-align: center; }
             }
+            @media (max-width: 640px) {
+              .cart-page { padding: 2.5rem 0 5rem; }
+              .cart-header { flex-direction: column; align-items: flex-start; gap: 0.8rem; margin-bottom: 2rem; }
+              .cart-header h1 { font-size: 2rem; }
+              .cart-error-banner { flex-wrap: wrap; }
+              .guest-banner { padding: 1.5rem; gap: 1rem; }
+              .cart-item { padding: 1.25rem; }
+              .item-main { gap: 1rem; }
+              .item-img { width: 72px; height: 72px; }
+              .summary-card { padding: 1.5rem; }
+              .empty-cart-view { padding: 5rem 0; }
+            }
           `}</style>
         </div>
     );

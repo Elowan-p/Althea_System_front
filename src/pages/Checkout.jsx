@@ -157,6 +157,13 @@ const checkoutStyles = `
     .btn-back { padding: 0.8rem 1.5rem; border: 1.5px solid #e2e8f0; border-radius: 12px; font-weight: 800; color: #475569; }
     .btn-back:hover { border-color: var(--primary); color: var(--primary); }
     .btn-support { padding: 0.8rem 1.5rem; background: var(--primary); color: white; border-radius: 12px; font-weight: 800; text-decoration: none; }
+
+    @media (max-width: 480px) {
+        .checkout-page { padding: 2rem 1rem; }
+        .checkout-card { padding: 2rem 1.25rem; border-radius: 20px; }
+        .checkout-card h2 { font-size: 1.5rem; }
+        .step-row { padding: 0.7rem 0.9rem; font-size: 0.82rem; }
+    }
 `;
 
 export default Checkout;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, Menu, X, User, Search, Globe, ChevronDown, Activity } from 'lucide-react';
@@ -8,7 +8,9 @@ const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const accountHubRef = useRef(null);
   const [searchValue, setSearchValue] = useState('');
   const [categories, setCategories] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -81,6 +83,30 @@ const Header = () => {
     };
   }, [fetchCartCount, checkAdmin]);
 
+  // Mobile sidebar: lock body scroll and allow closing with Escape
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleKey = (e) => { if (e.key === 'Escape') setIsMenuOpen(false); };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [isMenuOpen]);
+
+  // Profile dropdown: close when clicking outside (hover is unreliable on touch)
+  useEffect(() => {
+    if (!isProfileOpen) return;
+    const handleClickOutside = (e) => {
+      if (accountHubRef.current && !accountHubRef.current.contains(e.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', handleClickOutside);
+    return () => document.removeEventListener('pointerdown', handleClickOutside);
+  }, [isProfileOpen]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) navigate(`/search?q=${searchValue}`);
@@ -93,6 +119,7 @@ const Header = () => {
     window.dispatchEvent(new Event('authchange'));
     setCartCount(0);
     setIsMenuOpen(false);
+    setIsProfileOpen(false);
     window.dispatchEvent(new Event('logout-start'));
   };
 
@@ -177,15 +204,15 @@ const Header = () => {
                             <NavLink to="/register" className="btn-primary-sm">{t('header.register', "S'inscrire")}</NavLink>
                         </div>
                     ) : (
-                        <div className="account-hub">
-                            <button className="icon-action-btn"><User size={24} /></button>
-                            <div className="profile-dropdown-container">
+                        <div className="account-hub" ref={accountHubRef}>
+                            <button className="icon-action-btn" onClick={() => setIsProfileOpen(prev => !prev)}><User size={24} /></button>
+                            <div className={`profile-dropdown-container ${isProfileOpen ? 'open' : ''}`}>
                                 <div className="mini-profile-card">
                                     <div className="profile-header">{t('header.workspace', 'Espace de travail')}</div>
-                                    <NavLink to="/account/settings">{t('header.my_profile', 'Mon profil')}</NavLink>
-                                    <NavLink to="/account/orders">{t('header.quick_orders', 'Commandes rapides')}</NavLink>
+                                    <NavLink to="/account/settings" onClick={() => setIsProfileOpen(false)}>{t('header.my_profile', 'Mon profil')}</NavLink>
+                                    <NavLink to="/account/orders" onClick={() => setIsProfileOpen(false)}>{t('header.quick_orders', 'Commandes rapides')}</NavLink>
                                     {isAdmin && (
-                                        <NavLink to="/admin">{t('header.admin_dashboard', 'Backoffice')}</NavLink>
+                                        <NavLink to="/admin" onClick={() => setIsProfileOpen(false)}>{t('header.admin_dashboard', 'Backoffice')}</NavLink>
                                     )}
                                     <button className="btn-logout" onClick={handleLogout}>{t('header.sign_out', 'Déconnexion')}</button>
                                 </div>
@@ -211,6 +238,10 @@ const Header = () => {
                     <button className="close-side" onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
                 </header>
                 <div className="side-content">
+                    <form className="side-search" onSubmit={(e) => { handleSearch(e); setIsMenuOpen(false); }}>
+                        <Search size={18} />
+                        <input type="text" placeholder={t('header.search_placeholder', 'Rechercher un produit...')} value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                    </form>
                     <div className="side-section">
                         <label>Navigation principale</label>
                         <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Accueil</NavLink>
@@ -225,6 +256,37 @@ const Header = () => {
                         {categories.map((cat) => (
                             <NavLink key={cat.id} to={`/catalogue?category=${cat.id}`} onClick={() => setIsMenuOpen(false)}>{cat.title}</NavLink>
                         ))}
+                    </div>
+                    <div className="side-section">
+                        <label>{t('header.workspace', 'Espace de travail')}</label>
+                        {isAuthenticated ? (
+                            <>
+                                <NavLink to="/account/settings" onClick={() => setIsMenuOpen(false)}>{t('header.my_profile', 'Mon profil')}</NavLink>
+                                <NavLink to="/account/orders" onClick={() => setIsMenuOpen(false)}>{t('header.quick_orders', 'Commandes rapides')}</NavLink>
+                                <button className="side-logout" onClick={handleLogout}>{t('header.sign_out', 'Déconnexion')}</button>
+                            </>
+                        ) : (
+                            <>
+                                <NavLink to="/login" onClick={() => setIsMenuOpen(false)}>{t('header.sign_in', 'Connexion')}</NavLink>
+                                <NavLink to="/register" onClick={() => setIsMenuOpen(false)}>{t('header.register', "S'inscrire")}</NavLink>
+                            </>
+                        )}
+                    </div>
+                    <div className="side-lang">
+                        <Globe size={16} />
+                        <select
+                            className="lang-select"
+                            value={i18n.resolvedLanguage || i18n.language?.split('-')[0] || 'fr'}
+                            onChange={(e) => {
+                                const next = e.target.value;
+                                i18n.changeLanguage(next);
+                                window.dispatchEvent(new Event('languagechange'));
+                            }}
+                        >
+                            <option value="fr">FR</option>
+                            <option value="en">EN</option>
+                            <option value="ru">RU</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -419,6 +481,19 @@ const Header = () => {
         .mobile-only { display: block; }
         .desktop-only { display: none; }
         @media (min-width: 1024px) { .mobile-only { display: none; } .desktop-only { display: flex; } }
+        @media (max-width: 1023px) {
+          .main-bar { padding: 1rem 0; }
+          .main-flex { gap: 1rem; }
+          .flex-start { gap: 1rem; }
+          .flex-end { gap: 1rem; }
+          .actions-cluster { gap: 1rem; }
+        }
+        @media (max-width: 480px) {
+          .logo-symbol { width: 38px; height: 38px; font-size: 1.25rem; border-radius: 10px; }
+          .logo-text .main { font-size: 1.15rem; }
+          .logo-text .sub { font-size: 0.65rem; }
+          .cart-icon-box { width: 40px; height: 40px; }
+        }
       `}</style>
     </header>
   );

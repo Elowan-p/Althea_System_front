@@ -329,9 +329,34 @@ const Home = () => {
  
                 @media (max-width: 1024px) {
                     .hero-title { font-size: 2.5rem; }
+                    .hero-desc { font-size: 1.15rem; }
                     .values-grid { grid-template-columns: 1fr; }
                     .categories-grid-premium { grid-template-columns: 1fr 1fr; }
                     .products-grid-premium { grid-template-columns: 1fr; }
+                    .values-section, .categories-section, .top-products-section { padding: 5rem 0; }
+                }
+                @media (max-width: 640px) {
+                    .hero-section { height: 75vh; min-height: 480px; }
+                    .hero-content { padding: 1.5rem; }
+                    .hero-badge { margin-bottom: 1.25rem; }
+                    .hero-title { font-size: 2rem; margin-bottom: 1rem; }
+                    .hero-desc { font-size: 1rem; margin-bottom: 2rem; }
+                    .hero-actions { flex-direction: column; align-items: stretch; gap: 1rem; }
+                    .btn-primary-lg, .btn-outline-white { display: flex; align-items: center; justify-content: center; padding: 1rem 1.5rem; font-size: 1rem; }
+                    .carousel-nav { padding: 0 1rem; }
+                    .nav-arrow { width: 44px; height: 44px; }
+                    .values-section, .categories-section, .top-products-section { padding: 3.5rem 0; }
+                    .values-header { margin-bottom: 2.5rem; }
+                    .values-header h2 { font-size: 2rem; }
+                    .value-card { padding: 2rem; }
+                    .values-grid { gap: 1.5rem; }
+                    .section-header { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 2.5rem; }
+                    .section-header h3 { font-size: 1.75rem; }
+                    .categories-grid-premium { grid-template-columns: 1fr; gap: 1.5rem; }
+                    .cat-card-premium { height: 380px; padding: 1.5rem; }
+                    .products-grid-premium { gap: 2rem; }
+                    .prod-image { height: 240px; }
+                    .prod-details { padding: 1.5rem; }
                 }
             `}</style>
         </div>

@@ -222,6 +222,19 @@ const AdminLayout = () => {
           .admin-nav { flex-direction: row; flex-wrap: wrap; }
           .admin-nav a { padding: 0.6rem 0.9rem; }
         }
+        @media (max-width: 640px) {
+          .admin-shell { padding: 1rem 1rem 4rem; gap: 1rem; }
+          .admin-sidebar { padding: 1rem; gap: 1rem; }
+          .admin-brand { padding: 0.25rem 0.25rem 1rem; }
+          .admin-nav a { flex: 1 1 auto; justify-content: center; padding: 0.6rem 0.7rem; font-size: 0.82rem; }
+          .adm-title { font-size: 1.4rem; }
+          .adm-card { padding: 1.25rem; }
+          .adm-modal { padding: 1.5rem; }
+          .adm-modal-actions { flex-wrap: wrap; }
+          .adm-page-head { margin-bottom: 1.5rem; }
+          .adm-head-actions { width: 100%; }
+          .adm-head-actions .adm-btn { flex: 1; }
+        }
       `}</style>
     </div>
   );

@@ -240,6 +240,17 @@ const Settings = () => {
                     .form-row, .extra-options-grid { grid-template-columns: 1fr; }
                     .page-title { font-size: 1.8rem; }
                 }
+                @media (max-width: 640px) {
+                    .page-header { margin-bottom: 2rem; padding-bottom: 1.25rem; }
+                    .page-title { font-size: 1.6rem; }
+                    .settings-grid { gap: 1.5rem; }
+                    .settings-section { padding: 1.25rem; }
+                    .form-row { gap: 1.25rem; }
+                    .form-actions { flex-wrap: wrap; gap: 1rem; }
+                    .btn-save { width: 100%; justify-content: center; }
+                    .extra-options-grid { gap: 1.25rem; margin-top: 2.5rem; }
+                    .option-card { padding: 1.5rem; }
+                }
             `}</style>
         </div>
     );

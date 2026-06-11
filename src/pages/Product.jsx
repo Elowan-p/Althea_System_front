@@ -265,6 +265,27 @@ const Product = () => {
                     .main-stage { height: 400px; }
                     .prod-title { font-size: 2.5rem; }
                 }
+                @media (max-width: 640px) {
+                    .product-detail-page { padding-bottom: 4rem; }
+                    .prod-breadcrumbs { padding: 1.5rem 0; flex-wrap: wrap; gap: 0.4rem; }
+                    .product-grid { gap: 2rem; margin-bottom: 3rem; }
+                    .main-stage { height: 280px; padding: 1.5rem; border-radius: 20px; }
+                    .badges-row { flex-wrap: wrap; gap: 1rem; }
+                    .prod-title { font-size: 1.8rem; }
+                    .price-main { font-size: 2.2rem; }
+                    .cta-block { flex-wrap: wrap; gap: 1rem; padding: 1.5rem !important; }
+                    .add-to-cart { order: -1; flex: 1 1 100%; }
+                    .qty-selector { flex: 1; justify-content: space-between; }
+                    .tabs-area { margin-top: 3rem; }
+                    .tabs-nav { overflow-x: auto; }
+                    .tabs-nav button { padding: 1.1rem 1.25rem; white-space: nowrap; flex-shrink: 0; }
+                    .tab-content { padding: 1.5rem; }
+                    .rich-text p { font-size: 1rem; }
+                    .spec-row { flex-direction: column; gap: 0.25rem; }
+                    .related-section { margin-top: 4rem; }
+                    .related-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+                    .small-product-card img { height: 110px; }
+                }
             `}</style>
         </div>
     );

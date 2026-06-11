@@ -435,6 +435,9 @@ const ProductForm = () => {
           .form-bottom { grid-template-columns: 1fr; }
           .bottom-fields-grid { grid-template-columns: 1fr; }
         }
+        @media (max-width: 640px) {
+          .two-cols { grid-template-columns: 1fr; }
+        }
       `}</style>
     </div>
   );

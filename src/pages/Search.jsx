@@ -186,6 +186,18 @@ const Search = () => {
                 
                 .btn-outline-primary { border: 2px solid var(--primary); color: var(--primary); padding: 0.8rem 2rem; border-radius: 12px; font-weight: 800; transition: all 0.3s; }
                 .btn-outline-primary:hover { background: var(--primary); color: white; }
+
+                @media (max-width: 640px) {
+                    .search-hero { padding: 3rem 0; }
+                    .search-bar-wrap h1 { font-size: 2rem; margin-bottom: 1.5rem; }
+                    .main-search-form { flex-direction: column; align-items: stretch; padding: 0.8rem; gap: 0.5rem; border-radius: 16px; }
+                    .search-icon { display: none; }
+                    .main-search-form input { padding: 0.6rem 0.5rem; font-size: 1rem; }
+                    .btn-search { margin-left: 0; padding: 0.9rem 1rem; border-radius: 12px; }
+                    .results-header { margin: 2.5rem 0 2rem; }
+                    .results-header h2 { font-size: 1.5rem; }
+                    .empty-search { padding: 4rem 0; }
+                }
             `}</style>
         </div>
     );

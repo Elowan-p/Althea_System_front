@@ -116,6 +116,13 @@ const AccountLayout = () => {
                     .layout-grid { grid-template-columns: 1fr; gap: 2rem; }
                     .account-sidebar { position: static; }
                 }
+                @media (max-width: 640px) {
+                    .account-layout { padding: 2rem 0 4rem; }
+                    .layout-grid { gap: 1.5rem; }
+                    .account-sidebar { padding: 1.5rem; }
+                    .sidebar-header { margin-bottom: 1.5rem; padding-bottom: 1.25rem; }
+                    .account-main-content { padding: 1.5rem; border-radius: 20px; }
+                }
             `}</style>
         </div>
     );
