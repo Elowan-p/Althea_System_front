@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './components/common/Layout';
 import Loader from './components/common/Loader';
@@ -56,6 +56,16 @@ const ProtectedAdminRoute = ({ children }) => {
   return children;
 };
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
@@ -85,6 +95,7 @@ function App() {
 
   return (
     <>
+      <ScrollToTop />
       {isLoggingOut && <LogoutLoader />}
       <Suspense fallback={<Loader />}>
         <Layout>

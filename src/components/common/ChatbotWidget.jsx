@@ -283,73 +283,78 @@ function ChatbotWidget() {
         .cb-fab {
           position: fixed; bottom: 2rem; right: 2rem; z-index: 9000;
           display: flex; align-items: center; gap: 0.6rem;
-          background: linear-gradient(135deg, var(--primary,#005c97), var(--primary-light,#36d1dc));
+          background: var(--primary-gradient);
           color: #fff; border: none; border-radius: 50px;
           padding: 0.85rem 1.4rem 0.85rem 1.1rem;
           font-family: var(--font-main,inherit); font-weight: 700; font-size: 0.9rem;
           cursor: pointer; white-space: nowrap;
-          box-shadow: 0 8px 30px rgba(0,92,151,0.35);
-          transition: all 0.35s cubic-bezier(0.165,0.84,0.44,1);
+          box-shadow: 0 8px 30px rgba(0,92,151,0.3);
+          transition: var(--transition);
         }
-        .cb-fab:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 40px rgba(0,92,151,0.45); }
+        .cb-fab:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 16px 35px rgba(0,92,151,0.4); }
         .cb-fab--open {
           padding: 0.85rem; border-radius: 50%;
           background: linear-gradient(135deg,#334155,#475569);
-          box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
-        .cb-fab--open:hover { transform: rotate(5deg) scale(1.05); }
+        .cb-fab--open:hover { transform: rotate(90deg) scale(1.05); }
         .cb-fab-icon { display: flex; align-items: center; }
 
         /* ── Panel ── */
         .cb-panel {
           position: fixed; bottom: 5.5rem; right: 2rem; z-index: 8999;
           width: 380px; height: 560px;
-          background: #fff; border-radius: 24px;
-          box-shadow: 0 30px 80px -10px rgba(0,0,0,0.18), 0 4px 20px rgba(0,0,0,0.08);
+          background: rgba(255, 255, 255, 0.85); 
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(226, 232, 240, 0.7);
+          border-radius: 24px;
+          box-shadow: var(--shadow-premium);
           display: flex; flex-direction: column; overflow: hidden;
-          animation: cbIn 0.35s cubic-bezier(0.165,0.84,0.44,1);
+          animation: cbIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes cbIn {
-          from { opacity:0; transform: translateY(24px) scale(0.95); }
+          from { opacity:0; transform: translateY(30px) scale(0.92); }
           to   { opacity:1; transform: translateY(0) scale(1); }
         }
 
         /* ── Header ── */
         .cb-header {
-          background: linear-gradient(135deg, var(--primary,#005c97), var(--primary-light,#36d1dc));
+          background: var(--primary-gradient);
           padding: 1rem 1.2rem; display: flex; align-items: center;
           justify-content: space-between; flex-shrink: 0;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
         .cb-header-left { display: flex; align-items: center; gap: 0.9rem; }
         .cb-avatar {
-          width: 40px; height: 40px; background: rgba(255,255,255,0.25);
+          width: 40px; height: 40px; background: rgba(255,255,255,0.2);
           border-radius: 12px; display: flex; align-items: center; justify-content: center;
           font-weight: 900; font-size: 1.3rem; color: #fff;
         }
-        .cb-title { font-weight: 800; font-size: 0.95rem; color: #fff; }
-        .cb-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: rgba(255,255,255,0.85); font-weight: 600; }
+        .cb-title { font-weight: 850; font-size: 0.95rem; color: #fff; }
+        .cb-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: rgba(255,255,255,0.9); font-weight: 600; }
         .cb-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,0.25); }
         .cb-header-right { display: flex; align-items: center; gap: 0.5rem; }
         .cb-icon-btn {
           background: rgba(255,255,255,0.15); border: none; cursor: pointer; color: #fff;
           width: 32px; height: 32px; border-radius: 8px;
-          display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+          display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);
         }
-        .cb-icon-btn:hover { background: rgba(255,255,255,0.28); }
+        .cb-icon-btn:hover { background: rgba(255,255,255,0.28); transform: scale(1.05); }
 
-        /* ── Body — single scrollable column ── */
+        /* ── Body ── */
         .cb-body {
           flex: 1; overflow-y: auto; padding: 1.2rem;
-          display: flex; flex-direction: column; gap: 0.65rem;
+          display: flex; flex-direction: column; gap: 0.75rem;
         }
 
         /* ── Centered states ── */
         .cb-center {
           flex: 1; display: flex; flex-direction: column;
           align-items: center; justify-content: center;
-          gap: 0.8rem; text-align: center; color: var(--text-muted,#64748b);
+          gap: 0.8rem; text-align: center; color: var(--text-muted);
         }
-        .cb-center h3 { font-weight: 800; color: #1e293b; }
+        .cb-center h3 { font-weight: 850; color: var(--secondary); }
 
         /* ── Spinner ── */
         @keyframes cbSpin { to { transform: rotate(360deg); } }
@@ -357,27 +362,30 @@ function ChatbotWidget() {
 
         /* ── Bubbles ── */
         .cb-bubble {
-          max-width: 82%; padding: 0.75rem 1rem; border-radius: 16px;
-          font-size: 0.88rem; line-height: 1.55; word-break: break-word; font-weight: 500;
-          animation: cbBubble 0.25s ease;
+          max-width: 82%; padding: 0.8rem 1.1rem; border-radius: 18px;
+          font-size: 0.88rem; line-height: 1.5; word-break: break-word; font-weight: 500;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+          animation: cbBubble 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes cbBubble {
-          from { opacity: 0; transform: translateY(6px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(12px) scale(0.95); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
         }
         .cb-bubble--bot {
-          background: #f1f5f9; color: var(--text-main,#1e293b);
+          background: rgba(241, 245, 249, 0.9); color: var(--text-main);
           border-bottom-left-radius: 4px; align-self: flex-start;
+          border: 1px solid rgba(226, 232, 240, 0.4);
         }
         .cb-bubble--user {
-          background: linear-gradient(135deg, var(--primary,#005c97), var(--primary-light,#36d1dc));
+          background: var(--primary-gradient);
           color: #fff; border-bottom-right-radius: 4px; align-self: flex-end;
+          box-shadow: 0 4px 12px rgba(0, 92, 151, 0.15);
         }
 
         /* ── Typing dots ── */
         .cb-typing { display: flex; align-items: center; gap: 5px; }
         .cb-typing span {
-          width: 7px; height: 7px; background: #94a3b8; border-radius: 50%;
+          width: 7px; height: 7px; background: var(--text-muted); border-radius: 50%;
           animation: cbDot 1.2s infinite;
         }
         .cb-typing span:nth-child(2) { animation-delay: 0.2s; }
@@ -389,22 +397,23 @@ function ChatbotWidget() {
 
         /* ── Question chips ── */
         .cb-chips-wrap {
-          margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;
-          border-top: 1px solid #f1f5f9; padding-top: 0.8rem;
+          margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.45rem;
+          border-top: 1px solid rgba(226, 232, 240, 0.6); padding-top: 1rem;
         }
         .cb-chips-label {
           font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
-          color: #94a3b8; letter-spacing: 0.08em; margin-bottom: 0.15rem;
+          color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 0.2rem;
         }
         .cb-chip {
-          background: #f8fafc; border: 1px solid #e2e8f0;
-          color: var(--primary,#005c97); font-family: inherit; font-weight: 700; font-size: 0.82rem;
-          padding: 0.6rem 0.9rem; border-radius: 10px;
-          text-align: left; cursor: pointer; transition: all 0.2s ease;
+          background: rgba(248, 250, 252, 0.8); border: 1px solid rgba(226, 232, 240, 0.8);
+          color: var(--primary); font-family: inherit; font-weight: 700; font-size: 0.82rem;
+          padding: 0.65rem 1rem; border-radius: 12px;
+          text-align: left; cursor: pointer; transition: var(--transition-fast);
         }
         .cb-chip:hover:not(:disabled) {
-          background: var(--primary,#005c97); color: #fff; border-color: var(--primary,#005c97);
-          transform: translateX(3px);
+          background: var(--primary); color: #fff; border-color: var(--primary);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 92, 151, 0.15);
         }
         .cb-chip:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -412,35 +421,37 @@ function ChatbotWidget() {
         .cb-form-wrap { display: flex; flex-direction: column; gap: 0.8rem; }
         .cb-back-btn {
           display: flex; align-items: center; gap: 0.3rem;
-          font-size: 0.82rem; font-weight: 700; color: var(--text-muted,#64748b);
+          font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
           background: none; border: none; cursor: pointer; font-family: inherit;
-          transition: color 0.2s; align-self: flex-start; padding: 0;
+          transition: var(--transition-fast); align-self: flex-start; padding: 0;
         }
-        .cb-back-btn:hover { color: var(--primary,#005c97); }
+        .cb-back-btn:hover { color: var(--primary); transform: translateX(-2px); }
         .cb-form-header {
           display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-          text-align: center; color: var(--primary,#005c97);
+          text-align: center; color: var(--primary);
         }
-        .cb-form-header h3 { font-size: 1.05rem; font-weight: 800; color: #1e293b; }
-        .cb-form-header p { font-size: 0.82rem; color: var(--text-muted,#64748b); font-weight: 500; }
+        .cb-form-header h3 { font-size: 1.05rem; font-weight: 850; color: var(--secondary); }
+        .cb-form-header p { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
         .cb-form-wrap form { display: flex; flex-direction: column; gap: 0.5rem; }
-        .cb-form-wrap label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted,#64748b); }
+        .cb-form-wrap label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
         .cb-form-wrap input, .cb-form-wrap textarea {
-          border: 1.5px solid #e2e8f0; border-radius: 10px;
-          padding: 0.6rem 0.9rem; font-size: 0.85rem; font-family: inherit;
-          outline: none; background: #f8fafc; transition: border-color 0.2s; resize: none;
+          border: 1.5px solid rgba(226, 232, 240, 0.8); border-radius: 12px;
+          padding: 0.65rem 1rem; font-size: 0.85rem; font-family: inherit;
+          outline: none; background: rgba(248, 250, 252, 0.6); transition: var(--transition-fast); resize: none;
         }
         .cb-form-wrap input:focus, .cb-form-wrap textarea:focus {
-          border-color: var(--primary,#005c97); background: #fff;
+          border-color: var(--primary); background: #fff;
+          box-shadow: 0 0 0 4px var(--focus-ring);
         }
         .cb-submit-btn {
-          background: linear-gradient(135deg, var(--primary,#005c97), var(--primary-light,#36d1dc));
-          color: #fff; border: none; border-radius: 10px; padding: 0.75rem;
+          background: var(--primary-gradient);
+          color: #fff; border: none; border-radius: 12px; padding: 0.8rem;
           font-weight: 700; font-size: 0.88rem; font-family: inherit; cursor: pointer;
           display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-          transition: all 0.2s; margin-top: 0.3rem;
+          transition: var(--transition); margin-top: 0.3rem;
+          box-shadow: 0 4px 12px rgba(0, 92, 151, 0.2);
         }
-        .cb-submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,92,151,0.3); }
+        .cb-submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,92,151,0.35); }
         .cb-submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
         .cb-field-error {
           background: #fef2f2; color: #ef4444; border: 1px solid #fecaca;
@@ -450,16 +461,18 @@ function ChatbotWidget() {
         /* ── Success ── */
         .cb-success-icon {
           width: 56px; height: 56px;
-          background: linear-gradient(135deg, var(--primary,#005c97), var(--primary-light,#36d1dc));
+          background: var(--primary-gradient);
           border-radius: 50%; display: flex; align-items: center; justify-content: center;
           font-size: 1.5rem; color: #fff; font-weight: 900;
+          box-shadow: 0 4px 12px rgba(0, 92, 151, 0.2);
         }
         .cb-btn-retry {
-          background: var(--primary,#005c97); color: #fff; border: none; border-radius: 8px;
-          padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.85rem; font-family: inherit;
-          cursor: pointer; transition: all 0.2s;
+          background: var(--primary); color: #fff; border: none; border-radius: 10px;
+          padding: 0.6rem 1.4rem; font-weight: 700; font-size: 0.85rem; font-family: inherit;
+          cursor: pointer; transition: var(--transition-fast);
+          box-shadow: 0 4px 10px rgba(0, 92, 151, 0.15);
         }
-        .cb-btn-retry:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,92,151,0.3); }
+        .cb-btn-retry:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 92, 151, 0.25); }
 
         @media (max-width: 480px) {
           .cb-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 5rem; border-radius: 18px; }
