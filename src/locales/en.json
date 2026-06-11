@@ -138,7 +138,27 @@
     "notif_desc": "Configure alerts for order status, maintenance cycles, and compliance updates.",
     "loading": "Loading institutional profile settings...",
     "error_load": "Unable to load profile data.",
-    "error_save": "An error occurred during save."
+    "error_save": "An error occurred during save.",
+    "display_prefs": "Display Preferences",
+    "accessibility_title": "Visual Accessibility",
+    "accessibility_desc": "Enlarges text, improves contrast, and enables focus indicators on the product page.",
+    "accessibility_on": "Enabled — click to disable",
+    "accessibility_off": "Disabled — click to enable",
+    "accessibility_label_on": "Enabled",
+    "accessibility_label_off": "Disabled"
+  },
+  "product_page": {
+    "skip_to_content": "Skip to main content",
+    "aria_breadcrumb": "Breadcrumb navigation",
+    "aria_decrease_qty": "Decrease quantity",
+    "aria_increase_qty": "Increase quantity",
+    "aria_qty_value": "Selected quantity: {{count}}",
+    "aria_wishlist": "Add to wishlist",
+    "aria_share": "Share this product",
+    "aria_tabs_label": "Product information",
+    "aria_cart_live_added": "Product successfully added to cart",
+    "aria_cart_live_error": "Error adding product to cart",
+    "a11y_banner": "Accessibility mode enabled — Enlarged text and enhanced contrast"
   },
   "common": {
     "next": "Next",

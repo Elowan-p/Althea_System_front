@@ -27,6 +27,13 @@ const Product = () => {
     const [activeTab, setActiveTab] = useState('description');
     const [similarEquipment, setSimilarEquipment] = useState([]);
     const [cartStatus, setCartStatus] = useState('idle');
+    const [a11yMode, setA11yMode] = useState(() => localStorage.getItem('accessibilityMode') === 'true');
+
+    useEffect(() => {
+        const handleA11yChange = () => setA11yMode(localStorage.getItem('accessibilityMode') === 'true');
+        window.addEventListener('accessibilitychange', handleA11yChange);
+        return () => window.removeEventListener('accessibilitychange', handleA11yChange);
+    }, []);
 
     const currentLang = i18n.language;
 
@@ -67,11 +74,24 @@ const Product = () => {
     if (loading) return <Loader />;
     if (!product) return <div className="error-state container">{t('product_page.not_found', 'Product not found or system error.')}</div>;
 
+    const cartLiveMessage =
+        cartStatus === 'success' ? t('product_page.aria_cart_live_added', 'Produit ajouté au panier avec succès') :
+        cartStatus === 'error'   ? t('product_page.aria_cart_live_error', 'Erreur lors de l\'ajout au panier') : '';
+
     return (
-        <div className="product-detail-page modern-bg">
-            <div className="container">
-                {}
-                <nav className="prod-breadcrumbs">
+        <div className={`product-detail-page modern-bg${a11yMode ? ' a11y-mode' : ''}`}>
+            <a href="#product-main-content" className="skip-to-content">
+                {t('product_page.skip_to_content', 'Aller au contenu principal')}
+            </a>
+            {a11yMode && (
+                <div className="a11y-banner" role="status">
+                    {t('product_page.a11y_banner', 'Mode accessibilité activé — Textes agrandis et contrastes renforcés')}
+                </div>
+            )}
+            <div aria-live="polite" aria-atomic="true" className="sr-only">{cartLiveMessage}</div>
+            <div className="container" id="product-main-content">
+                {/* Breadcrumbs */}
+                <nav className="prod-breadcrumbs" aria-label={t('product_page.aria_breadcrumb', 'Fil d\'Ariane')}>
                     <NavLink to="/">{t('product_page.breadcrumb_catalogue', 'Catalogue')}</NavLink>
                     <ChevronRight size={14} />
                     <NavLink to={`/category/${product.category.id}`}>{product.category.title}</NavLink>
@@ -115,15 +135,32 @@ const Product = () => {
                         </div>
 
                         <div className="cta-block card">
-                            <div className="qty-selector">
-                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))}><Minus size={18} /></button>
-                                <span>{quantity}</span>
-                                <button onClick={() => setQuantity(q => q + 1)}><Plus size={18} /></button>
+                            <div className="qty-selector" role="group" aria-label={t('product_page.quantity_group', 'Quantité')}>
+                                <button
+                                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                    aria-label={t('product_page.aria_decrease_qty', 'Diminuer la quantité')}
+                                >
+                                    <Minus size={18} />
+                                </button>
+                                <span aria-live="polite" aria-label={t('product_page.aria_qty_value', 'Quantité sélectionnée : {{count}}', { count: quantity })}>
+                                    {quantity}
+                                </span>
+                                <button
+                                    onClick={() => setQuantity(q => q + 1)}
+                                    aria-label={t('product_page.aria_increase_qty', 'Augmenter la quantité')}
+                                >
+                                    <Plus size={18} />
+                                </button>
                             </div>
                             <button
                                 className={`btn-primary add-to-cart ${cartStatus}`}
                                 disabled={product.inStock <= 0 || cartStatus === 'loading'}
                                 onClick={handleAddToCart}
+                                aria-label={
+                                    cartStatus === 'success' ? t('product_page.added_cart', 'Added to Cart!') :
+                                    product.inStock > 0 ? `${t('product_page.deploy_inventory', 'Add to Cart')} — ${product.title}` :
+                                    t('product_page.request_availability', 'Request Availability')
+                                }
                             >
                                 {cartStatus === 'loading' && <Loader2 size={20} className="spin-icon" />}
                                 {cartStatus === 'success' && <CheckCircle size={20} />}
@@ -134,8 +171,12 @@ const Product = () => {
                                  cartStatus === 'error' ? t('product_page.error_retry', 'Error — Retry') :
                                  product.inStock > 0 ? t('product_page.deploy_inventory', 'Add to Cart') : t('product_page.request_availability', 'Request Availability')}
                             </button>
-                            <button className="icon-btn-outline"><Heart size={20} /></button>
-                            <button className="icon-btn-outline"><Share2 size={20} /></button>
+                            <button className="icon-btn-outline" aria-label={t('product_page.aria_wishlist', 'Ajouter aux favoris')}>
+                                <Heart size={20} />
+                            </button>
+                            <button className="icon-btn-outline" aria-label={t('product_page.aria_share', 'Partager ce produit')}>
+                                <Share2 size={20} />
+                            </button>
                         </div>
 
                         <div className="trust-signals">
@@ -153,23 +194,70 @@ const Product = () => {
 
                 {}
                 <div className="tabs-area card">
-                    <nav className="tabs-nav">
-                        <button className={activeTab === 'description' ? 'active' : ''} onClick={() => setActiveTab('description')}>{t('product_page.tab_description', 'Description')}</button>
-                        <button className={activeTab === 'specs' ? 'active' : ''} onClick={() => setActiveTab('specs')}>{t('product_page.tab_specs', 'Technical Specifications')}</button>
-                        <button className={activeTab === 'support' ? 'active' : ''} onClick={() => setActiveTab('support')}>{t('product_page.tab_support', 'Institutional Support')}</button>
-                    </nav>
+                    <div className="tabs-nav" role="tablist" aria-label={t('product_page.aria_tabs_label', 'Informations sur le produit')}>
+                        <button
+                            role="tab"
+                            id="tab-btn-description"
+                            aria-selected={activeTab === 'description'}
+                            aria-controls="tabpanel-description"
+                            className={activeTab === 'description' ? 'active' : ''}
+                            onClick={() => setActiveTab('description')}
+                        >
+                            {t('product_page.tab_description', 'Description')}
+                        </button>
+                        <button
+                            role="tab"
+                            id="tab-btn-specs"
+                            aria-selected={activeTab === 'specs'}
+                            aria-controls="tabpanel-specs"
+                            className={activeTab === 'specs' ? 'active' : ''}
+                            onClick={() => setActiveTab('specs')}
+                        >
+                            {t('product_page.tab_specs', 'Technical Specifications')}
+                        </button>
+                        <button
+                            role="tab"
+                            id="tab-btn-support"
+                            aria-selected={activeTab === 'support'}
+                            aria-controls="tabpanel-support"
+                            className={activeTab === 'support' ? 'active' : ''}
+                            onClick={() => setActiveTab('support')}
+                        >
+                            {t('product_page.tab_support', 'Institutional Support')}
+                        </button>
+                    </div>
                     <div className="tab-content">
                         {activeTab === 'description' && (
-                            <div className="rich-text">
+                            <div
+                                role="tabpanel"
+                                id="tabpanel-description"
+                                aria-labelledby="tab-btn-description"
+                                className="rich-text"
+                            >
                                 <p>{product.description}</p>
                                 <p>{t('product_page.standard_desc', 'Standardized for hospital environments requiring high precision and maximum uptime.')}</p>
                             </div>
                         )}
                         {activeTab === 'specs' && (
-                            <div className="specs-list">
+                            <div
+                                role="tabpanel"
+                                id="tabpanel-specs"
+                                aria-labelledby="tab-btn-specs"
+                                className="specs-list"
+                            >
                                 <div className="spec-row"><strong>{t('product_page.spec_standard', 'Standard')}</strong> <span>{t('product_page.spec_standard_val', 'Medical Grade CE/FDA')}</span></div>
                                 <div className="spec-row"><strong>{t('product_page.spec_origin', 'Origin')}</strong> <span>{t('product_page.spec_origin_val', 'German Engineering')}</span></div>
                                 <div className="spec-row"><strong>{t('product_page.spec_network', 'Network')}</strong> <span>{t('product_page.spec_network_val', 'HL7/DICOM Compliant')}</span></div>
+                            </div>
+                        )}
+                        {activeTab === 'support' && (
+                            <div
+                                role="tabpanel"
+                                id="tabpanel-support"
+                                aria-labelledby="tab-btn-support"
+                                className="rich-text"
+                            >
+                                <p>{t('product_page.support_desc', 'Our institutional support team is available 24/7 for maintenance and compliance assistance.')}</p>
                             </div>
                         )}
                     </div>
@@ -191,6 +279,85 @@ const Product = () => {
             </div>
 
             <style>{`
+                .skip-to-content {
+                    position: absolute;
+                    top: -200px;
+                    left: 1rem;
+                    background: var(--primary);
+                    color: white;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 8px;
+                    font-weight: 800;
+                    font-size: 0.9rem;
+                    z-index: 10000;
+                    text-decoration: none;
+                    transition: top 0.2s ease;
+                }
+                .skip-to-content:focus { top: 1rem; }
+
+                .a11y-banner {
+                    background: var(--primary);
+                    color: white;
+                    text-align: center;
+                    padding: 0.6rem 1rem;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    letter-spacing: 0.02em;
+                }
+
+                .sr-only {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    margin: -1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    white-space: nowrap;
+                    border: 0;
+                }
+
+                /* ── Accessibilité malvoyants ── */
+                .a11y-mode .prod-title { font-size: 5.5rem !important; line-height: 1.15 !important; letter-spacing: 0 !important; }
+                .a11y-mode .price-main { font-size: 5rem !important; }
+                .a11y-mode .tax-tag { font-size: 1.2rem !important; font-weight: 700 !important; }
+                .a11y-mode .rating-row { font-size: 1.15rem !important; gap: 1.5rem !important; }
+                .a11y-mode .domain-pill { font-size: 1rem !important; padding: 0.6rem 1.4rem !important; }
+                .a11y-mode .badge-item { font-size: 1.1rem !important; gap: 0.8rem !important; }
+                .a11y-mode .signal { font-size: 1.1rem !important; gap: 1.2rem !important; }
+                .a11y-mode .signal span { font-size: 1.15rem !important; }
+                .a11y-mode .prod-breadcrumbs { font-size: 1rem !important; gap: 1rem !important; }
+                .a11y-mode .rich-text p { font-size: 1.5rem !important; line-height: 2.3 !important; margin-bottom: 2rem !important; color: #1e293b !important; }
+                .a11y-mode .spec-row { font-size: 1.25rem !important; padding: 1.5rem 0 !important; }
+                .a11y-mode .spec-row strong { font-size: 1.25rem !important; }
+                .a11y-mode .tabs-nav button { font-size: 1.15rem !important; padding: 2rem 3rem !important; }
+                .a11y-mode .tab-content { padding: 3.5rem !important; }
+                .a11y-mode .add-to-cart { font-size: 1.2rem !important; padding: 1.5rem !important; min-height: 60px !important; }
+                .a11y-mode .qty-selector { font-size: 1.4rem !important; padding: 1rem 1.5rem !important; gap: 2rem !important; }
+                .a11y-mode .qty-selector button { transform: scale(1.3) !important; }
+                .a11y-mode .icon-btn-outline { width: 56px !important; height: 56px !important; }
+                .a11y-mode .small-product-card h4 { font-size: 1.35rem !important; }
+                .a11y-mode .small-product-card p { font-size: 1.2rem !important; }
+                .a11y-mode .section-title { font-size: 2.2rem !important; }
+                .a11y-mode .info-side { gap: 2.5rem !important; }
+                .a11y-mode .price-box { border-left-width: 7px !important; padding-left: 2rem !important; }
+                .a11y-mode *:focus-visible {
+                    outline: 4px solid #005c97 !important;
+                    outline-offset: 5px !important;
+                    border-radius: 4px !important;
+                }
+                /* Overrides media queries */
+                @media (max-width: 1024px) {
+                    .a11y-mode .prod-title { font-size: 4rem !important; }
+                    .a11y-mode .price-main { font-size: 3.8rem !important; }
+                }
+                @media (max-width: 640px) {
+                    .a11y-mode .prod-title { font-size: 3rem !important; }
+                    .a11y-mode .price-main { font-size: 3rem !important; }
+                    .a11y-mode .rich-text p { font-size: 1.3rem !important; }
+                    .a11y-mode .tabs-nav button { font-size: 1rem !important; padding: 1.2rem 1.5rem !important; }
+                }
+
                 .product-detail-page { padding-bottom: 8rem; }
                 .prod-breadcrumbs { display: flex; align-items: center; gap: 0.8rem; padding: 3rem 0; font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
                 .prod-breadcrumbs a:hover { color: var(--primary); }
