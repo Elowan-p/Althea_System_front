@@ -1,0 +1,7 @@
+.row-unread td { background: #fafcff; }
+.sender-cell { display: flex; flex-direction: column; }
+.sender-name { font-weight: 800; color: var(--slate-800); }
+.sender-email { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+.subject-link { font-weight: 750; color: var(--slate-800); }
+.subject-link:hover { color: var(--primary); }
+.row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }

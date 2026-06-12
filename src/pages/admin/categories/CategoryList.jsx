@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Pencil, Trash2, Loader2, AlertCircle, Layers, ImageOff } from 'lucide-react';
 import { getCategories, deleteCategory, clearApiCache } from '../../../services/api';
+import './CategoryList.css';
 
 const CategoryList = () => {
   const navigate = useNavigate();
@@ -87,7 +88,7 @@ const CategoryList = () => {
                 <th>Image</th>
                 <th>Titre</th>
                 <th>Produits</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th className="u-text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -154,12 +155,6 @@ const CategoryList = () => {
         </div>
       )}
 
-      <style>{`
-        .cat-title-link { font-weight: 750; color: #1e293b; }
-        .cat-title-link:hover { color: var(--primary); }
-        .row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-        .thumb-placeholder { display: flex; align-items: center; justify-content: center; color: #cbd5e1; }
-      `}</style>
     </div>
   );
 };

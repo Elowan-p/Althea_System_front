@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2, AlertCircle, ShoppingCart, Eye, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
 import { getAdminOrders } from '../../../services/api';
+import './OrderList.css';
 
 const PAGE_SIZE = 20;
 const DEFAULT_STATUSES = ['cart', 'Payé', 'shipped', 'delivered', 'cancelled'];
@@ -81,7 +82,7 @@ const OrderList = () => {
         <Filter size={16} color="#94a3b8" />
         <select
           className="adm-select"
-          style={{ width: 220 }}
+          className="u-w-220"
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
         >
@@ -120,7 +121,7 @@ const OrderList = () => {
                 <th>Date</th>
                 <th>Statut</th>
                 <th>Total</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th className="u-text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -165,11 +166,6 @@ const OrderList = () => {
         </button>
       </div>
 
-      <style>{`
-        .order-id-link { font-weight: 900; color: var(--primary); }
-        .cell-total { font-weight: 800; color: #012a4a; white-space: nowrap; }
-        .row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-      `}</style>
     </div>
   );
 };

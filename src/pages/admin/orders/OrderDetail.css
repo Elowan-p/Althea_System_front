@@ -1,0 +1,28 @@
+.back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; }
+.back-link:hover { color: var(--primary); }
+
+.order-detail-page .adm-title { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+
+.detail-grid { display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; align-items: start; }
+.detail-main, .detail-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+
+.card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 850; color: var(--navy-900); margin-bottom: 1.25rem; }
+
+.item-cell { display: flex; align-items: center; gap: 0.8rem; }
+.item-name { font-weight: 750; color: var(--slate-800); }
+
+.meta-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: 0.88rem; }
+.meta-row span { color: var(--text-muted); font-weight: 600; }
+.meta-row strong { color: var(--slate-800); font-weight: 800; text-align: right; word-break: break-all; }
+
+.address-block p { font-size: 0.9rem; font-weight: 650; color: var(--slate-700); line-height: 1.7; }
+.muted-note { font-size: 0.88rem; color: var(--text-muted); font-weight: 600; }
+
+@media (max-width: 1200px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}
+
+.od-amount { text-align: right; font-weight: 800; color: var(--secondary); }
+.od-total-label { text-align: right; font-weight: 900; color: var(--secondary); }
+.od-total-value { text-align: right; font-weight: 900; color: var(--primary); font-size: 1.05rem; }

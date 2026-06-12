@@ -1,28 +1,31 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import Layout from './components/common/Layout';
-import Loader from './components/common/Loader';
-import LogoutLoader from './components/common/LogoutLoader';
+import Layout from './components/Layout/Layout';
+import Loader from './components/Loader/Loader';
+import LogoutLoader from './components/LogoutLoader/LogoutLoader';
 import AccountLayout from './pages/account/AccountLayout';
 import Orders from './pages/account/Orders';
 import Settings from './pages/account/Settings';
-import './index.css';
+import { isAuthenticated, isAdminUser, isAdminTwoFaVerified } from './utils/auth';
+import './styles/variables.css';
+import './styles/reset.css';
+import './styles/global.css';
 
-const Home = lazy(() => import('./pages/Home'));
-const Category = lazy(() => import('./pages/Category'));
-const Product = lazy(() => import('./pages/Product'));
-const Search = lazy(() => import('./pages/Search'));
-const Cart = lazy(() => import('./pages/Cart'));
-const Checkout = lazy(() => import('./pages/Checkout'));
-const Catalogue = lazy(() => import('./pages/Catalogue'));
+const Home = lazy(() => import('./pages/Home/Home'));
+const Category = lazy(() => import('./pages/Category/Category'));
+const Product = lazy(() => import('./pages/Product/Product'));
+const Search = lazy(() => import('./pages/Search/Search'));
+const Cart = lazy(() => import('./pages/Cart/Cart'));
+const Checkout = lazy(() => import('./pages/Checkout/Checkout'));
+const Catalogue = lazy(() => import('./pages/Catalogue/Catalogue'));
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
 const VerifyEmail = lazy(() => import('./pages/auth/VerifyEmail'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Cancel = lazy(() => import('./pages/Cancel'));
+const Contact = lazy(() => import('./pages/Contact/Contact'));
+const Cancel = lazy(() => import('./pages/Cancel/Cancel'));
 
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
@@ -40,19 +43,12 @@ const ChatbotConversationList = lazy(() => import('./pages/admin/chatbot/Chatbot
 const ChatbotConversationDetail = lazy(() => import('./pages/admin/chatbot/ChatbotConversationDetail'));
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem('token');
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return isAuthenticated() ? children : <Navigate to="/login" replace />;
 };
 
 const ProtectedAdminRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  let user = {};
-  try {
-    user = JSON.parse(localStorage.getItem('user') || '{}');
-  } catch {  }
-  const isAdmin = user?.roles?.includes('ROLE_ADMIN');
-  if (!token || !isAdmin) return <Navigate to="/login" replace />;
-  if (!localStorage.getItem('adminTwoFaVerified')) return <Navigate to="/admin/2fa" replace />;
+  if (!isAuthenticated() || !isAdminUser()) return <Navigate to="/login" replace />;
+  if (!isAdminTwoFaVerified()) return <Navigate to="/admin/2fa" replace />;
   return children;
 };
 

@@ -1,0 +1,75 @@
+/* variables.css — CSS custom properties (design tokens) only */
+:root {
+  /* HSL-tailored premium palette */
+  --primary: hsl(212, 100%, 35%); /* Sophisticated deep blue */
+  --primary-light: hsl(190, 90%, 50%); /* High-tech medical cyan */
+  --primary-gradient: linear-gradient(135deg, var(--primary), var(--primary-light));
+  --secondary: hsl(222, 47%, 18%); /* Slate dark */
+  --accent: hsl(38, 98%, 52%); /* Gold/yellow rating accent */
+  --background: hsl(210, 40%, 98%); /* Soft grayish-blue background */
+  --white: hsl(0, 0%, 100%);
+  --text-main: hsl(215, 25%, 20%);
+  --text-muted: hsl(215, 16%, 57%);
+  --error: hsl(0, 84%, 60%);
+  --success: hsl(150, 84%, 37%);
+  --border: hsl(214, 32%, 91%);
+  --focus-ring: rgba(0, 92, 151, 0.15);
+
+  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --header-height: 70px;
+  --container-width: 1200px;
+
+  /* Super soft, modern diffuse shadows */
+  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-premium: 0 30px 60px -15px rgba(0, 50, 100, 0.06), 0 0 1px rgba(0, 0, 0, 0.05);
+
+  /* Fluid, premium transition curves */
+  --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Neutral slate scale */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --navy-900: #012a4a;
+  --canvas: #fcfdfe;
+
+  /* Brand blues */
+  --brand-700: #005c97;
+  --brand-800: #004b7c;
+  --blue-50: #f0f7ff;
+  --blue-100: #e8f4fd;
+  --blue-200: #bfdbfe;
+
+  /* Status — red */
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+
+  /* Status — green */
+  --green-50: #f0fdf4;
+  --green-100: #dcfce7;
+  --green-500: #10b981;
+  --green-600: #059669;
+  --green-800: #166534;
+
+  /* Extended neutrals / accents */
+  --slate-900: #0f172a;
+  --blue-25: #eff6ff;
+  --blue-150: #dbeafe;
+  --cyan-400: #36d1dc;
+  --mist: #f0f4f8;
+  --plum: #4a4e69;
+}

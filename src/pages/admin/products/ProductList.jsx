@@ -5,6 +5,7 @@ import {
   ArrowUp, ArrowDown, ArrowUpDown, Eye, EyeOff, ImageOff
 } from 'lucide-react';
 import { getAdminProducts, deleteAdminProduct, bulkAdminProducts, clearApiCache } from '../../../services/api';
+import './ProductList.css';
 
 const COLUMNS = [
   { field: 'pictureUrl', label: 'Image', sortable: false },
@@ -118,7 +119,7 @@ const ProductList = () => {
   };
 
   const SortIcon = ({ field }) => {
-    if (sortField !== field) return <ArrowUpDown size={13} style={{ opacity: 0.4 }} />;
+    if (sortField !== field) return <ArrowUpDown size={13} className="u-fade" />;
     return sortDir === 'asc' ? <ArrowUp size={13} /> : <ArrowDown size={13} />;
   };
 
@@ -178,7 +179,7 @@ const ProductList = () => {
           <table className="adm-table">
             <thead>
               <tr>
-                <th style={{ width: 40 }}>
+                <th className="u-w-40">
                   <input type="checkbox" checked={allSelected} onChange={toggleAll} />
                 </th>
                 {COLUMNS.map((col) => (
@@ -187,13 +188,13 @@ const ProductList = () => {
                     className={col.sortable ? 'sortable' : ''}
                     onClick={col.sortable ? () => handleSort(col.field) : undefined}
                   >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <span className="u-inline-center">
                       {col.label}
                       {col.sortable && <SortIcon field={col.field} />}
                     </span>
                   </th>
                 ))}
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th className="u-text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -278,19 +279,6 @@ const ProductList = () => {
         </div>
       )}
 
-      <style>{`
-        .bulk-bar {
-          background: #f0f4f8; border: 1px solid #dbeafe; border-radius: 12px;
-          padding: 0.7rem 1.25rem;
-        }
-        .bulk-count { font-size: 0.85rem; font-weight: 800; color: var(--primary); margin-right: 0.5rem; }
-        .product-title-link { font-weight: 750; color: #1e293b; }
-        .product-title-link:hover { color: var(--primary); }
-        .cell-price { font-weight: 800; color: #012a4a; white-space: nowrap; }
-        .row-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-        .thumb-placeholder { display: flex; align-items: center; justify-content: center; color: #cbd5e1; }
-        .adm-table input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
-      `}</style>
     </div>
   );
 };

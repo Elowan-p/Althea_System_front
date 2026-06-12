@@ -10,6 +10,7 @@ import {
   getWeeklySalesByCategory,
   getCategoryShare
 } from '../../services/api';
+import './Dashboard.css';
 
 const CHART_COLORS = ['#005c97', '#36d1dc', '#ffb703', '#10b981', '#8b5cf6', '#f97316', '#ef4444', '#2c3e50'];
 
@@ -313,34 +314,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <style>{`
-        .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
-        .dash-stat-card {
-          background: white; border: 1px solid var(--border); border-radius: 18px;
-          padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;
-        }
-        .dash-stat-icon {
-          width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
-          background: #f0f4f8; color: var(--primary);
-          display: flex; align-items: center; justify-content: center;
-        }
-        .dash-stat-label { display: block; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
-        .dash-stat-value { font-size: 1.5rem; font-weight: 900; color: #012a4a; }
-
-        .dash-chart-card { margin-bottom: 1.5rem; }
-        .dash-chart-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
-        .dash-chart-head h2 { font-size: 1.05rem; font-weight: 850; color: #012a4a; }
-
-        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .dash-grid .dash-chart-card { margin-bottom: 0; }
-
-        @media (max-width: 1200px) {
-          .dash-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 768px) {
-          .dash-stats { grid-template-columns: 1fr; }
-        }
-      `}</style>
     </div>
   );
 };

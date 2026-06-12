@@ -5,6 +5,7 @@ import {
   User, CheckCircle2, RefreshCw
 } from 'lucide-react';
 import { getAdminOrder, updateOrderStatus, getInvoicePdf, getAdminProducts } from '../../../services/api';
+import './OrderDetail.css';
 
 const STATUS_OPTIONS = ['cart', 'Payé', 'shipped', 'delivered', 'cancelled'];
 
@@ -110,7 +111,7 @@ const OrderDetail = () => {
     return (
       <div>
         <Link to="/admin/orders" className="back-link"><ArrowLeft size={15} /> Retour aux commandes</Link>
-        <div className="adm-error" style={{ marginTop: '1rem' }}>
+        <div className="adm-error u-mt-1">
           <AlertCircle size={18} />
           <span>{error || 'Commande introuvable.'}</span>
         </div>
@@ -170,14 +171,14 @@ const OrderDetail = () => {
             {items.length === 0 ? (
               <div className="adm-empty"><p>Aucun article dans cette commande.</p></div>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
+              <div className="u-scroll-x">
                 <table className="adm-table">
                   <thead>
                     <tr>
                       <th>Produit</th>
-                      <th style={{ textAlign: 'center' }}>Quantité</th>
-                      <th style={{ textAlign: 'right' }}>Prix unitaire</th>
-                      <th style={{ textAlign: 'right' }}>Total</th>
+                      <th className="u-text-center">Quantité</th>
+                      <th className="u-text-right">Prix unitaire</th>
+                      <th className="u-text-right">Total</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -196,9 +197,9 @@ const OrderDetail = () => {
                               <span className="item-name">{title}</span>
                             </div>
                           </td>
-                          <td style={{ textAlign: 'center' }}>{qty}</td>
-                          <td style={{ textAlign: 'right' }}>{unitPrice.toLocaleString('fr-FR')} €</td>
-                          <td style={{ textAlign: 'right', fontWeight: 800, color: '#012a4a' }}>
+                          <td className="u-text-center">{qty}</td>
+                          <td className="u-text-right">{unitPrice.toLocaleString('fr-FR')} €</td>
+                          <td className="od-amount">
                             {(unitPrice * qty).toLocaleString('fr-FR')} €
                           </td>
                         </tr>
@@ -207,10 +208,10 @@ const OrderDetail = () => {
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colSpan={3} style={{ textAlign: 'right', fontWeight: 900, color: '#012a4a' }}>
+                      <td colSpan={3} className="od-total-label">
                         Total commande
                       </td>
-                      <td style={{ textAlign: 'right', fontWeight: 900, color: 'var(--primary)', fontSize: '1.05rem' }}>
+                      <td className="od-total-value">
                         {Number(order.totalPrice || 0).toLocaleString('fr-FR')} €
                       </td>
                     </tr>
@@ -234,7 +235,7 @@ const OrderDetail = () => {
             </div>
             <button
               className="adm-btn primary"
-              style={{ width: '100%' }}
+              className="u-full-width"
               disabled={updating || !newStatus || newStatus === order.status}
               onClick={handleStatusUpdate}
             >
@@ -294,32 +295,6 @@ const OrderDetail = () => {
         </div>
       </div>
 
-      <style>{`
-        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .back-link:hover { color: var(--primary); }
-
-        .order-detail-page .adm-title { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-
-        .detail-grid { display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; align-items: start; }
-        .detail-main, .detail-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
-
-        .card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 850; color: #012a4a; margin-bottom: 1.25rem; }
-
-        .item-cell { display: flex; align-items: center; gap: 0.8rem; }
-        .item-name { font-weight: 750; color: #1e293b; }
-
-        .meta-list { display: flex; flex-direction: column; gap: 0.9rem; }
-        .meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: 0.88rem; }
-        .meta-row span { color: var(--text-muted); font-weight: 600; }
-        .meta-row strong { color: #1e293b; font-weight: 800; text-align: right; word-break: break-all; }
-
-        .address-block p { font-size: 0.9rem; font-weight: 650; color: #334155; line-height: 1.7; }
-        .muted-note { font-size: 0.88rem; color: var(--text-muted); font-weight: 600; }
-
-        @media (max-width: 1200px) {
-          .detail-grid { grid-template-columns: 1fr; }
-        }
-      `}</style>
     </div>
   );
 };

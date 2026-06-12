@@ -176,7 +176,7 @@ export const register = (data) => api.post('/auth/register', data);
 export const getUserProfile = () => api.get('/auth/me');
 export const updateUserProfile = (data) => api.put('/auth/me', data);
 
-export const verifyEmail = (token) => api.get(`/auth/verify-email/${token}`);
+export const verifyEmail = (token) => api.post(`/auth/verify-email/${token}`);
 
 export const login = (data) => api.post('/auth/login_check', {
   username: data.username,

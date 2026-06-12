@@ -1,0 +1,15 @@
+.back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; }
+.back-link:hover { color: var(--primary); }
+
+.contact-detail-page .adm-title { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+
+.msg-card { margin-bottom: 1.5rem; }
+.msg-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; padding-bottom: 1.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--slate-100); }
+.msg-meta-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; font-weight: 700; color: var(--slate-600); }
+.msg-meta-item svg { color: var(--slate-400); }
+.msg-email { color: var(--primary); }
+.msg-email:hover { text-decoration: underline; }
+
+.msg-body { font-size: 0.95rem; color: var(--slate-700); font-weight: 550; line-height: 1.8; white-space: pre-wrap; }
+
+.card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 850; color: var(--navy-900); margin-bottom: 1.25rem; }
